@@ -1,0 +1,4331 @@
+Archivo: TypeDeclarationValidatorTest.java [Version: A]
+  [ORIGINAL] package mantenimiento.codecounter.validators.logical_validators;
+  [ORIGINAL] 
+  [ORIGINAL] import static org.junit.jupiter.api.Assertions.assertFalse;
+  [ORIGINAL] import static org.junit.jupiter.api.Assertions.assertTrue;
+  [ORIGINAL] 
+  [ORIGINAL] import org.junit.jupiter.api.BeforeEach;
+  [ORIGINAL] import org.junit.jupiter.api.DisplayName;
+  [ORIGINAL] import org.junit.jupiter.api.Test;
+  [ORIGINAL] 
+  [ORIGINAL] class TypeDeclarationValidatorTest {
+  [ORIGINAL] 
+  [ORIGINAL] private TypeDeclarationValidator validator;
+  [ORIGINAL] 
+  [ORIGINAL] @BeforeEach
+  [ORIGINAL] void setUp() {
+  [ORIGINAL] validator = new TypeDeclarationValidator();
+  [ORIGINAL] }
+  [ORIGINAL] 
+  [ORIGINAL] @Test
+  [ORIGINAL] @DisplayName("Debe de validar correctamente una declaración de clase")
+  [ORIGINAL] void testValidateTypeWithValidClassDeclaration() {
+  [ORIGINAL] String validClassDeclaration = "public class MyClass {";
+  [ORIGINAL] assertTrue(validator.validateType(validClassDeclaration));
+  [ORIGINAL] }
+  [ORIGINAL] 
+  [ORIGINAL] @Test
+  [ORIGINAL] @DisplayName("Debe de validar correctamente una declaración de interfaz")
+  [ORIGINAL] void testValidateTypeWithValidInterfaceDeclaration() {
+  [ORIGINAL] String validInterfaceDeclaration = "public interface MyInterface {";
+  [ORIGINAL] assertTrue(validator.validateType(validInterfaceDeclaration));
+  [ORIGINAL] }
+  [ORIGINAL] 
+  [ORIGINAL] @Test
+  [ORIGINAL] @DisplayName("Debe de validar correctamente una declaración de enum")
+  [ORIGINAL] void testValidateTypeWithValidEnumDeclaration() {
+  [ORIGINAL] String validEnumDeclaration = "public enum MyEnum {";
+  [ORIGINAL] assertTrue(validator.validateType(validEnumDeclaration));
+  [ORIGINAL] }
+  [ORIGINAL] 
+  [ORIGINAL] @Test
+  [ORIGINAL] @DisplayName("Debe de validar correctamente una declaración de método")
+  [ORIGINAL] void testValidateTypeWithInvalidDeclaration() {
+  [ORIGINAL] String invalidDeclaration = "public void myMethod() {";
+  [ORIGINAL] assertFalse(validator.validateType(invalidDeclaration));
+  [ORIGINAL] }
+  [ORIGINAL] 
+  [ORIGINAL] @Test
+  [ORIGINAL] @DisplayName("Debe de validar correctamente una declaración con linea vacía")
+  [ORIGINAL] void testValidateTypeWithEmptyLine() {
+  [ORIGINAL] String emptyLine = "";
+  [ORIGINAL] assertFalse(validator.validateType(emptyLine));
+  [ORIGINAL] }
+  [ORIGINAL] 
+  [ORIGINAL] @Test
+  [ORIGINAL] @DisplayName("Debe de validar correctamente una declaración con espacios en blanco")
+  [ORIGINAL] void testValidateTypeWithWhitespaceOnly() {
+  [ORIGINAL] String whitespaceOnly = "    ";
+  [ORIGINAL] assertFalse(validator.validateType(whitespaceOnly));
+  [ORIGINAL] }
+  [ORIGINAL] 
+  [ORIGINAL] @Test
+  [ORIGINAL] @DisplayName("Debe de validar correctamente una declaración con comentario de bloque")
+  [ORIGINAL] void testValidateTypeWithCommentLine() {
+  [ORIGINAL] String commentLine = "// This is a comment";
+  [ORIGINAL] assertFalse(validator.validateType(commentLine));
+  [ORIGINAL] }
+  [ORIGINAL] 
+  [ORIGINAL] @Test
+  [ORIGINAL] @DisplayName("Debe de validar correctamente una declaración parcial")
+  [ORIGINAL] void testValidateTypeWithPartialDeclaration() {
+  [ORIGINAL] String partialDeclaration = "class";
+  [ORIGINAL] assertFalse(validator.validateType(partialDeclaration));
+  [ORIGINAL] }
+  [ORIGINAL] }
+
+Archivo: JavaClass.java [Version: B]
+  [ORIGINAL] package mantenimiento.codecounter.models;
+  [ORIGINAL] 
+  [ORIGINAL] /** Representa una clase Java individual con sus contadores de líneas y métodos. */
+  [ORIGINAL] public class JavaClass {
+  [ORIGINAL] private int methodsAmount;
+  [ORIGINAL] private int linesOfCode;
+  [ORIGINAL] private String className;
+  [ORIGINAL] 
+  [ORIGINAL] public JavaClass(String className) {
+  [ORIGINAL] if (className == null || className.trim().isEmpty()) {
+  [ORIGINAL] throw new IllegalArgumentException("El nombre de la clase no puede ser nulo o vacío.");
+  [ORIGINAL] }
+  [ORIGINAL] this.className = className;
+  [ORIGINAL] this.methodsAmount = 0;
+  [ORIGINAL] this.linesOfCode = 0;
+  [ORIGINAL] }
+  [ORIGINAL] 
+  [ORIGINAL] /** Devolver el total de métodos encontrados en esta clase. */
+  [ORIGINAL] public int getMethodsAmount() {
+  [ORIGINAL] return methodsAmount;
+  [ORIGINAL] }
+  [ORIGINAL] 
+  [ORIGINAL] /** Devolver el nombre de esta clase. */
+  [ORIGINAL] public String getClassName() {
+  [ORIGINAL] return className;
+  [ORIGINAL] }
+  [ORIGINAL] 
+  [ORIGINAL] /** Incrementar en uno el contador de métodos para esta clase. */
+  [ORIGINAL] public void incrementMethodsAmount() {
+  [ORIGINAL] this.methodsAmount++;
+  [ORIGINAL] }
+  [ORIGINAL] 
+  [ORIGINAL] /** Incrementar en uno el contador de líneas físicas de código para esta clase. */
+  [ORIGINAL] public void incrementLinesOfCode() {
+  [ORIGINAL] this.linesOfCode++;
+  [ORIGINAL] }
+  [ORIGINAL] 
+  [ORIGINAL] /** Devolver el total de líneas físicas de código contadas para esta clase. */
+  [ORIGINAL] public int getLinesOfCode() {
+  [ORIGINAL] return linesOfCode;
+  [ORIGINAL] }
+  [ORIGINAL] 
+  [ORIGINAL] @Override
+  [ORIGINAL] public String toString() {
+  [ORIGINAL] // Útil para depuración
+  [ORIGINAL] return "JavaClass{"
+  [ORIGINAL] + "className='"
+  [ORIGINAL] + className
+  [ORIGINAL] + '\''
+  [ORIGINAL] + ", linesOfCode="
+  [ORIGINAL] + linesOfCode
+  [ORIGINAL] + ", methodsAmount="
+  [ORIGINAL] + methodsAmount
+  [ORIGINAL] + '}';
+  [ORIGINAL] }
+  [ORIGINAL] 
+  [ORIGINAL] @Override
+  [ORIGINAL] public boolean equals(Object o) {
+  [ORIGINAL] if (this == o) return true;
+  [ORIGINAL] if (o == null || getClass() != o.getClass()) return false;
+  [ORIGINAL] JavaClass javaClass = (JavaClass) o;
+  [ORIGINAL] return className.equals(javaClass.className);
+  [ORIGINAL] }
+  [ORIGINAL] }
+
+Archivo: SingleAnnotationValidatorTest.java [Version: A]
+  [ORIGINAL] package mantenimiento.codecounter.validators.format_validators;
+  [ORIGINAL] 
+  [ORIGINAL] import static org.junit.jupiter.api.Assertions.assertThrows;
+  [ORIGINAL] import static org.junit.jupiter.api.Assertions.assertTrue;
+  [ORIGINAL] 
+  [ORIGINAL] import mantenimiento.codecounter.exceptions.InvalidFormatException;
+  [ORIGINAL] import org.junit.jupiter.api.DisplayName;
+  [ORIGINAL] import org.junit.jupiter.api.Test;
+  [ORIGINAL] 
+  [ORIGINAL] class SingleAnnotationValidatorTest {
+  [ORIGINAL] private final SingleAnnotationValidator validator = new SingleAnnotationValidator();
+  [ORIGINAL] 
+  [ORIGINAL] @Test
+  [ORIGINAL] @DisplayName("Debe devolver true para una anotación válida en una sola línea: @Override")
+  [ORIGINAL] void testValidOverrideAnnotation() throws InvalidFormatException {
+  [ORIGINAL] assertTrue(validator.isValid("@Override"));
+  [ORIGINAL] }
+  [ORIGINAL] 
+  [ORIGINAL] @Test
+  [ORIGINAL] @DisplayName(
+  [ORIGINAL] "Debe devolver true para una anotación válida en una sola línea: @Rule(expected ="
+  [ORIGINAL] + " IllegalArgumentException.class)")
+  [ORIGINAL] void testValidTestAnnotation() throws InvalidFormatException {
+  [ORIGINAL] assertTrue(validator.isValid("@Rule(expected = IllegalArgumentException.class)"));
+  [ORIGINAL] }
+  [ORIGINAL] 
+  [ORIGINAL] @Test
+  [ORIGINAL] @DisplayName("Debe lanzar excepción para múltiples anotaciones en la misma línea")
+  [ORIGINAL] void testMultipleAnnotationsThrowsException() {
+  [ORIGINAL] String line = "@Override @Test @Something";
+  [ORIGINAL] assertThrows(InvalidFormatException.class, () -> validator.isValid(line));
+  [ORIGINAL] }
+  [ORIGINAL] 
+  [ORIGINAL] @Test
+  [ORIGINAL] @DisplayName("Debe lanzar excepción para anotación seguida de código en la misma línea")
+  [ORIGINAL] void testAnnotationWithCodeThrowsException() {
+  [ORIGINAL] String line = "@Override public void doSomething(){";
+  [ORIGINAL] assertThrows(InvalidFormatException.class, () -> validator.isValid(line));
+  [ORIGINAL] }
+  [ORIGINAL] 
+  [ORIGINAL] @Test
+  [ORIGINAL] @DisplayName("Debe lanzar excepción si la anotación es mal formada")
+  [ORIGINAL] void testMalformedAnnotationThrowsException() {
+  [ORIGINAL] assertThrows(InvalidFormatException.class, () -> validator.isValid("@"));
+  [ORIGINAL] assertThrows(InvalidFormatException.class, () -> validator.isValid("@123Invalid"));
+  [ORIGINAL] }
+  [ORIGINAL] }
+
+Archivo: FormatValidator.java [Version: B]
+  [ORIGINAL] package mantenimiento.codecounter.templates;
+  [ORIGINAL] 
+  [ORIGINAL] import mantenimiento.codecounter.exceptions.InvalidFormatException;
+  [ORIGINAL] 
+  [ORIGINAL] /** Proporciona una implementación base para la validación de formato del código. */
+  [ORIGINAL] public abstract class FormatValidator {
+  [ORIGINAL] 
+  [ORIGINAL] private FormatValidator nextValidator;
+  [ORIGINAL] 
+  [ORIGINAL] /**
+  [ORIGINAL] * Establece el siguiente validador en la cadena de validación lógica.
+  [ORIGINAL] *
+  [ORIGINAL] * @param nextLogicalValidator Siguiente validador lógico en la cadena.
+  [ORIGINAL] */
+  [ORIGINAL] public void setNextValidator(FormatValidator nextFormatValidator) {
+  [ORIGINAL] this.nextValidator = nextFormatValidator;
+  [ORIGINAL] }
+  [ORIGINAL] 
+  [ORIGINAL] public abstract boolean isValid(String lineOfFile) throws InvalidFormatException;
+  [ORIGINAL] 
+  [ORIGINAL] /**
+  [ORIGINAL] * Valida la siguiente regla en la cadena de responsabilidad.
+  [ORIGINAL] *
+  [ORIGINAL] * @param linesOfFile Lista de líneas de código a validar.
+  [ORIGINAL] * @return {@code true} si la validación es exitosa, {@code false} en caso contrario.
+  [ORIGINAL] */
+  [ORIGINAL] protected boolean validateNext(String lineOfFile) throws InvalidFormatException {
+  [ORIGINAL] if (nextValidator != null) {
+  [ORIGINAL] return nextValidator.isValid(lineOfFile);
+  [ORIGINAL] }
+  [ORIGINAL] 
+  [ORIGINAL] return true;
+  [ORIGINAL] }
+  [ORIGINAL] }
+
+Archivo: ComparationReport.java [Version: B]
+  [NEW] package mantenimiento.codecounter.models.reporters;
+  [ORIGINAL] 
+  [ORIGINAL] import java.util.ArrayList;
+  [ORIGINAL] import java.util.List;
+  [ORIGINAL] 
+  [ORIGINAL] import mantenimiento.codecounter.demo.LineRecord;
+  [NEW] import mantenimiento.codecounter.models.comparators.STATUS;
+  [NEW] 
+  [NEW] public class ComparationReport {
+  [NEW] 
+  [NEW] private List<LineRecord> currentContentReport;
+  [NEW] 
+  [NEW] private List<LineRecord> contentToCompareReport;
+  [ORIGINAL] 
+  [NEW] public ComparationReport() {
+  [NEW] this.currentContentReport = new ArrayList<>();
+  [NEW] this.contentToCompareReport = new ArrayList<>();
+  [NEW] }
+  [NEW] 
+  [NEW] public void makeReportLine(STATUS status, String line, String lineToCompare) {
+  [NEW] switch (status) {
+  [NEW] case ORIGINAL:
+  [NEW] currentContentReport.add(new LineRecord(STATUS.ORIGINAL, line));
+  [NEW] contentToCompareReport.add(new LineRecord(STATUS.ORIGINAL, lineToCompare));
+  [NEW] break;
+  [NEW] case MODIFIED:
+  [NEW] currentContentReport.add(new LineRecord(STATUS.ORIGINAL, line));
+  [NEW] contentToCompareReport.add(new LineRecord(STATUS.MODIFIED, lineToCompare));
+  [NEW] break;
+  [NEW] case NEW:
+  [NEW] currentContentReport.add(new LineRecord(STATUS.DELETED, line));
+  [NEW] contentToCompareReport.add(new LineRecord(STATUS.NEW, lineToCompare));
+  [NEW] break;
+  [NEW] default:
+  [NEW] break;
+  [NEW] }
+  [NEW] }
+  [NEW] 
+  [NEW] public void updateReport(List<String> content, int difference) {
+  [NEW] int indexToCheck = content.size() - difference - 1;
+  [NEW] for (int i = indexToCheck; i < content.size() - 1; i++) {
+  [NEW] this.currentContentReport.add(new LineRecord(STATUS.DELETED, content.get(i)));
+  [NEW] }
+  [ORIGINAL] }
+  [ORIGINAL] 
+  [NEW] public void updateReport(List<String> content, List<String> contentToCompare, int difference) {
+  [NEW] int indexToCheck = contentToCompare.size() - difference - 1;
+
+Archivo: Reporter.java [Version: A]
+  [ORIGINAL] package mantenimiento.codecounter.models.reporters;
+  [ORIGINAL] 
+  [ORIGINAL] import java.nio.file.Path;
+  [ORIGINAL] import java.util.List;
+  [ORIGINAL] import mantenimiento.codecounter.models.counters.StructCounter;
+  [ORIGINAL] 
+  [ORIGINAL] /** Clase abstracta que define el comportamiento de un generador de reportes */
+  [ORIGINAL] public abstract class Reporter {
+  [ORIGINAL] protected String programName;
+  [ORIGINAL] protected List<StructCounter> lineCounters;
+  [ORIGINAL] 
+  [ORIGINAL] protected Reporter(Path filePath, List<StructCounter> lineCounters) {
+  [ORIGINAL] this.programName = filePath.getFileName().toString();
+  [ORIGINAL] this.lineCounters = lineCounters;
+  [ORIGINAL] }
+  [ORIGINAL] 
+  [ORIGINAL] /** Genera un reporte con la información de los contadores de líneas */
+  [ORIGINAL] public abstract void generateReport();
+  [ORIGINAL] }
+
+Archivo: JavaFileTest.java [Version: B]
+  [ORIGINAL] package mantenimiento.codecounter.models;
+  [ORIGINAL] 
+  [ORIGINAL] import static org.junit.jupiter.api.Assertions.assertEquals;
+  [ORIGINAL] import static org.junit.jupiter.api.Assertions.assertFalse;
+  [ORIGINAL] import static org.junit.jupiter.api.Assertions.assertNotNull;
+  [ORIGINAL] 
+  [ORIGINAL] import java.io.IOException;
+  [ORIGINAL] import java.nio.file.Files;
+  [ORIGINAL] import java.nio.file.Path;
+  [ORIGINAL] import java.nio.file.Paths;
+  [ORIGINAL] import java.util.ArrayList;
+  [ORIGINAL] import java.util.List;
+  [ORIGINAL] import mantenimiento.codecounter.exceptions.FileNotFoundException;
+  [ORIGINAL] import org.junit.jupiter.api.AfterEach;
+  [ORIGINAL] import org.junit.jupiter.api.BeforeEach;
+  [ORIGINAL] import org.junit.jupiter.api.DisplayName;
+  [ORIGINAL] import org.junit.jupiter.api.Test;
+  [ORIGINAL] 
+  [ORIGINAL] class JavaFileTest {
+  [ORIGINAL] 
+  [ORIGINAL] private Path tempFile;
+  [ORIGINAL] 
+  [ORIGINAL] @BeforeEach
+  [ORIGINAL] void setUp() throws IOException {
+  [ORIGINAL] tempFile = Paths.get("testFile.java");
+  [ORIGINAL] Files.write(
+  [ORIGINAL] tempFile,
+  [ORIGINAL] new ArrayList<String>(
+  [ORIGINAL] List.of(
+  [ORIGINAL] "public class Test {",
+  [ORIGINAL] "    // Esto es un comentario en línea",
+  [ORIGINAL] "    /** ",
+  [ORIGINAL] "     *",
+  [ORIGINAL] "     * que ocupa varias líneas",
+  [ORIGINAL] "     */",
+  [ORIGINAL] "    public void method() {",
+  [ORIGINAL] "                             ",
+  [ORIGINAL] "        System.out.println(\"Hello World\");",
+  [ORIGINAL] "    }",
+  [ORIGINAL] "                             ",
+  [ORIGINAL] "}")));
+  [ORIGINAL] }
+  [ORIGINAL] 
+  [ORIGINAL] @AfterEach
+  [ORIGINAL] void tearDown() throws IOException {
+  [ORIGINAL] Files.deleteIfExists(tempFile);
+  [ORIGINAL] }
+  [ORIGINAL] 
+  [ORIGINAL] @Test
+  [ORIGINAL] @DisplayName("Debe de cargar el contenido correctamente")
+  [ORIGINAL] void testLoadFileContent() throws FileNotFoundException {
+  [ORIGINAL] JavaFile javaFile = new JavaFile(tempFile);
+  [ORIGINAL] List<String> content = javaFile.getContent();
+  [ORIGINAL] 
+  [ORIGINAL] assertNotNull(content);
+  [ORIGINAL] assertFalse(content.isEmpty());
+  [ORIGINAL] assertEquals(12, content.size());
+  [ORIGINAL] }
+  [ORIGINAL] 
+  [ORIGINAL] @Test
+  [ORIGINAL] @DisplayName("Debe de eliminar comentarios en bloque y de linea correctamente")
+  [ORIGINAL] void testRemoveComments() throws FileNotFoundException {
+  [ORIGINAL] JavaFile javaFile = new JavaFile(this.tempFile).removeComments();
+  [ORIGINAL] List<String> content = javaFile.getContent();
+  [ORIGINAL] 
+  [ORIGINAL] assertFalse(content.contains("// Esto es un comentario en línea"));
+  [ORIGINAL] assertFalse(content.contains("/**"));
+  [ORIGINAL] assertFalse(content.contains("*"));
+  [ORIGINAL] assertFalse(content.contains("* Comentario de bloque"));
+  [ORIGINAL] assertFalse(content.contains("* que ocupa varias líneas"));
+  [ORIGINAL] assertFalse(content.contains("*/"));
+  [ORIGINAL] }
+  [ORIGINAL] 
+  [ORIGINAL] @Test
+  [ORIGINAL] @DisplayName("Debe de eliminar lineas en blanco correctamente")
+  [ORIGINAL] void testRemoveBlankLines() throws FileNotFoundException {
+  [ORIGINAL] JavaFile javaFile = new JavaFile(this.tempFile).removeBlankLines();
+  [ORIGINAL] List<String> content = javaFile.getContent();
+  [ORIGINAL] 
+  [ORIGINAL] assertFalse(content.contains(""));
+  [ORIGINAL] }
+  [ORIGINAL] 
+  [ORIGINAL] @Test
+  [ORIGINAL] @DisplayName("Debe de remover lineas en blanco y comentarios")
+  [ORIGINAL] void testRemoveCommentsAndBlankLines() throws FileNotFoundException {
+  [ORIGINAL] JavaFile javaFile = new JavaFile(tempFile).removeComments().removeBlankLines();
+  [ORIGINAL] List<String> content = javaFile.getContent();
+  [ORIGINAL] 
+  [ORIGINAL] assertFalse(content.contains("// Esto es un comentario en línea"));
+  [ORIGINAL] assertFalse(content.contains("/* Comentario de bloque"));
+  [ORIGINAL] assertFalse(content.contains("que ocupa varias líneas */"));
+  [ORIGINAL] assertFalse(content.contains(""));
+  [ORIGINAL] 
+  [ORIGINAL] assertEquals(5, content.size());
+  [ORIGINAL] }
+  [ORIGINAL] }
+
+Archivo: ProyectComparator.java [Version: A]
+  [ORIGINAL] package mantenimiento.codecounter.models.comparators;
+  [ORIGINAL] 
+  [ORIGINAL] import java.util.ArrayList;
+  [ORIGINAL] import java.util.HashMap;
+  [ORIGINAL] import java.util.List;
+  [ORIGINAL] import java.util.Map;
+  [ORIGINAL] import java.util.Optional;
+  [ORIGINAL] 
+  [ORIGINAL] import mantenimiento.codecounter.demo.LineRecord;
+  [ORIGINAL] import mantenimiento.codecounter.models.JavaFile;
+  [ORIGINAL] import mantenimiento.codecounter.models.Proyect;
+  [DELETED] 
+  [DELETED] public class ProyectComparator {
+  [DELETED] 
+  [DELETED] private Proyect proyectToCompare;
+  [DELETED] 
+  [DELETED] private Proyect proyect;
+  [DELETED] 
+  [DELETED] private List<JavaFile> contentFiles;
+  [DELETED] 
+  [DELETED] private List<JavaFile> contentToCompareFiles;
+  [DELETED] 
+  [DELETED] private Map<String, List<LineRecord>> generalReport = new HashMap<>();
+  [DELETED] 
+  [DELETED] public ProyectComparator(Proyect proyect, Proyect proyectToCompare) {
+  [DELETED] this.proyect = proyect;
+  [DELETED] this.proyectToCompare = proyectToCompare;
+  [DELETED] this.contentFiles = proyect.getFiles();
+  [DELETED] this.contentToCompareFiles = proyectToCompare.getFiles();
+  [DELETED] }
+  [DELETED] 
+  [DELETED] public void compare() {
+  [DELETED] List<JavaFile> blackListOne = new ArrayList<>(this.proyect.getFiles());
+  [DELETED] List<JavaFile> blackListTwo = new ArrayList<>(this.proyectToCompare.getFiles());
+  [DELETED] 
+  [DELETED] for (JavaFile javaFile : this.contentFiles) {
+  [DELETED] String name = javaFile.getFileName();
+  [DELETED] Optional<JavaFile> fileToComOptional = findFileTocompare(name);
+  [DELETED] fileToComOptional.ifPresent(s -> compareFiles(javaFile, s));
+  [DELETED] //fileToComOptional.ifPresent(blackListTwo::remove);
+  [DELETED] //blackListOne.remove(javaFile);
+  [DELETED] }
+  [DELETED] 
+  [DELETED] //blackListOne.forEach(s -> generateReportForSingleFile(STATUS.DELETED, s, "A"));
+  [DELETED] //blackListTwo.forEach(s -> generateReportForSingleFile(STATUS.NEW, s, "B"));
+  [DELETED] }
+  [DELETED] 
+  [DELETED] private Optional<JavaFile> findFileTocompare(String className) {
+  [DELETED] return this.contentToCompareFiles.stream()
+  [DELETED] .filter(s -> s.getFileName().equals(className))
+  [DELETED] .findAny();
+  [DELETED] }
+  [DELETED] 
+  [DELETED] private void compareFiles(JavaFile javaFile, JavaFile javaFileToCompare) {
+  [DELETED] JavaFileComparator javaFileComparator = new JavaFileComparator(javaFile.getContent(),
+  [DELETED] javaFileToCompare.getContent());
+  [DELETED] javaFileComparator.compareContent();
+  [DELETED] List<LineRecord> contentReport = javaFileComparator.getCurrentContentReport();
+  [DELETED] List<LineRecord> contentToCompareReport = javaFileComparator.getContentToCompareReport();
+  [DELETED] generalReport.put(javaFile.getFileName() + "A", contentReport);
+  [DELETED] generalReport.put(javaFile.getFileName() + "B", contentToCompareReport);
+  [DELETED] this.contentToCompareFiles.remove(javaFileToCompare);
+  [DELETED] }
+  [ORIGINAL] 
+  [DELETED] private void generateReportForSingleFile(STATUS status, JavaFile javaFile, String mention) {
+  [DELETED] List<LineRecord> report = new ArrayList<>();
+  [DELETED] javaFile.getContent().stream().forEach(s -> {
+  [DELETED] report.add(new LineRecord(status, s));
+  [DELETED] });
+  [DELETED] ;
+  [DELETED] generalReport.put(javaFile.getFileName() + " " + mention, report);
+  [DELETED] }
+  [DELETED] 
+  [DELETED] public Map<String, List<LineRecord>> getGeneralReport() {
+  [DELETED] return generalReport;
+  [DELETED] }
+  [DELETED] 
+  [ORIGINAL] }
+  [DELETED] }
+  [DELETED] 
+  [DELETED] public Map<String, List<LineRecord>> getGeneralReport() {
+  [DELETED] return generalReport;
+  [DELETED] }
+  [DELETED] 
+
+Archivo: LineRecord.java [Version: A]
+  [ORIGINAL] package mantenimiento.codecounter.demo;
+  [ORIGINAL] 
+  [ORIGINAL] import mantenimiento.codecounter.models.comparators.STATUS;
+  [ORIGINAL] 
+  [ORIGINAL] public record LineRecord (
+  [ORIGINAL] STATUS status,
+  [ORIGINAL] String content
+  [ORIGINAL] ) {
+  [ORIGINAL] 
+  [ORIGINAL] }
+
+Archivo: ImportValidator.java [Version: B]
+  [ORIGINAL] package mantenimiento.codecounter.validators.format_validators;
+  [ORIGINAL] 
+  [ORIGINAL] import static mantenimiento.codecounter.constants.ReasonInvalidFormat.INVALID_IMPORT_STATEMENT;
+  [ORIGINAL] 
+  [ORIGINAL] import mantenimiento.codecounter.exceptions.InvalidFormatException;
+  [ORIGINAL] import mantenimiento.codecounter.templates.FormatValidator;
+  [ORIGINAL] 
+  [ORIGINAL] /**
+  [ORIGINAL] * Clase que valida si la importacion de un paquete tiene un comodin y lanza una excepcion en caso
+  [ORIGINAL] * de haber
+  [ORIGINAL] *
+  [ORIGINAL] * <p>ej: import java.util*
+  [ORIGINAL] */
+  [ORIGINAL] public class ImportValidator extends FormatValidator {
+  [ORIGINAL] 
+  [ORIGINAL] /**
+  [ORIGINAL] * Realiza la validacion del formato verificando si es un import y si utiliza un comodin
+  [ORIGINAL] *
+  [ORIGINAL] * @param lineOfFile linea de texto (sentencia de codigo) a validar
+  [ORIGINAL] * @return {@code true} si el import es sin comodin
+  [ORIGINAL] * @throws InvalidFormatException si el import se realiza con comodin
+  [ORIGINAL] */
+  [ORIGINAL] @Override
+  [ORIGINAL] public boolean isValid(String lineOfFile) throws InvalidFormatException {
+  [ORIGINAL] if (isImportDeclaration(lineOfFile)) {
+  [ORIGINAL] if (isImportWithWildcard(lineOfFile)) {
+  [ORIGINAL] throw new InvalidFormatException(INVALID_IMPORT_STATEMENT, lineOfFile);
+  [ORIGINAL] }
+  [ORIGINAL] 
+  [ORIGINAL] return true;
+  [ORIGINAL] }
+  [ORIGINAL] 
+  [ORIGINAL] return this.validateNext(lineOfFile);
+  [ORIGINAL] }
+  [ORIGINAL] 
+  [ORIGINAL] /**
+  [ORIGINAL] * Valida si la sentencia corresponde a una declaracion de import
+  [ORIGINAL] *
+  [ORIGINAL] * @param lineOfCode sentencia a validar
+  [ORIGINAL] * @return {@code true} si es una declaracion de import, {@code false} si no corresponde
+  [ORIGINAL] */
+  [ORIGINAL] private boolean isImportDeclaration(String lineOfCode) {
+  [ORIGINAL] String importDeclarationRegex = "^import\\s+.*;$";
+  [ORIGINAL] return lineOfCode.matches(importDeclarationRegex);
+  [ORIGINAL] }
+  [ORIGINAL] 
+  [ORIGINAL] /**
+  [ORIGINAL] * Valida si la declaracion de import, incluso un import statico, tiene comodín
+  [ORIGINAL] *
+  [ORIGINAL] * @param lineOfCode sentencia a validar
+  [ORIGINAL] * @return {@code true} si el import es con comodin, {@code false} si no corresponde
+  [ORIGINAL] */
+  [ORIGINAL] private boolean isImportWithWildcard(String lineOfCode) {
+  [ORIGINAL] String wildcardImportRegex = "^import\\s+(static\\s+)?(?:\\w+\\.\\s*){1,10}\\*\\s*;";
+  [ORIGINAL] return lineOfCode.matches(wildcardImportRegex);
+  [ORIGINAL] }
+  [ORIGINAL] }
+
+Archivo: TerminalReporter.java [Version: A]
+  [ORIGINAL] package mantenimiento.codecounter.models.reporters;
+  [ORIGINAL] 
+  [ORIGINAL] import java.nio.file.Path;
+  [ORIGINAL] import java.util.List;
+  [ORIGINAL] import mantenimiento.codecounter.models.counters.StructCounter;
+  [ORIGINAL] 
+  [ORIGINAL] /** Clase que genera un reporte en la terminal */
+  [ORIGINAL] public class TerminalReporter extends Reporter {
+  [ORIGINAL] 
+  [ORIGINAL] public TerminalReporter(Path filePath, List<StructCounter> lineCounter) {
+  [ORIGINAL] super(filePath, lineCounter);
+  [ORIGINAL] }
+  [ORIGINAL] 
+  [ORIGINAL] /** Genera un reporte con la información de los contadores de líneas */
+  [ORIGINAL] @Override
+  [ORIGINAL] public void generateReport() {
+  [ORIGINAL] printHeader();
+  [ORIGINAL] printBody();
+  [ORIGINAL] }
+  [ORIGINAL] 
+  [ORIGINAL] /**
+  [ORIGINAL] * Imprime el encabezado del reporte incluyengo: el nombre del programa y los nombres de las
+  [ORIGINAL] * columnas
+  [ORIGINAL] */
+  [ORIGINAL] private void printHeader() {
+  [ORIGINAL] System.out.println(
+  [ORIGINAL] "---------------------------------------------------------------------------------");
+  [ORIGINAL] System.out.println("Programa: " + this.programName);
+  [ORIGINAL] System.out.println(
+  [ORIGINAL] "---------------------------------------------------------------------------------");
+  [ORIGINAL] System.out.printf(" %-40s  %-15s  %-15s %n", "Clases", "Métodos", "Lineas");
+  [ORIGINAL] System.out.println(
+  [ORIGINAL] "---------------------------------------------------------------------------------");
+  [ORIGINAL] }
+  [ORIGINAL] 
+  [ORIGINAL] /**
+  [ORIGINAL] * Imprime el cuerpo del reporte incluyendo la información de los contadores de líneas por archivo
+  [ORIGINAL] * analizado
+  [ORIGINAL] */
+  [ORIGINAL] private void printBody() {
+  [ORIGINAL] for (StructCounter lineCounter : lineCounters) {
+  [ORIGINAL] lineCounter
+  [ORIGINAL] .getClasses()
+  [ORIGINAL] .forEach(
+  [ORIGINAL] javaClass ->
+  [ORIGINAL] System.out.printf(
+  [ORIGINAL] " %-40s  %-15d  %-15d %n",
+  [ORIGINAL] javaClass.getClassName(),
+  [ORIGINAL] javaClass.getMethodsAmount(),
+  [ORIGINAL] javaClass.getLinesOfCode()));
+  [ORIGINAL] }
+  [ORIGINAL] 
+  [ORIGINAL] System.out.println(
+  [ORIGINAL] "---------------------------------------------------------------------------------");
+  [ORIGINAL] int totalPhysicalLines =
+  [ORIGINAL] lineCounters.stream().mapToInt(StructCounter::getTotalLinesOfCode).sum();
+  [ORIGINAL] System.out.println("Total de líneas físicas de código: " + totalPhysicalLines);
+  [ORIGINAL] }
+  [ORIGINAL] }
+
+Archivo: STATUS.java [Version: B]
+  [ORIGINAL] package mantenimiento.codecounter.models.comparators;
+  [ORIGINAL] 
+  [ORIGINAL] public enum STATUS {
+  [ORIGINAL] NEW, MODIFIED, DELETED, ORIGINAL
+  [NEW] }
+
+Archivo: StyleKAndRValidator.java [Version: B]
+  [ORIGINAL] package mantenimiento.codecounter.validators.format_validators;
+  [ORIGINAL] 
+  [ORIGINAL] import static mantenimiento.codecounter.constants.ReasonInvalidFormat.INVALID_STYLE_K_AND_R;
+  [ORIGINAL] 
+  [ORIGINAL] import mantenimiento.codecounter.exceptions.InvalidFormatException;
+  [ORIGINAL] import mantenimiento.codecounter.templates.FormatValidator;
+  [ORIGINAL] 
+  [ORIGINAL] /** Clase que valida si se cumple el formato de uso de llaves K&R */
+  [ORIGINAL] public class StyleKAndRValidator extends FormatValidator {
+  [ORIGINAL] 
+  [ORIGINAL] private static final String INVALID_OPENING_BRACKED_REGEX = "^\\s*\\{\\s*";
+  [ORIGINAL] private static final String VALID_CLOSING_BRACKED_REGEX =
+  [ORIGINAL] "((\\s*\\}\\s*)|(\\s*\\}\\s*(while|else|catch|finally|\\)?;).*))";
+  [ORIGINAL] private static final String EMPTY_BRACKED_REGEX = "^\\s*\\{.*\\}\\s*";
+  [ORIGINAL] 
+  [ORIGINAL] /**
+  [ORIGINAL] * Realiza la validacion del formato verificando si se cumple el estilo de bloques K&R
+  [ORIGINAL] *
+  [ORIGINAL] * @param lineOfFile linea de texto (sentencia de codigo) a validar
+  [ORIGINAL] * @return {@code true} si se satisface el estilo de bloques K&R {@code false} en caso contrario
+  [ORIGINAL] * @throws InvalidFormatException si no se cumple estilo de bloque K&R
+  [ORIGINAL] */
+  [ORIGINAL] @Override
+  [ORIGINAL] public boolean isValid(String lineOfFile) throws InvalidFormatException {
+  [ORIGINAL] if (isInValidOpeningBracked(lineOfFile)
+  [ORIGINAL] || isInvalidClosingBracked(lineOfFile)
+  [ORIGINAL] || isEmptyBracked(lineOfFile)) {
+  [ORIGINAL] throw new InvalidFormatException(INVALID_STYLE_K_AND_R, lineOfFile);
+  [ORIGINAL] }
+  [ORIGINAL] return validateNext(lineOfFile);
+  [ORIGINAL] }
+  [ORIGINAL] 
+  [ORIGINAL] /**
+  [ORIGINAL] * Verifica si la línea del archivo contiene un corchete de apertura no válido.
+  [ORIGINAL] *
+  [ORIGINAL] * @param lineOfFile Línea del archivo a evaluar.
+  [ORIGINAL] * @return {@code true} si la línea coincide con el patrón de corchete de apertura no válido,
+  [ORIGINAL] *     {@code false} en caso contrario.
+  [ORIGINAL] */
+  [ORIGINAL] private boolean isInValidOpeningBracked(String lineOfFile) {
+  [ORIGINAL] return lineOfFile.matches(INVALID_OPENING_BRACKED_REGEX);
+  [ORIGINAL] }
+  [ORIGINAL] 
+  [ORIGINAL] /**
+  [ORIGINAL] * Verifica si la línea del archivo contiene un corchete de cierre no válido.
+  [ORIGINAL] *
+  [ORIGINAL] * @param lineOfFile Línea del archivo a evaluar.
+  [ORIGINAL] * @return {@code true} si la línea coincide con el patrón de corchete de cierre no válido, {@code
+  [ORIGINAL] *     false} en caso contrario.
+  [ORIGINAL] */
+  [ORIGINAL] private boolean isInvalidClosingBracked(String lineOfFile) {
+  [ORIGINAL] 
+  [ORIGINAL] return (lineOfFile.startsWith("}") || lineOfFile.endsWith("}"))
+  [ORIGINAL] && !lineOfFile.matches(VALID_CLOSING_BRACKED_REGEX);
+  [ORIGINAL] }
+  [ORIGINAL] 
+  [ORIGINAL] /**
+  [ORIGINAL] * Verifica si la línea del archivo contiene un par de corchetes vacío.
+  [ORIGINAL] *
+  [ORIGINAL] * @param lineOfFile Línea del archivo a evaluar.
+  [ORIGINAL] * @return {@code true} si la línea coincide con el patrón de corchetes vacíos, {@code false} en
+  [ORIGINAL] *     caso contrario.
+  [ORIGINAL] */
+  [ORIGINAL] private boolean isEmptyBracked(String lineOfFile) {
+  [ORIGINAL] return lineOfFile.matches(EMPTY_BRACKED_REGEX);
+  [ORIGINAL] }
+  [ORIGINAL] }
+
+Archivo: InvalidFormatException.java [Version: A]
+  [ORIGINAL] package mantenimiento.codecounter.exceptions;
+  [ORIGINAL] 
+  [ORIGINAL] import mantenimiento.codecounter.constants.ReasonInvalidFormat;
+  [ORIGINAL] 
+  [ORIGINAL] public class InvalidFormatException extends Exception {
+  [ORIGINAL] private String fileName = "";
+  [ORIGINAL] 
+  [ORIGINAL] public InvalidFormatException(ReasonInvalidFormat error, String lineOfCode) {
+  [ORIGINAL] super(error.toString() + "\nLinea: " + lineOfCode);
+  [ORIGINAL] }
+  [ORIGINAL] 
+  [ORIGINAL] public InvalidFormatException(String message) {
+  [ORIGINAL] super(message);
+  [ORIGINAL] }
+  [ORIGINAL] 
+  [ORIGINAL] public void setFileName(String fileName) {
+  [ORIGINAL] this.fileName = fileName;
+  [ORIGINAL] }
+  [ORIGINAL] 
+  [ORIGINAL] public String getFileName() {
+  [ORIGINAL] return this.fileName;
+  [ORIGINAL] }
+  [ORIGINAL] }
+
+Archivo: StructCounter.java [Version: A]
+  [ORIGINAL] package mantenimiento.codecounter.models.counters;
+  [ORIGINAL] 
+  [ORIGINAL] import java.util.ArrayList;
+  [ORIGINAL] import java.util.List;
+  [ORIGINAL] import java.util.Optional;
+  [ORIGINAL] import mantenimiento.codecounter.models.JavaClass;
+  [ORIGINAL] 
+  [ORIGINAL] /**
+  [ORIGINAL] * Clase que representa un contador de estructuras: Clases y métodos. Mantiene una lista de objetos
+  [ORIGINAL] * JavaClass y proporciona métodos para incrementar sus contadores.
+  [ORIGINAL] */
+  [ORIGINAL] public class StructCounter {
+  [ORIGINAL] private final List<JavaClass> javaClasses;
+  [ORIGINAL] 
+  [ORIGINAL] public StructCounter() {
+  [ORIGINAL] this.javaClasses = new ArrayList<>();
+  [ORIGINAL] }
+  [ORIGINAL] 
+  [ORIGINAL] /**
+  [ORIGINAL] * Añade una nueva clase a la lista si no existe una con el mismo nombre.
+  [ORIGINAL] *
+  [ORIGINAL] * @param className El nombre de la clase a añadir.
+  [ORIGINAL] */
+  [ORIGINAL] public void addClass(String className) {
+  [ORIGINAL] if (findClassByName(className).isEmpty()) {
+  [ORIGINAL] javaClasses.add(new JavaClass(className));
+  [ORIGINAL] }
+  [ORIGINAL] }
+  [ORIGINAL] 
+  [ORIGINAL] /**
+  [ORIGINAL] * Busca una clase en la lista por su nombre.
+  [ORIGINAL] *
+  [ORIGINAL] * @param className El nombre de la clase a buscar.
+  [ORIGINAL] * @return Un Optional conteniendo la JavaClass si se encuentra, o un Optional vacío si no.
+  [ORIGINAL] */
+  [ORIGINAL] private Optional<JavaClass> findClassByName(String className) {
+  [ORIGINAL] if (className == null) return Optional.empty();
+  [ORIGINAL] for (JavaClass jc : javaClasses) {
+  [ORIGINAL] if (className.equals(jc.getClassName())) {
+  [ORIGINAL] return Optional.of(jc);
+  [ORIGINAL] }
+  [ORIGINAL] }
+  [ORIGINAL] return Optional.empty();
+  [ORIGINAL] }
+  [ORIGINAL] 
+  [ORIGINAL] /** Añade un método a la última clase registrada en la lista. */
+  [ORIGINAL] public void addMethodToLastClass() {
+  [ORIGINAL] if (!javaClasses.isEmpty()) {
+  [ORIGINAL] javaClasses.get(javaClasses.size() - 1).incrementMethodsAmount();
+  [ORIGINAL] }
+  [ORIGINAL] }
+  [ORIGINAL] 
+  [ORIGINAL] /**
+  [ORIGINAL] * Añade una línea física de código a la clase especificada por su nombre.
+  [ORIGINAL] *
+  [ORIGINAL] * @param className El nombre de la clase a la que se debe añadir la línea.
+  [ORIGINAL] */
+  [ORIGINAL] public void addLineToClass(String className) {
+  [ORIGINAL] Optional<JavaClass> targetClass = findClassByName(className);
+  [ORIGINAL] if (targetClass.isPresent()) {
+  [ORIGINAL] targetClass.get().incrementLinesOfCode();
+  [ORIGINAL] } else {
+  [ORIGINAL] throw new IllegalStateException("Clase no encontrada al intentar añadir línea: " + className);
+  [ORIGINAL] }
+  [ORIGINAL] }
+  [ORIGINAL] 
+  [ORIGINAL] /** Devuelve el total de líneas de código sumando las de todas las clases registradas. */
+  [ORIGINAL] public int getTotalLinesOfCode() {
+  [ORIGINAL] int totalLines = 0;
+  [ORIGINAL] for (JavaClass javaClass : javaClasses) {
+  [ORIGINAL] totalLines += javaClass.getLinesOfCode();
+  [ORIGINAL] }
+  [ORIGINAL] return totalLines;
+  [ORIGINAL] }
+  [ORIGINAL] 
+  [ORIGINAL] /** Devolver el número total de clases registradas. */
+  [ORIGINAL] public int getClassesCount() {
+  [ORIGINAL] return javaClasses.size();
+  [ORIGINAL] }
+  [ORIGINAL] 
+  [ORIGINAL] /** Devolver el total de métodos sumando los de todas las clases registradas. */
+  [ORIGINAL] public int getTotalMethodsCount() {
+  [ORIGINAL] int totalMethods = 0;
+  [ORIGINAL] for (JavaClass javaClass : javaClasses) {
+  [ORIGINAL] totalMethods += javaClass.getMethodsAmount();
+  [ORIGINAL] }
+  [ORIGINAL] return totalMethods;
+  [ORIGINAL] }
+  [ORIGINAL] 
+  [ORIGINAL] /** Devuelve la lista completa de objetos JavaClass registrados. */
+  [ORIGINAL] public List<JavaClass> getClasses() {
+  [ORIGINAL] return new ArrayList<>(javaClasses);
+  [ORIGINAL] }
+  [ORIGINAL] }
+
+Archivo: JavaFilesNotFoundException.java [Version: B]
+  [ORIGINAL] package mantenimiento.codecounter.exceptions;
+  [ORIGINAL] 
+  [ORIGINAL] public class JavaFilesNotFoundException extends Exception {
+  [ORIGINAL] private static final String ERROR_MESSAGE =
+  [ORIGINAL] "No se ha encontrado archivos Java por analizar en la carpeta del proyecto";
+  [ORIGINAL] 
+  [ORIGINAL] public JavaFilesNotFoundException() {
+  [ORIGINAL] super(ERROR_MESSAGE);
+  [ORIGINAL] }
+  [ORIGINAL] }
+
+Archivo: TypeDeclarationValidatorTest.java [Version: B]
+  [ORIGINAL] package mantenimiento.codecounter.validators.logical_validators;
+  [ORIGINAL] 
+  [ORIGINAL] import static org.junit.jupiter.api.Assertions.assertFalse;
+  [ORIGINAL] import static org.junit.jupiter.api.Assertions.assertTrue;
+  [ORIGINAL] 
+  [ORIGINAL] import org.junit.jupiter.api.BeforeEach;
+  [ORIGINAL] import org.junit.jupiter.api.DisplayName;
+  [ORIGINAL] import org.junit.jupiter.api.Test;
+  [ORIGINAL] 
+  [ORIGINAL] class TypeDeclarationValidatorTest {
+  [ORIGINAL] 
+  [ORIGINAL] private TypeDeclarationValidator validator;
+  [ORIGINAL] 
+  [ORIGINAL] @BeforeEach
+  [ORIGINAL] void setUp() {
+  [ORIGINAL] validator = new TypeDeclarationValidator();
+  [ORIGINAL] }
+  [ORIGINAL] 
+  [ORIGINAL] @Test
+  [ORIGINAL] @DisplayName("Debe de validar correctamente una declaración de clase")
+  [ORIGINAL] void testValidateTypeWithValidClassDeclaration() {
+  [ORIGINAL] String validClassDeclaration = "public class MyClass {";
+  [ORIGINAL] assertTrue(validator.validateType(validClassDeclaration));
+  [ORIGINAL] }
+  [ORIGINAL] 
+  [ORIGINAL] @Test
+  [ORIGINAL] @DisplayName("Debe de validar correctamente una declaración de interfaz")
+  [ORIGINAL] void testValidateTypeWithValidInterfaceDeclaration() {
+  [ORIGINAL] String validInterfaceDeclaration = "public interface MyInterface {";
+  [ORIGINAL] assertTrue(validator.validateType(validInterfaceDeclaration));
+  [ORIGINAL] }
+  [ORIGINAL] 
+  [ORIGINAL] @Test
+  [ORIGINAL] @DisplayName("Debe de validar correctamente una declaración de enum")
+  [ORIGINAL] void testValidateTypeWithValidEnumDeclaration() {
+  [ORIGINAL] String validEnumDeclaration = "public enum MyEnum {";
+  [ORIGINAL] assertTrue(validator.validateType(validEnumDeclaration));
+  [ORIGINAL] }
+  [ORIGINAL] 
+  [ORIGINAL] @Test
+  [ORIGINAL] @DisplayName("Debe de validar correctamente una declaración de método")
+  [ORIGINAL] void testValidateTypeWithInvalidDeclaration() {
+  [ORIGINAL] String invalidDeclaration = "public void myMethod() {";
+  [ORIGINAL] assertFalse(validator.validateType(invalidDeclaration));
+  [ORIGINAL] }
+  [ORIGINAL] 
+  [ORIGINAL] @Test
+  [ORIGINAL] @DisplayName("Debe de validar correctamente una declaración con linea vacía")
+  [ORIGINAL] void testValidateTypeWithEmptyLine() {
+  [ORIGINAL] String emptyLine = "";
+  [ORIGINAL] assertFalse(validator.validateType(emptyLine));
+  [ORIGINAL] }
+  [ORIGINAL] 
+  [ORIGINAL] @Test
+  [ORIGINAL] @DisplayName("Debe de validar correctamente una declaración con espacios en blanco")
+  [ORIGINAL] void testValidateTypeWithWhitespaceOnly() {
+  [ORIGINAL] String whitespaceOnly = "    ";
+  [ORIGINAL] assertFalse(validator.validateType(whitespaceOnly));
+  [ORIGINAL] }
+  [ORIGINAL] 
+  [ORIGINAL] @Test
+  [ORIGINAL] @DisplayName("Debe de validar correctamente una declaración con comentario de bloque")
+  [ORIGINAL] void testValidateTypeWithCommentLine() {
+  [ORIGINAL] String commentLine = "// This is a comment";
+  [ORIGINAL] assertFalse(validator.validateType(commentLine));
+  [ORIGINAL] }
+  [ORIGINAL] 
+  [ORIGINAL] @Test
+  [ORIGINAL] @DisplayName("Debe de validar correctamente una declaración parcial")
+  [ORIGINAL] void testValidateTypeWithPartialDeclaration() {
+  [ORIGINAL] String partialDeclaration = "class";
+  [ORIGINAL] assertFalse(validator.validateType(partialDeclaration));
+  [ORIGINAL] }
+  [ORIGINAL] }
+
+Archivo: SingleDeclarationValidatorTest.java [Version: A]
+  [ORIGINAL] package mantenimiento.codecounter.validators.format_validators;
+  [ORIGINAL] 
+  [ORIGINAL] import static org.junit.jupiter.api.Assertions.assertThrows;
+  [ORIGINAL] import static org.junit.jupiter.api.Assertions.assertTrue;
+  [ORIGINAL] 
+  [ORIGINAL] import mantenimiento.codecounter.exceptions.InvalidFormatException;
+  [ORIGINAL] import org.junit.jupiter.api.DisplayName;
+  [ORIGINAL] import org.junit.jupiter.api.Test;
+  [ORIGINAL] 
+  [ORIGINAL] class SingleDeclarationValidatorTest {
+  [ORIGINAL] 
+  [ORIGINAL] @Test
+  [ORIGINAL] void testValidSingleDeclaration() throws InvalidFormatException {
+  [ORIGINAL] SingleDeclarationValidator validator = new SingleDeclarationValidator();
+  [ORIGINAL] assertTrue(validator.isValid("int x = 10;"));
+  [ORIGINAL] }
+  [ORIGINAL] 
+  [ORIGINAL] @Test
+  [ORIGINAL] @DisplayName("Debe de lanzar la excepion al detectar incialización de varias variables")
+  [ORIGINAL] void testInvalidMultipleDeclarationsWithSemicolon() {
+  [ORIGINAL] SingleDeclarationValidator validator = new SingleDeclarationValidator();
+  [ORIGINAL] assertThrows(
+  [ORIGINAL] InvalidFormatException.class,
+  [ORIGINAL] () -> {
+  [ORIGINAL] validator.isValid("int value 1 = 10; double value2 = 12.8;");
+  [ORIGINAL] });
+  [ORIGINAL] assertThrows(
+  [ORIGINAL] InvalidFormatException.class,
+  [ORIGINAL] () -> {
+  [ORIGINAL] validator.isValid("value; value;");
+  [ORIGINAL] });
+  [ORIGINAL] }
+  [ORIGINAL] 
+  [ORIGINAL] @Test
+  [ORIGINAL] @DisplayName("Debe de lanzar la excepion al detectar incialización de varias variables ")
+  [ORIGINAL] void testInvalidMultipleDeclarationsWithCommas() {
+  [ORIGINAL] SingleDeclarationValidator validator = new SingleDeclarationValidator();
+  [ORIGINAL] assertThrows(
+  [ORIGINAL] InvalidFormatException.class,
+  [ORIGINAL] () -> {
+  [ORIGINAL] validator.isValid("int value1, value2, value3;");
+  [ORIGINAL] });
+  [ORIGINAL] }
+  [ORIGINAL] }
+
+Archivo: TypeDeclarationValidator.java [Version: A]
+  [ORIGINAL] package mantenimiento.codecounter.validators.logical_validators;
+  [ORIGINAL] 
+  [ORIGINAL] import static mantenimiento.codecounter.constants.JavaRegextConstants.ACCESS_MODIFIERS_REGEX;
+  [ORIGINAL] import static mantenimiento.codecounter.constants.JavaRegextConstants.TYPE_KEYS;
+  [ORIGINAL] 
+  [ORIGINAL] import mantenimiento.codecounter.templates.LogicalValidator;
+  [ORIGINAL] 
+  [ORIGINAL] /**
+  [ORIGINAL] * Clase que verifica si existe una declaración de tipo (class, interface, enum) para poder
+  [ORIGINAL] * contabilizarlo como línea lógica
+  [ORIGINAL] */
+  [ORIGINAL] public class TypeDeclarationValidator implements LogicalValidator {
+  [ORIGINAL] 
+  [ORIGINAL] private static final String TYPE_DECLARATION =
+  [ORIGINAL] "^(\\s*" + ACCESS_MODIFIERS_REGEX + ".*\\s*" + TYPE_KEYS + ".*)";
+  [ORIGINAL] 
+  [ORIGINAL] /**
+  [ORIGINAL] * Determina si una línea de código corresponde a una declaración de tipo para considerarla como
+  [ORIGINAL] * línea lógica
+  [ORIGINAL] *
+  [ORIGINAL] * @param linesOfCode
+  [ORIGINAL] * @return {@code true} si la corresponde a una declaración de tipo, {@code false} en caso
+  [ORIGINAL] *     contrario
+  [ORIGINAL] */
+  [ORIGINAL] @Override
+  [ORIGINAL] public boolean validateType(String linesOfCode) {
+  [ORIGINAL] return isTypeDeclaration(linesOfCode);
+  [ORIGINAL] }
+  [ORIGINAL] 
+  [ORIGINAL] /**
+  [ORIGINAL] * Verifica si la sentencia es una declaración de tipo
+  [ORIGINAL] *
+  [ORIGINAL] * @param lineOfCode sentencia de codigo por analizar
+  [ORIGINAL] * @return {@code true} si coincide con la declaracion, {@code false} en caso contrario
+  [ORIGINAL] */
+  [ORIGINAL] private boolean isTypeDeclaration(String line) {
+  [ORIGINAL] return line.matches(TYPE_DECLARATION) && !line.contains("\"");
+  [ORIGINAL] }
+  [ORIGINAL] 
+  [ORIGINAL] /*
+  [ORIGINAL] * Obtiene el nombre del tipo declarado en la línea de código
+  [ORIGINAL] */
+  [ORIGINAL] 
+  [ORIGINAL] public String getTypeName(String line) {
+  [ORIGINAL] if (line.contains("\"")) return null;
+  [ORIGINAL] 
+  [ORIGINAL] String[] tokens = line.trim().split("\\s+");
+  [ORIGINAL] for (int i = 0; i < tokens.length - 1; i++) {
+  [ORIGINAL] if (tokens[i].equals("class") || tokens[i].equals("interface") || tokens[i].equals("enum")) {
+  [ORIGINAL] return tokens[i + 1];
+  [ORIGINAL] }
+  [ORIGINAL] }
+  [ORIGINAL] return null;
+  [ORIGINAL] }
+  [ORIGINAL] }
+
+Archivo: FolderNotFoundException.java [Version: A]
+  [ORIGINAL] package mantenimiento.codecounter.exceptions;
+  [ORIGINAL] 
+  [ORIGINAL] public class FolderNotFoundException extends Exception {
+  [ORIGINAL] private static final String ERROR_MESSAGE =
+  [ORIGINAL] "No se ha encontrado la carpeta o la ruta no corresponde a una carpeta %s";
+  [ORIGINAL] 
+  [ORIGINAL] public FolderNotFoundException(String folderPath) {
+  [ORIGINAL] super(String.format(ERROR_MESSAGE, folderPath));
+  [ORIGINAL] }
+  [ORIGINAL] }
+
+Archivo: JavaClass.java [Version: A]
+  [ORIGINAL] package mantenimiento.codecounter.models;
+  [ORIGINAL] 
+  [ORIGINAL] /** Representa una clase Java individual con sus contadores de líneas y métodos. */
+  [ORIGINAL] public class JavaClass {
+  [ORIGINAL] private int methodsAmount;
+  [ORIGINAL] private int linesOfCode;
+  [ORIGINAL] private String className;
+  [ORIGINAL] 
+  [ORIGINAL] public JavaClass(String className) {
+  [ORIGINAL] if (className == null || className.trim().isEmpty()) {
+  [ORIGINAL] throw new IllegalArgumentException("El nombre de la clase no puede ser nulo o vacío.");
+  [ORIGINAL] }
+  [ORIGINAL] this.className = className;
+  [ORIGINAL] this.methodsAmount = 0;
+  [ORIGINAL] this.linesOfCode = 0;
+  [ORIGINAL] }
+  [ORIGINAL] 
+  [ORIGINAL] /** Devolver el total de métodos encontrados en esta clase. */
+  [ORIGINAL] public int getMethodsAmount() {
+  [ORIGINAL] return methodsAmount;
+  [ORIGINAL] }
+  [ORIGINAL] 
+  [ORIGINAL] /** Devolver el nombre de esta clase. */
+  [ORIGINAL] public String getClassName() {
+  [ORIGINAL] return className;
+  [ORIGINAL] }
+  [ORIGINAL] 
+  [ORIGINAL] /** Incrementar en uno el contador de métodos para esta clase. */
+  [ORIGINAL] public void incrementMethodsAmount() {
+  [ORIGINAL] this.methodsAmount++;
+  [ORIGINAL] }
+  [ORIGINAL] 
+  [ORIGINAL] /** Incrementar en uno el contador de líneas físicas de código para esta clase. */
+  [ORIGINAL] public void incrementLinesOfCode() {
+  [ORIGINAL] this.linesOfCode++;
+  [ORIGINAL] }
+  [ORIGINAL] 
+  [ORIGINAL] /** Devolver el total de líneas físicas de código contadas para esta clase. */
+  [ORIGINAL] public int getLinesOfCode() {
+  [ORIGINAL] return linesOfCode;
+  [ORIGINAL] }
+  [ORIGINAL] 
+  [ORIGINAL] @Override
+  [ORIGINAL] public String toString() {
+  [ORIGINAL] // Útil para depuración
+  [ORIGINAL] return "JavaClass{"
+  [ORIGINAL] + "className='"
+  [ORIGINAL] + className
+  [ORIGINAL] + '\''
+  [ORIGINAL] + ", linesOfCode="
+  [ORIGINAL] + linesOfCode
+  [ORIGINAL] + ", methodsAmount="
+  [ORIGINAL] + methodsAmount
+  [ORIGINAL] + '}';
+  [ORIGINAL] }
+  [ORIGINAL] 
+  [ORIGINAL] @Override
+  [ORIGINAL] public boolean equals(Object o) {
+  [ORIGINAL] if (this == o) return true;
+  [ORIGINAL] if (o == null || getClass() != o.getClass()) return false;
+  [ORIGINAL] JavaClass javaClass = (JavaClass) o;
+  [ORIGINAL] return className.equals(javaClass.className);
+  [ORIGINAL] }
+  [ORIGINAL] }
+
+Archivo: MethodDeclarationValidatorTest.java [Version: A]
+  [ORIGINAL] package mantenimiento.codecounter.validators.logical_validators;
+  [ORIGINAL] 
+  [ORIGINAL] import static org.junit.jupiter.api.Assertions.assertFalse;
+  [ORIGINAL] import static org.junit.jupiter.api.Assertions.assertTrue;
+  [ORIGINAL] 
+  [ORIGINAL] import org.junit.jupiter.api.BeforeEach;
+  [ORIGINAL] import org.junit.jupiter.api.DisplayName;
+  [ORIGINAL] import org.junit.jupiter.api.Test;
+  [ORIGINAL] 
+  [ORIGINAL] class MethodDeclarationValidatorTest {
+  [ORIGINAL] 
+  [ORIGINAL] private MethodDeclarationValidator validator;
+  [ORIGINAL] 
+  [ORIGINAL] @BeforeEach
+  [ORIGINAL] void setUp() {
+  [ORIGINAL] validator = new MethodDeclarationValidator();
+  [ORIGINAL] }
+  [ORIGINAL] 
+  [ORIGINAL] @Test
+  [ORIGINAL] @DisplayName("Debe retornar true para una declaración de método válida")
+  [ORIGINAL] void testValidateType_ValidMethodDeclaration() {
+  [ORIGINAL] String validMethod = "public static void main(String[] args)";
+  [ORIGINAL] assertTrue(
+  [ORIGINAL] validator.validateType(validMethod), "Should return true for a valid method declaration");
+  [ORIGINAL] }
+  [ORIGINAL] 
+  [ORIGINAL] @Test
+  [ORIGINAL] @DisplayName("Debe retornar true para una declaración de método válida sin modificadores")
+  [ORIGINAL] void testValidateType_ValidMethodWithoutModifiers() {
+  [ORIGINAL] String validMethod = "void doSomething()";
+  [ORIGINAL] assertTrue(
+  [ORIGINAL] validator.validateType(validMethod),
+  [ORIGINAL] "Should return true for a valid method declaration without modifiers");
+  [ORIGINAL] }
+  [ORIGINAL] 
+  [ORIGINAL] @Test
+  [ORIGINAL] @DisplayName("Debe retornar false para una declaración de método con punto y coma")
+  [ORIGINAL] void testValidateType_InvalidMethodWithSemicolon() {
+  [ORIGINAL] String invalidMethod = "public void doSomething();";
+  [ORIGINAL] assertFalse(
+  [ORIGINAL] validator.validateType(invalidMethod),
+  [ORIGINAL] "Should return false for a method declaration with a semicolon");
+  [ORIGINAL] }
+  [ORIGINAL] 
+  [ORIGINAL] @Test
+  [ORIGINAL] @DisplayName("Debe retornar false para una línea de código que no es una declaración de método")
+  [ORIGINAL] void testValidateType_InvalidLineOfCode() {
+  [ORIGINAL] String invalidCode = "int x = 0;";
+  [ORIGINAL] assertFalse(
+  [ORIGINAL] validator.validateType(invalidCode),
+  [ORIGINAL] "Should return false for a non-method declaration line of code");
+  [ORIGINAL] }
+  [ORIGINAL] 
+  [ORIGINAL] @Test
+  [ORIGINAL] @DisplayName("Debe retornar false para una línea vacía")
+  [ORIGINAL] void testValidateType_EmptyLine() {
+  [ORIGINAL] String emptyLine = "";
+  [ORIGINAL] assertFalse(validator.validateType(emptyLine), "Should return false for an empty line");
+  [ORIGINAL] }
+  [ORIGINAL] 
+  [ORIGINAL] @Test
+  [ORIGINAL] @DisplayName("Debe retornar false para una línea con solo espacios en blanco")
+  [ORIGINAL] void testValidateType_WhitespaceOnly() {
+  [ORIGINAL] String whitespaceOnly = "   ";
+  [ORIGINAL] assertFalse(
+  [ORIGINAL] validator.validateType(whitespaceOnly),
+  [ORIGINAL] "Should return false for a line with only whitespace");
+  [ORIGINAL] }
+  [ORIGINAL] 
+  [ORIGINAL] @Test
+  [ORIGINAL] @DisplayName("Debe retornar false para una declaración de método sin paréntesis")
+  [ORIGINAL] void testValidateType_InvalidMethodWithoutParentheses() {
+  [ORIGINAL] String invalidMethod = "public void doSomething";
+  [ORIGINAL] assertFalse(
+  [ORIGINAL] validator.validateType(invalidMethod),
+  [ORIGINAL] "Should return false for a method declaration without parentheses");
+  [ORIGINAL] }
+  [ORIGINAL] }
+
+Archivo: Proyect.java [Version: A]
+  [ORIGINAL] package mantenimiento.codecounter.models;
+  [ORIGINAL] 
+  [ORIGINAL] import java.nio.file.Path;
+  [ORIGINAL] import java.util.ArrayList;
+  [ORIGINAL] import java.util.List;
+  [ORIGINAL] 
+  [ORIGINAL] import mantenimiento.codecounter.exceptions.FileNotFoundException;
+  [ORIGINAL] 
+  [DELETED] 
+  [DELETED] public class Proyect {
+  [DELETED] 
+  [DELETED] private String path;
+  [DELETED] 
+  [DELETED] private List<Path> pathFiles;
+  [DELETED] 
+  [DELETED] private List<JavaFile> files;
+  [DELETED] 
+  [DELETED] 
+  [DELETED] public Proyect(String path, List<Path> pathFiles) {
+  [DELETED] this.path = path;
+  [DELETED] this.pathFiles = pathFiles;
+  [DELETED] this.files = new ArrayList<>();
+  [DELETED] makeFiles();
+  [DELETED] }
+  [DELETED] 
+  [DELETED] public String getPath() {
+  [DELETED] return path;
+  [DELETED] }
+  [DELETED] 
+  [DELETED] public void setPath(String path) {
+  [DELETED] this.path = path;
+  [DELETED] }
+  [DELETED] 
+  [DELETED] public List<JavaFile> getFiles() {
+  [DELETED] return files;
+  [DELETED] }
+  [DELETED] 
+  [DELETED] public void setFiles(List<JavaFile> files) {
+  [DELETED] this.files = files;
+  [DELETED] }
+  [DELETED] 
+  [DELETED] private void makeFiles(){
+  [DELETED] for (Path path : pathFiles) {
+  [DELETED] try {
+  [DELETED] this.files.add(new JavaFile(path));
+  [DELETED] } catch (FileNotFoundException e) {
+  [DELETED] e.printStackTrace();
+  [ORIGINAL] }
+  [DELETED] }
+  [ORIGINAL] }
+  [NEW] }
+  [NEW] }
+
+Archivo: CodeAnalyzerTest.java [Version: B]
+  [ORIGINAL] package mantenimiento.codecounter.models;
+  [ORIGINAL] 
+  [ORIGINAL] import static org.junit.jupiter.api.Assertions.assertEquals;
+  [ORIGINAL] import static org.junit.jupiter.api.Assertions.assertNull;
+  [ORIGINAL] import static org.junit.jupiter.api.Assertions.assertTrue;
+  [ORIGINAL] 
+  [ORIGINAL] import mantenimiento.codecounter.exceptions.InvalidFormatException;
+  [ORIGINAL] import mantenimiento.codecounter.models.counters.StructCounter;
+  [ORIGINAL] import org.junit.jupiter.api.BeforeEach;
+  [ORIGINAL] import org.junit.jupiter.api.DisplayName;
+  [ORIGINAL] import org.junit.jupiter.api.Test;
+  [ORIGINAL] 
+  [ORIGINAL] class CodeAnalyzerTest {
+  [ORIGINAL] 
+  [ORIGINAL] private StructCounter structCounter;
+  [ORIGINAL] private CodeAnalyzer codeAnalyzer;
+  [ORIGINAL] 
+  [ORIGINAL] @BeforeEach
+  [ORIGINAL] void setUp() {
+  [ORIGINAL] structCounter = new StructCounter();
+  [ORIGINAL] codeAnalyzer = new CodeAnalyzer(structCounter);
+  [ORIGINAL] }
+  [ORIGINAL] 
+  [ORIGINAL] @Test
+  [ORIGINAL] @DisplayName("Procesar línea: línea de comentario")
+  [ORIGINAL] void testProcessLine_CommentLine() throws InvalidFormatException {
+  [ORIGINAL] String line = "// Esto es un comentario";
+  [ORIGINAL] 
+  [ORIGINAL] codeAnalyzer.processLine(line);
+  [ORIGINAL] 
+  [ORIGINAL] assertTrue(structCounter.getClasses().isEmpty());
+  [ORIGINAL] }
+  [ORIGINAL] 
+  [ORIGINAL] @Test
+  [ORIGINAL] @DisplayName("Procesar línea: línea vacía")
+  [ORIGINAL] void testProcessLine_EmptyLine() throws InvalidFormatException {
+  [ORIGINAL] String line = "   ";
+  [ORIGINAL] 
+  [ORIGINAL] codeAnalyzer.processLine(line);
+  [ORIGINAL] 
+  [ORIGINAL] assertTrue(structCounter.getClasses().isEmpty());
+  [ORIGINAL] }
+  [ORIGINAL] 
+  [ORIGINAL] @Test
+  [ORIGINAL] @DisplayName("Preprocesar línea: ignorar línea de comentario")
+  [ORIGINAL] void testPreprocessLine_IgnoreCommentLine() {
+  [ORIGINAL] String commentLine = "// Esto es un comentario";
+  [ORIGINAL] 
+  [ORIGINAL] String result = codeAnalyzer.preprocessLine(commentLine);
+  [ORIGINAL] 
+  [ORIGINAL] assertNull(result);
+  [ORIGINAL] }
+  [ORIGINAL] 
+  [ORIGINAL] @Test
+  [ORIGINAL] @DisplayName("Preprocesar línea: ignorar línea vacía")
+  [ORIGINAL] void testPreprocessLine_IgnoreEmptyLine() {
+  [ORIGINAL] String emptyLine = "   ";
+  [ORIGINAL] 
+  [ORIGINAL] String result = codeAnalyzer.preprocessLine(emptyLine);
+  [ORIGINAL] 
+  [ORIGINAL] assertNull(result);
+  [ORIGINAL] }
+  [ORIGINAL] 
+  [ORIGINAL] @Test
+  [ORIGINAL] @DisplayName("Preprocesar línea: línea válida")
+  [ORIGINAL] void testPreprocessLine_ValidLine() {
+  [ORIGINAL] String validLine = "public class TestClass {";
+  [ORIGINAL] 
+  [ORIGINAL] String result = codeAnalyzer.preprocessLine(validLine);
+  [ORIGINAL] 
+  [ORIGINAL] assertEquals("public class TestClass {", result);
+  [ORIGINAL] }
+  [ORIGINAL] 
+  [ORIGINAL] @Test
+  [ORIGINAL] @DisplayName("Obtener contador")
+  [ORIGINAL] void testGetCounter() {
+  [ORIGINAL] assertEquals(structCounter, codeAnalyzer.getCounter());
+  [ORIGINAL] }
+  [ORIGINAL] 
+  [ORIGINAL] @Test
+  [ORIGINAL] @DisplayName("Contar las clases anidadas")
+  [ORIGINAL] void testCountNestedClasses() throws InvalidFormatException {
+  [ORIGINAL] String line1 = "public class OuterClass {";
+  [ORIGINAL] String line2 = "public class InnerClass {";
+  [ORIGINAL] String line3 = "public class InnerMostClass {";
+  [ORIGINAL] 
+  [ORIGINAL] codeAnalyzer.processLine(line1);
+  [ORIGINAL] codeAnalyzer.processLine(line2);
+  [ORIGINAL] codeAnalyzer.processLine(line3);
+  [ORIGINAL] 
+  [ORIGINAL] assertEquals(3, structCounter.getClassesCount());
+  [ORIGINAL] }
+  [ORIGINAL] 
+  [ORIGINAL] @Test
+  [ORIGINAL] @DisplayName("Contar métodos en una clase")
+  [ORIGINAL] void testCountMethodsInClass() throws InvalidFormatException {
+  [ORIGINAL] String line1 = "public class TestClass {";
+  [ORIGINAL] String line2 = "public void testMethod() {";
+  [ORIGINAL] String line3 = "return; } }";
+  [ORIGINAL] 
+  [ORIGINAL] codeAnalyzer.processLine(line1);
+  [ORIGINAL] codeAnalyzer.processLine(line2);
+  [ORIGINAL] codeAnalyzer.processLine(line3);
+  [ORIGINAL] 
+  [ORIGINAL] assertEquals(1, structCounter.getClasses().get(0).getMethodsAmount());
+  [ORIGINAL] }
+  [ORIGINAL] 
+  [ORIGINAL] @Test
+  [ORIGINAL] @DisplayName("Contar líneas de código en una clase")
+  [ORIGINAL] void testCountLinesOfCodeInClass() throws InvalidFormatException {
+  [ORIGINAL] String line1 = "public class TestClass {";
+  [ORIGINAL] String line2 = "int a = 0;";
+  [ORIGINAL] String line3 = "return; } }";
+  [ORIGINAL] 
+  [ORIGINAL] codeAnalyzer.processLine(line1);
+  [ORIGINAL] codeAnalyzer.processLine(line2);
+  [ORIGINAL] codeAnalyzer.processLine(line3);
+  [ORIGINAL] 
+  [ORIGINAL] assertEquals(3, structCounter.getClasses().get(0).getLinesOfCode());
+  [ORIGINAL] }
+  [ORIGINAL] }
+
+Archivo: ImportValidatorTest.java [Version: A]
+  [ORIGINAL] package mantenimiento.codecounter.validators.format_validators;
+  [ORIGINAL] 
+  [ORIGINAL] import static org.junit.jupiter.api.Assertions.assertThrows;
+  [ORIGINAL] import static org.junit.jupiter.api.Assertions.assertTrue;
+  [ORIGINAL] 
+  [ORIGINAL] import mantenimiento.codecounter.exceptions.InvalidFormatException;
+  [ORIGINAL] import org.junit.jupiter.api.DisplayName;
+  [ORIGINAL] import org.junit.jupiter.api.Test;
+  [ORIGINAL] 
+  [ORIGINAL] class ImportValidatorTest {
+  [ORIGINAL] 
+  [ORIGINAL] @Test
+  [ORIGINAL] @DisplayName("Debe de aceptar la declaracion de import")
+  [ORIGINAL] void testValidImport() throws InvalidFormatException {
+  [ORIGINAL] ImportValidator validator = new ImportValidator();
+  [ORIGINAL] assertTrue(validator.isValid("import java.util.List;"));
+  [ORIGINAL] assertTrue(validator.isValid("import static java.util.List;"));
+  [ORIGINAL] }
+  [ORIGINAL] 
+  [ORIGINAL] @Test
+  [ORIGINAL] @DisplayName("Debe de lanzar la excepion al detectar comodin en import")
+  [ORIGINAL] void importWithWildcardThrowsException() {
+  [ORIGINAL] ImportValidator validator = new ImportValidator();
+  [ORIGINAL] assertThrows(InvalidFormatException.class, () -> validator.isValid("import java.util.*;"));
+  [ORIGINAL] }
+  [ORIGINAL] 
+  [ORIGINAL] @Test
+  [ORIGINAL] @DisplayName("Debe de lanzar la excepion al detectar comodin en import static")
+  [ORIGINAL] void testStaticImportWithWildcardThrowsException() {
+  [ORIGINAL] ImportValidator validator = new ImportValidator();
+  [ORIGINAL] assertThrows(
+  [ORIGINAL] InvalidFormatException.class, () -> validator.isValid("import static java.lang.Math.*;"));
+  [ORIGINAL] }
+  [ORIGINAL] }
+
+Archivo: ReasonInvalidFormat.java [Version: A]
+  [ORIGINAL] package mantenimiento.codecounter.constants;
+  [ORIGINAL] 
+  [ORIGINAL] /** Clase que representa razones de formato inválido en el código fuente. */
+  [ORIGINAL] public class ReasonInvalidFormat {
+  [ORIGINAL] public static final ReasonInvalidFormat INVALID_STYLE_K_AND_R =
+  [ORIGINAL] new ReasonInvalidFormat("Se debe seguir el estilo K&R para el uso de bloques.");
+  [ORIGINAL] public static final ReasonInvalidFormat INVALID_IMPORT_STATEMENT =
+  [ORIGINAL] new ReasonInvalidFormat(
+  [ORIGINAL] "Las importaciones de paquete deben de ser explicitas y con comodin *.");
+  [ORIGINAL] public static final ReasonInvalidFormat INVALID_ANOTATION_STATEMENT =
+  [ORIGINAL] new ReasonInvalidFormat("Cada anotación debe estar en una sola línea y bien formada.");
+  [ORIGINAL] public static final ReasonInvalidFormat INVALID_SINGLE_DECLARATION_STATEMENT =
+  [ORIGINAL] new ReasonInvalidFormat("No se permite realizar multiples declaraciones por linea");
+  [ORIGINAL] 
+  [ORIGINAL] private String reason;
+  [ORIGINAL] 
+  [ORIGINAL] private ReasonInvalidFormat(String reason) {
+  [ORIGINAL] this.reason = reason;
+  [ORIGINAL] }
+  [ORIGINAL] 
+  [ORIGINAL] @Override
+  [ORIGINAL] public String toString() {
+  [ORIGINAL] return this.reason;
+  [ORIGINAL] }
+  [ORIGINAL] }
+
+Archivo: TxtReporter.java  [Version: B]
+  [NEW] package mantenimiento.codecounter.models.reporters;
+  [NEW] 
+  [NEW] import java.io.BufferedWriter;
+  [NEW] import java.io.FileWriter;
+  [NEW] import java.io.IOException;
+  [NEW] import java.util.List;
+  [NEW] import java.util.Map;
+  [NEW] 
+  [NEW] import mantenimiento.codecounter.demo.LineRecord;
+  [NEW] 
+  [NEW] public class TxtReporter {
+  [NEW] private Map<String, List<LineRecord>> report;
+  [NEW] 
+  [NEW] public TxtReporter(Map<String, List<LineRecord>> report) {
+  [NEW] this.report = report;
+  [NEW] }
+  [NEW] 
+  [NEW] public void generateTxt() {
+  [NEW] String outputFileName = "reporte.txt";
+  [NEW] try (BufferedWriter writer = new BufferedWriter(new FileWriter(outputFileName))) {
+  [NEW] for (Map.Entry<String, List<LineRecord>> entry : this.report.entrySet()) {
+  [NEW] String fileName = entry.getKey();
+  [NEW] List<LineRecord> records = entry.getValue();
+  [NEW] 
+  [NEW] writer.write("Archivo: " + fileName);
+  [NEW] writer.newLine();
+  [NEW] 
+  [NEW] for (LineRecord record : records) {
+  [NEW] writer.write("  [" + record.status() + "] " + record.content());
+  [NEW] writer.newLine();
+  [NEW] }
+  [NEW] 
+  [NEW] writer.newLine(); // Línea en blanco entre archivos
+  [NEW] }
+  [NEW] System.out.println("Reporte escrito en " + outputFileName);
+  [NEW] } catch (IOException e) {
+  [NEW] System.err.println("Error al escribir el reporte: " + e.getMessage());
+  [NEW] }
+  [NEW] }
+  [NEW] }
+
+Archivo: TerminalReporter.java [Version: B]
+  [ORIGINAL] package mantenimiento.codecounter.models.reporters;
+  [ORIGINAL] 
+  [ORIGINAL] import java.nio.file.Path;
+  [ORIGINAL] import java.util.List;
+  [ORIGINAL] import mantenimiento.codecounter.models.counters.StructCounter;
+  [ORIGINAL] 
+  [ORIGINAL] /** Clase que genera un reporte en la terminal */
+  [ORIGINAL] public class TerminalReporter extends Reporter {
+  [ORIGINAL] 
+  [ORIGINAL] public TerminalReporter(Path filePath, List<StructCounter> lineCounter) {
+  [ORIGINAL] super(filePath, lineCounter);
+  [ORIGINAL] }
+  [ORIGINAL] 
+  [ORIGINAL] /** Genera un reporte con la información de los contadores de líneas */
+  [ORIGINAL] @Override
+  [ORIGINAL] public void generateReport() {
+  [ORIGINAL] printHeader();
+  [ORIGINAL] printBody();
+  [ORIGINAL] }
+  [ORIGINAL] 
+  [ORIGINAL] /**
+  [ORIGINAL] * Imprime el encabezado del reporte incluyengo: el nombre del programa y los nombres de las
+  [ORIGINAL] * columnas
+  [ORIGINAL] */
+  [ORIGINAL] private void printHeader() {
+  [ORIGINAL] System.out.println(
+  [ORIGINAL] "---------------------------------------------------------------------------------");
+  [ORIGINAL] System.out.println("Programa: " + this.programName);
+  [ORIGINAL] System.out.println(
+  [ORIGINAL] "---------------------------------------------------------------------------------");
+  [ORIGINAL] System.out.printf(" %-40s  %-15s  %-15s %n", "Clases", "Métodos", "Lineas");
+  [ORIGINAL] System.out.println(
+  [ORIGINAL] "---------------------------------------------------------------------------------");
+  [ORIGINAL] }
+  [ORIGINAL] 
+  [ORIGINAL] /**
+  [ORIGINAL] * Imprime el cuerpo del reporte incluyendo la información de los contadores de líneas por archivo
+  [ORIGINAL] * analizado
+  [ORIGINAL] */
+  [ORIGINAL] private void printBody() {
+  [ORIGINAL] for (StructCounter lineCounter : lineCounters) {
+  [ORIGINAL] lineCounter
+  [ORIGINAL] .getClasses()
+  [ORIGINAL] .forEach(
+  [ORIGINAL] javaClass ->
+  [ORIGINAL] System.out.printf(
+  [ORIGINAL] " %-40s  %-15d  %-15d %n",
+  [ORIGINAL] javaClass.getClassName(),
+  [ORIGINAL] javaClass.getMethodsAmount(),
+  [ORIGINAL] javaClass.getLinesOfCode()));
+  [ORIGINAL] }
+  [ORIGINAL] 
+  [ORIGINAL] System.out.println(
+  [ORIGINAL] "---------------------------------------------------------------------------------");
+  [ORIGINAL] int totalPhysicalLines =
+  [ORIGINAL] lineCounters.stream().mapToInt(StructCounter::getTotalLinesOfCode).sum();
+  [ORIGINAL] System.out.println("Total de líneas físicas de código: " + totalPhysicalLines);
+  [ORIGINAL] }
+  [ORIGINAL] }
+
+Archivo: SingleDeclarationValidator.java [Version: A]
+  [ORIGINAL] package mantenimiento.codecounter.validators.format_validators;
+  [ORIGINAL] 
+  [ORIGINAL] import static mantenimiento.codecounter.constants.ReasonInvalidFormat.INVALID_SINGLE_DECLARATION_STATEMENT;
+  [ORIGINAL] 
+  [ORIGINAL] import mantenimiento.codecounter.exceptions.InvalidFormatException;
+  [ORIGINAL] import mantenimiento.codecounter.templates.FormatValidator;
+  [ORIGINAL] 
+  [ORIGINAL] /** Clase que valida si existe una sola variable declarada por línea ejemplo: int value = 10; */
+  [ORIGINAL] public class SingleDeclarationValidator extends FormatValidator {
+  [ORIGINAL] private static final String MULTIPLE_DECLARATIONS_REGEX =
+  [ORIGINAL] "^\\s*\\w+[\\s.=*&%+\\-/^\\w]*[;,][\\s.=*&%+\\-/^\\w]*[;,].*$";
+  [ORIGINAL] 
+  [ORIGINAL] /**
+  [ORIGINAL] * Realiza la validacion del formato verificando si existe una sola declaración por línea
+  [ORIGINAL] *
+  [ORIGINAL] * @param lineOfFile linea de texto (sentencia de codigo) a validar
+  [ORIGINAL] * @return {@code true} si la línea cuenta con una sola declaración, {@code false} en caso
+  [ORIGINAL] *     contrario
+  [ORIGINAL] * @throws InvalidFormatException si existen más variables declaradas
+  [ORIGINAL] */
+  [ORIGINAL] @Override
+  [ORIGINAL] public boolean isValid(String lineOfFile) throws InvalidFormatException {
+  [ORIGINAL] if (hasMultipleDeclarations(lineOfFile)) {
+  [ORIGINAL] throw new InvalidFormatException(INVALID_SINGLE_DECLARATION_STATEMENT, lineOfFile);
+  [ORIGINAL] }
+  [ORIGINAL] 
+  [ORIGINAL] return this.validateNext(lineOfFile);
+  [ORIGINAL] }
+  [ORIGINAL] 
+  [ORIGINAL] /**
+  [ORIGINAL] * Verifica si la línea contiene múltiples declaraciones separadas por punto y coma o solo por
+  [ORIGINAL] * comas.
+  [ORIGINAL] *
+  [ORIGINAL] * @param lineOfFile La línea del archivo a validar.
+  [ORIGINAL] * @return {@code true} si hay múltiples declaraciones separadas por comas o punto y coma, {@code
+  [ORIGINAL] *     false} en caso contrario.
+  [ORIGINAL] */
+  [ORIGINAL] public boolean hasMultipleDeclarations(String lineOfFile) {
+  [ORIGINAL] return lineOfFile.matches(MULTIPLE_DECLARATIONS_REGEX);
+  [ORIGINAL] }
+  [ORIGINAL] }
+
+Archivo: ComparationReport.java [Version: A]
+  [DELETED] package mantenimiento.codecounter.models.comparators;
+  [ORIGINAL] 
+  [ORIGINAL] import java.util.ArrayList;
+  [ORIGINAL] import java.util.List;
+  [ORIGINAL] 
+  [ORIGINAL] import mantenimiento.codecounter.demo.LineRecord;
+  [DELETED] 
+  [DELETED] public class ComparationReport {
+  [DELETED] 
+  [DELETED] private List<Record> currentContentReport;
+  [DELETED] 
+  [DELETED] private List<Record> contentToCompareReport;
+  [DELETED] 
+  [ORIGINAL] 
+  [DELETED] 
+  [DELETED] public ComparationReport() {
+  [DELETED] this.currentContentReport = new ArrayList<>();
+  [DELETED] this.contentToCompareReport = new ArrayList<>();
+  [DELETED] }
+  [DELETED] 
+  [DELETED] 
+  [DELETED] 
+  [DELETED] public void makeReportLine(STATUS status, String line, String lineToCompare){
+  [DELETED] switch (status) {
+  [DELETED] case ORIGINAL:
+  [DELETED] currentContentReport.add(new LineRecord(STATUS.DELETED, line));
+  [DELETED] contentToCompareReport.add(new LineRecord(STATUS.NEW, lineToCompare));
+  [DELETED] break;
+  [DELETED] case MODIFIED:
+  [DELETED] currentContentReport.add(new LineRecord(STATUS.ORIGINAL, line));
+  [DELETED] contentToCompareReport.add(new LineRecord(STATUS.MODIFIED, lineToCompare));
+  [DELETED] break;
+  [DELETED] case NEW:
+  [DELETED] currentContentReport.add(new LineRecord(STATUS.DELETED, line));
+  [DELETED] contentToCompareReport.add(new LineRecord(STATUS.NEW, lineToCompare));
+  [DELETED] break;
+  [DELETED] default:
+  [DELETED] break;
+  [DELETED] }
+  [DELETED] }
+  [DELETED] 
+  [DELETED] public void makeReportSingleClass(){
+  [DELETED] 
+  [ORIGINAL] }
+  [ORIGINAL] 
+  [DELETED] 
+  [DELETED] }
+  [DELETED] case MODIFIED:
+  [DELETED] currentContentReport.add(new LineRecord(STATUS.ORIGINAL, line));
+  [DELETED] contentToCompareReport.add(new LineRecord(STATUS.MODIFIED, lineToCompare));
+  [DELETED] break;
+  [DELETED] case NEW:
+  [DELETED] currentContentReport.add(new LineRecord(STATUS.DELETED, line));
+  [DELETED] contentToCompareReport.add(new LineRecord(STATUS.NEW, lineToCompare));
+  [DELETED] break;
+  [DELETED] default:
+  [DELETED] break;
+  [DELETED] }
+  [DELETED] }
+  [DELETED] 
+  [DELETED] public void makeReportSingleClass(){
+  [DELETED] 
+  [DELETED] }
+  [DELETED] 
+  [DELETED] 
+
+Archivo: StructCounter.java [Version: B]
+  [ORIGINAL] package mantenimiento.codecounter.models.counters;
+  [ORIGINAL] 
+  [ORIGINAL] import java.util.ArrayList;
+  [ORIGINAL] import java.util.List;
+  [ORIGINAL] import java.util.Optional;
+  [ORIGINAL] import mantenimiento.codecounter.models.JavaClass;
+  [ORIGINAL] 
+  [ORIGINAL] /**
+  [ORIGINAL] * Clase que representa un contador de estructuras: Clases y métodos. Mantiene una lista de objetos
+  [ORIGINAL] * JavaClass y proporciona métodos para incrementar sus contadores.
+  [ORIGINAL] */
+  [ORIGINAL] public class StructCounter {
+  [ORIGINAL] private final List<JavaClass> javaClasses;
+  [ORIGINAL] 
+  [ORIGINAL] public StructCounter() {
+  [ORIGINAL] this.javaClasses = new ArrayList<>();
+  [ORIGINAL] }
+  [ORIGINAL] 
+  [ORIGINAL] /**
+  [ORIGINAL] * Añade una nueva clase a la lista si no existe una con el mismo nombre.
+  [ORIGINAL] *
+  [ORIGINAL] * @param className El nombre de la clase a añadir.
+  [ORIGINAL] */
+  [ORIGINAL] public void addClass(String className) {
+  [ORIGINAL] if (findClassByName(className).isEmpty()) {
+  [ORIGINAL] javaClasses.add(new JavaClass(className));
+  [ORIGINAL] }
+  [ORIGINAL] }
+  [ORIGINAL] 
+  [ORIGINAL] /**
+  [ORIGINAL] * Busca una clase en la lista por su nombre.
+  [ORIGINAL] *
+  [ORIGINAL] * @param className El nombre de la clase a buscar.
+  [ORIGINAL] * @return Un Optional conteniendo la JavaClass si se encuentra, o un Optional vacío si no.
+  [ORIGINAL] */
+  [ORIGINAL] private Optional<JavaClass> findClassByName(String className) {
+  [ORIGINAL] if (className == null) return Optional.empty();
+  [ORIGINAL] for (JavaClass jc : javaClasses) {
+  [ORIGINAL] if (className.equals(jc.getClassName())) {
+  [ORIGINAL] return Optional.of(jc);
+  [ORIGINAL] }
+  [ORIGINAL] }
+  [ORIGINAL] return Optional.empty();
+  [ORIGINAL] }
+  [ORIGINAL] 
+  [ORIGINAL] /** Añade un método a la última clase registrada en la lista. */
+  [ORIGINAL] public void addMethodToLastClass() {
+  [ORIGINAL] if (!javaClasses.isEmpty()) {
+  [ORIGINAL] javaClasses.get(javaClasses.size() - 1).incrementMethodsAmount();
+  [ORIGINAL] }
+  [ORIGINAL] }
+  [ORIGINAL] 
+  [ORIGINAL] /**
+  [ORIGINAL] * Añade una línea física de código a la clase especificada por su nombre.
+  [ORIGINAL] *
+  [ORIGINAL] * @param className El nombre de la clase a la que se debe añadir la línea.
+  [ORIGINAL] */
+  [ORIGINAL] public void addLineToClass(String className) {
+  [ORIGINAL] Optional<JavaClass> targetClass = findClassByName(className);
+  [ORIGINAL] if (targetClass.isPresent()) {
+  [ORIGINAL] targetClass.get().incrementLinesOfCode();
+  [ORIGINAL] } else {
+  [ORIGINAL] throw new IllegalStateException("Clase no encontrada al intentar añadir línea: " + className);
+  [ORIGINAL] }
+  [ORIGINAL] }
+  [ORIGINAL] 
+  [ORIGINAL] /** Devuelve el total de líneas de código sumando las de todas las clases registradas. */
+  [ORIGINAL] public int getTotalLinesOfCode() {
+  [ORIGINAL] int totalLines = 0;
+  [ORIGINAL] for (JavaClass javaClass : javaClasses) {
+  [ORIGINAL] totalLines += javaClass.getLinesOfCode();
+  [ORIGINAL] }
+  [ORIGINAL] return totalLines;
+  [ORIGINAL] }
+  [ORIGINAL] 
+  [ORIGINAL] /** Devolver el número total de clases registradas. */
+  [ORIGINAL] public int getClassesCount() {
+  [ORIGINAL] return javaClasses.size();
+  [ORIGINAL] }
+  [ORIGINAL] 
+  [ORIGINAL] /** Devolver el total de métodos sumando los de todas las clases registradas. */
+  [ORIGINAL] public int getTotalMethodsCount() {
+  [ORIGINAL] int totalMethods = 0;
+  [ORIGINAL] for (JavaClass javaClass : javaClasses) {
+  [ORIGINAL] totalMethods += javaClass.getMethodsAmount();
+  [ORIGINAL] }
+  [ORIGINAL] return totalMethods;
+  [ORIGINAL] }
+  [ORIGINAL] 
+  [ORIGINAL] /** Devuelve la lista completa de objetos JavaClass registrados. */
+  [ORIGINAL] public List<JavaClass> getClasses() {
+  [ORIGINAL] return new ArrayList<>(javaClasses);
+  [ORIGINAL] }
+  [ORIGINAL] }
+
+Archivo: JavaFilesNotFoundException.java [Version: A]
+  [ORIGINAL] package mantenimiento.codecounter.exceptions;
+  [ORIGINAL] 
+  [ORIGINAL] public class JavaFilesNotFoundException extends Exception {
+  [ORIGINAL] private static final String ERROR_MESSAGE =
+  [ORIGINAL] "No se ha encontrado archivos Java por analizar en la carpeta del proyecto";
+  [ORIGINAL] 
+  [ORIGINAL] public JavaFilesNotFoundException() {
+  [ORIGINAL] super(ERROR_MESSAGE);
+  [ORIGINAL] }
+  [ORIGINAL] }
+
+Archivo: ValidatorManager.java [Version: B]
+  [ORIGINAL] package mantenimiento.codecounter.validators;
+  [ORIGINAL] 
+  [ORIGINAL] import java.util.List;
+  [ORIGINAL] import mantenimiento.codecounter.templates.FormatValidator;
+  [ORIGINAL] import mantenimiento.codecounter.templates.LogicalValidator;
+  [ORIGINAL] import mantenimiento.codecounter.validators.format_validators.ImportValidator;
+  [ORIGINAL] import mantenimiento.codecounter.validators.format_validators.SingleAnnotationValidator;
+  [ORIGINAL] import mantenimiento.codecounter.validators.format_validators.SingleDeclarationValidator;
+  [ORIGINAL] import mantenimiento.codecounter.validators.format_validators.StyleKAndRValidator;
+  [ORIGINAL] import mantenimiento.codecounter.validators.logical_validators.MethodDeclarationValidator;
+  [ORIGINAL] import mantenimiento.codecounter.validators.logical_validators.TypeDeclarationValidator;
+  [ORIGINAL] 
+  [ORIGINAL] /** Brinda el acceso a los validadores de formato o de líneas lógicas */
+  [ORIGINAL] public class ValidatorManager {
+  [ORIGINAL] private static FormatValidator formatValidator = null;
+  [ORIGINAL] 
+  [ORIGINAL] /**
+  [ORIGINAL] * Genera la secuencia de validaciones de formato
+  [ORIGINAL] *
+  [ORIGINAL] * @return Encadenamiento de validadores de format
+  [ORIGINAL] */
+  [ORIGINAL] public static FormatValidator getFormatValidator() {
+  [ORIGINAL] 
+  [ORIGINAL] if (formatValidator != null) {
+  [ORIGINAL] return formatValidator;
+  [ORIGINAL] }
+  [ORIGINAL] 
+  [ORIGINAL] FormatValidator importValidator = new ImportValidator();
+  [ORIGINAL] FormatValidator styleKAndRValidator = new StyleKAndRValidator();
+  [ORIGINAL] FormatValidator singleAnnotationValidator = new SingleAnnotationValidator();
+  [ORIGINAL] FormatValidator singleDeclarationValidator = new SingleDeclarationValidator();
+  [ORIGINAL] 
+  [ORIGINAL] importValidator.setNextValidator(styleKAndRValidator);
+  [ORIGINAL] styleKAndRValidator.setNextValidator(singleAnnotationValidator);
+  [ORIGINAL] singleAnnotationValidator.setNextValidator(singleDeclarationValidator);
+  [ORIGINAL] formatValidator = importValidator;
+  [ORIGINAL] 
+  [ORIGINAL] return formatValidator;
+  [ORIGINAL] }
+  [ORIGINAL] 
+  [ORIGINAL] /**
+  [ORIGINAL] * Genera la secuencia de validaciones de líneas lógicas
+  [ORIGINAL] *
+  [ORIGINAL] * @return Lista de validadores lógicos
+  [ORIGINAL] */
+  [ORIGINAL] public static LogicalValidator getLogicalValidators(String lineOfCode) {
+  [ORIGINAL] 
+  [ORIGINAL] final List<LogicalValidator> logicalValidators =
+  [ORIGINAL] List.of(new MethodDeclarationValidator(), new TypeDeclarationValidator());
+  [ORIGINAL] if (lineOfCode == null || lineOfCode.isBlank()) {
+  [ORIGINAL] return null;
+  [ORIGINAL] }
+  [ORIGINAL] return logicalValidators.stream()
+  [ORIGINAL] .filter(e -> e.validateType(lineOfCode))
+  [ORIGINAL] .findFirst()
+  [ORIGINAL] .orElse(null);
+  [ORIGINAL] }
+  [ORIGINAL] 
+  [ORIGINAL] private ValidatorManager() {}
+  [ORIGINAL] }
+
+Archivo: SingleDeclarationValidatorTest.java [Version: B]
+  [ORIGINAL] package mantenimiento.codecounter.validators.format_validators;
+  [ORIGINAL] 
+  [ORIGINAL] import static org.junit.jupiter.api.Assertions.assertThrows;
+  [ORIGINAL] import static org.junit.jupiter.api.Assertions.assertTrue;
+  [ORIGINAL] 
+  [ORIGINAL] import mantenimiento.codecounter.exceptions.InvalidFormatException;
+  [ORIGINAL] import org.junit.jupiter.api.DisplayName;
+  [ORIGINAL] import org.junit.jupiter.api.Test;
+  [ORIGINAL] 
+  [ORIGINAL] class SingleDeclarationValidatorTest {
+  [ORIGINAL] 
+  [ORIGINAL] @Test
+  [ORIGINAL] void testValidSingleDeclaration() throws InvalidFormatException {
+  [ORIGINAL] SingleDeclarationValidator validator = new SingleDeclarationValidator();
+  [ORIGINAL] assertTrue(validator.isValid("int x = 10;"));
+  [ORIGINAL] }
+  [ORIGINAL] 
+  [ORIGINAL] @Test
+  [ORIGINAL] @DisplayName("Debe de lanzar la excepion al detectar incialización de varias variables")
+  [ORIGINAL] void testInvalidMultipleDeclarationsWithSemicolon() {
+  [ORIGINAL] SingleDeclarationValidator validator = new SingleDeclarationValidator();
+  [ORIGINAL] assertThrows(
+  [ORIGINAL] InvalidFormatException.class,
+  [ORIGINAL] () -> {
+  [ORIGINAL] validator.isValid("int value 1 = 10; double value2 = 12.8;");
+  [ORIGINAL] });
+  [ORIGINAL] assertThrows(
+  [ORIGINAL] InvalidFormatException.class,
+  [ORIGINAL] () -> {
+  [ORIGINAL] validator.isValid("value; value;");
+  [ORIGINAL] });
+  [ORIGINAL] }
+  [ORIGINAL] 
+  [ORIGINAL] @Test
+  [ORIGINAL] @DisplayName("Debe de lanzar la excepion al detectar incialización de varias variables ")
+  [ORIGINAL] void testInvalidMultipleDeclarationsWithCommas() {
+  [ORIGINAL] SingleDeclarationValidator validator = new SingleDeclarationValidator();
+  [ORIGINAL] assertThrows(
+  [ORIGINAL] InvalidFormatException.class,
+  [ORIGINAL] () -> {
+  [ORIGINAL] validator.isValid("int value1, value2, value3;");
+  [ORIGINAL] });
+  [ORIGINAL] }
+  [ORIGINAL] }
+
+Archivo: JavaFilesScanner.java [Version: A]
+  [ORIGINAL] package mantenimiento.codecounter.utils;
+  [ORIGINAL] 
+  [ORIGINAL] import java.io.IOException;
+  [ORIGINAL] import java.nio.file.Files;
+  [ORIGINAL] import java.nio.file.Path;
+  [ORIGINAL] import java.nio.file.Paths;
+  [ORIGINAL] import java.util.List;
+  [ORIGINAL] import java.util.function.Predicate;
+  [ORIGINAL] import java.util.stream.Stream;
+  [ORIGINAL] import mantenimiento.codecounter.exceptions.FolderNotFoundException;
+  [ORIGINAL] import mantenimiento.codecounter.exceptions.JavaFilesNotFoundException;
+  [ORIGINAL] 
+  [ORIGINAL] public class JavaFilesScanner {
+  [ORIGINAL] /**
+  [ORIGINAL] * Método para obtener los archivos .java dentro de un directorio y sus subdirectorios.
+  [ORIGINAL] *
+  [ORIGINAL] * @param folderPath Ruta del directorio raíz.
+  [ORIGINAL] * @return Lista de rutas de archivos .java encontrados.
+  [ORIGINAL] * @throws FolderNotFoundException Si la carpeta no existe o no es válida.
+  [ORIGINAL] * @throws NoJavaFilesFoundException Si no se encuentran archivos .java en la carpeta.
+  [ORIGINAL] */
+  [ORIGINAL] public static List<Path> getJavaFiles(String folderPath)
+  [ORIGINAL] throws FolderNotFoundException, JavaFilesNotFoundException {
+  [ORIGINAL] Path path = Paths.get(folderPath);
+  [ORIGINAL] try (Stream<Path> stream = Files.walk(path)) {
+  [ORIGINAL] List<Path> javaFiles = stream.filter(Files::isRegularFile).filter(isJavaFile()).toList();
+  [ORIGINAL] 
+  [ORIGINAL] if (javaFiles.isEmpty()) {
+  [ORIGINAL] throw new JavaFilesNotFoundException();
+  [ORIGINAL] }
+  [ORIGINAL] 
+  [ORIGINAL] return javaFiles;
+  [ORIGINAL] 
+  [ORIGINAL] } catch (IOException e) {
+  [ORIGINAL] throw new FolderNotFoundException(folderPath);
+  [ORIGINAL] }
+  [ORIGINAL] }
+  [ORIGINAL] 
+  [ORIGINAL] /**
+  [ORIGINAL] * Método para verificar si un archivo es un archivo .java.
+  [ORIGINAL] *
+  [ORIGINAL] * @return Predicate que verifica si el archivo termina en ".java".
+  [ORIGINAL] */
+  [ORIGINAL] private static Predicate<Path> isJavaFile() {
+  [ORIGINAL] return fileName -> fileName.toString().endsWith(".java");
+  [ORIGINAL] }
+  [ORIGINAL] 
+  [ORIGINAL] private JavaFilesScanner() {}
+  [ORIGINAL] }
+
+Archivo: TypeDeclarationValidator.java [Version: B]
+  [ORIGINAL] package mantenimiento.codecounter.validators.logical_validators;
+  [ORIGINAL] 
+  [ORIGINAL] import static mantenimiento.codecounter.constants.JavaRegextConstants.ACCESS_MODIFIERS_REGEX;
+  [ORIGINAL] import static mantenimiento.codecounter.constants.JavaRegextConstants.TYPE_KEYS;
+  [ORIGINAL] 
+  [ORIGINAL] import mantenimiento.codecounter.templates.LogicalValidator;
+  [ORIGINAL] 
+  [ORIGINAL] /**
+  [ORIGINAL] * Clase que verifica si existe una declaración de tipo (class, interface, enum) para poder
+  [ORIGINAL] * contabilizarlo como línea lógica
+  [ORIGINAL] */
+  [ORIGINAL] public class TypeDeclarationValidator implements LogicalValidator {
+  [ORIGINAL] 
+  [ORIGINAL] private static final String TYPE_DECLARATION =
+  [ORIGINAL] "^(\\s*" + ACCESS_MODIFIERS_REGEX + ".*\\s*" + TYPE_KEYS + ".*)";
+  [ORIGINAL] 
+  [ORIGINAL] /**
+  [ORIGINAL] * Determina si una línea de código corresponde a una declaración de tipo para considerarla como
+  [ORIGINAL] * línea lógica
+  [ORIGINAL] *
+  [ORIGINAL] * @param linesOfCode
+  [ORIGINAL] * @return {@code true} si la corresponde a una declaración de tipo, {@code false} en caso
+  [ORIGINAL] *     contrario
+  [ORIGINAL] */
+  [ORIGINAL] @Override
+  [ORIGINAL] public boolean validateType(String linesOfCode) {
+  [ORIGINAL] return isTypeDeclaration(linesOfCode);
+  [ORIGINAL] }
+  [ORIGINAL] 
+  [ORIGINAL] /**
+  [ORIGINAL] * Verifica si la sentencia es una declaración de tipo
+  [ORIGINAL] *
+  [ORIGINAL] * @param lineOfCode sentencia de codigo por analizar
+  [ORIGINAL] * @return {@code true} si coincide con la declaracion, {@code false} en caso contrario
+  [ORIGINAL] */
+  [ORIGINAL] private boolean isTypeDeclaration(String line) {
+  [ORIGINAL] return line.matches(TYPE_DECLARATION) && !line.contains("\"");
+  [ORIGINAL] }
+  [ORIGINAL] 
+  [ORIGINAL] /*
+  [ORIGINAL] * Obtiene el nombre del tipo declarado en la línea de código
+  [ORIGINAL] */
+  [ORIGINAL] 
+  [ORIGINAL] public String getTypeName(String line) {
+  [ORIGINAL] if (line.contains("\"")) return null;
+  [ORIGINAL] 
+  [ORIGINAL] String[] tokens = line.trim().split("\\s+");
+  [ORIGINAL] for (int i = 0; i < tokens.length - 1; i++) {
+  [ORIGINAL] if (tokens[i].equals("class") || tokens[i].equals("interface") || tokens[i].equals("enum")) {
+  [ORIGINAL] return tokens[i + 1];
+  [ORIGINAL] }
+  [ORIGINAL] }
+  [ORIGINAL] return null;
+  [ORIGINAL] }
+  [ORIGINAL] }
+
+Archivo: MethodDeclarationValidatorTest.java [Version: B]
+  [ORIGINAL] package mantenimiento.codecounter.validators.logical_validators;
+  [ORIGINAL] 
+  [ORIGINAL] import static org.junit.jupiter.api.Assertions.assertFalse;
+  [ORIGINAL] import static org.junit.jupiter.api.Assertions.assertTrue;
+  [ORIGINAL] 
+  [ORIGINAL] import org.junit.jupiter.api.BeforeEach;
+  [ORIGINAL] import org.junit.jupiter.api.DisplayName;
+  [ORIGINAL] import org.junit.jupiter.api.Test;
+  [ORIGINAL] 
+  [ORIGINAL] class MethodDeclarationValidatorTest {
+  [ORIGINAL] 
+  [ORIGINAL] private MethodDeclarationValidator validator;
+  [ORIGINAL] 
+  [ORIGINAL] @BeforeEach
+  [ORIGINAL] void setUp() {
+  [ORIGINAL] validator = new MethodDeclarationValidator();
+  [ORIGINAL] }
+  [ORIGINAL] 
+  [ORIGINAL] @Test
+  [ORIGINAL] @DisplayName("Debe retornar true para una declaración de método válida")
+  [ORIGINAL] void testValidateType_ValidMethodDeclaration() {
+  [ORIGINAL] String validMethod = "public static void main(String[] args)";
+  [ORIGINAL] assertTrue(
+  [ORIGINAL] validator.validateType(validMethod), "Should return true for a valid method declaration");
+  [ORIGINAL] }
+  [ORIGINAL] 
+  [ORIGINAL] @Test
+  [ORIGINAL] @DisplayName("Debe retornar true para una declaración de método válida sin modificadores")
+  [ORIGINAL] void testValidateType_ValidMethodWithoutModifiers() {
+  [ORIGINAL] String validMethod = "void doSomething()";
+  [ORIGINAL] assertTrue(
+  [ORIGINAL] validator.validateType(validMethod),
+  [ORIGINAL] "Should return true for a valid method declaration without modifiers");
+  [ORIGINAL] }
+  [ORIGINAL] 
+  [ORIGINAL] @Test
+  [ORIGINAL] @DisplayName("Debe retornar false para una declaración de método con punto y coma")
+  [ORIGINAL] void testValidateType_InvalidMethodWithSemicolon() {
+  [ORIGINAL] String invalidMethod = "public void doSomething();";
+  [ORIGINAL] assertFalse(
+  [ORIGINAL] validator.validateType(invalidMethod),
+  [ORIGINAL] "Should return false for a method declaration with a semicolon");
+  [ORIGINAL] }
+  [ORIGINAL] 
+  [ORIGINAL] @Test
+  [ORIGINAL] @DisplayName("Debe retornar false para una línea de código que no es una declaración de método")
+  [ORIGINAL] void testValidateType_InvalidLineOfCode() {
+  [ORIGINAL] String invalidCode = "int x = 0;";
+  [ORIGINAL] assertFalse(
+  [ORIGINAL] validator.validateType(invalidCode),
+  [ORIGINAL] "Should return false for a non-method declaration line of code");
+  [ORIGINAL] }
+  [ORIGINAL] 
+  [ORIGINAL] @Test
+  [ORIGINAL] @DisplayName("Debe retornar false para una línea vacía")
+  [ORIGINAL] void testValidateType_EmptyLine() {
+  [ORIGINAL] String emptyLine = "";
+  [ORIGINAL] assertFalse(validator.validateType(emptyLine), "Should return false for an empty line");
+  [ORIGINAL] }
+  [ORIGINAL] 
+  [ORIGINAL] @Test
+  [ORIGINAL] @DisplayName("Debe retornar false para una línea con solo espacios en blanco")
+  [ORIGINAL] void testValidateType_WhitespaceOnly() {
+  [ORIGINAL] String whitespaceOnly = "   ";
+  [ORIGINAL] assertFalse(
+  [ORIGINAL] validator.validateType(whitespaceOnly),
+  [ORIGINAL] "Should return false for a line with only whitespace");
+  [ORIGINAL] }
+  [ORIGINAL] 
+  [ORIGINAL] @Test
+  [ORIGINAL] @DisplayName("Debe retornar false para una declaración de método sin paréntesis")
+  [ORIGINAL] void testValidateType_InvalidMethodWithoutParentheses() {
+  [ORIGINAL] String invalidMethod = "public void doSomething";
+  [ORIGINAL] assertFalse(
+  [ORIGINAL] validator.validateType(invalidMethod),
+  [ORIGINAL] "Should return false for a method declaration without parentheses");
+  [ORIGINAL] }
+  [ORIGINAL] }
+
+Archivo: ProgramBuilder.java [Version: B]
+  [ORIGINAL] package mantenimiento.codecounter.models;
+  [ORIGINAL] 
+  [ORIGINAL] import java.nio.file.Path;
+  [ORIGINAL] import java.nio.file.Paths;
+  [ORIGINAL] import java.util.ArrayList;
+  [ORIGINAL] import java.util.List;
+  [ORIGINAL] import java.util.Map;
+  [ORIGINAL] import java.util.stream.Stream;
+  [ORIGINAL] 
+  [ORIGINAL] import mantenimiento.codecounter.demo.LineRecord;
+  [ORIGINAL] import mantenimiento.codecounter.exceptions.FileNotFoundException;
+  [ORIGINAL] import mantenimiento.codecounter.exceptions.FolderNotFoundException;
+  [ORIGINAL] import mantenimiento.codecounter.exceptions.InvalidFormatException;
+  [ORIGINAL] import mantenimiento.codecounter.exceptions.JavaFilesNotFoundException;
+  [ORIGINAL] import mantenimiento.codecounter.models.comparators.ProyectComparator;
+  [ORIGINAL] import mantenimiento.codecounter.models.counters.StructCounter;
+  [ORIGINAL] import mantenimiento.codecounter.models.reporters.Reporter;
+  [ORIGINAL] import mantenimiento.codecounter.models.reporters.TerminalReporter;
+  [ORIGINAL] import mantenimiento.codecounter.utils.JavaFilesScanner;
+  [NEW] import mantenimiento.codecounter.models.reporters.TxtReporter;
+  [NEW] 
+  [NEW] /**
+  [NEW] * Clase encargada de analizar archivos Java dentro de una carpeta, contando
+  [NEW] * líneas de código
+  [NEW] * físicas y lógicas, y generando un reporte con los resultados.
+  [NEW] */
+  [NEW] public class ProgramBuilder {
+  [NEW] /**
+  [NEW] * Analiza los archivos Java dentro de la carpeta especificada, contando líneas
+  [NEW] * de código y
+  [NEW] * generando un reporte con los resultados.
+  [NEW] *
+  [NEW] * @param folderPath Ruta de la carpeta que contiene los archivos Java.
+  [NEW] * @throws JavaFilesNotFoundException
+  [NEW] * @throws FolderNotFoundException
+  [NEW] */
+  [NEW] public static void buildProgram(String folderPath) throws FolderNotFoundException, JavaFilesNotFoundException {
+  [NEW] String[] paths = folderPath.split(" ");
+  [NEW] Stream.of(paths).forEach(ProgramBuilder::countWorkflow);
+  [NEW] if (paths.length == 2) {
+  [NEW] compareWorkflow(paths);
+  [ORIGINAL] }
+  [NEW] }
+  [NEW] 
+  [NEW] private static void countWorkflow(String folderPath) {
+  [NEW] try {
+  [NEW] List<Path> javaFilePaths = JavaFilesScanner.getJavaFiles(folderPath);
+  [NEW] List<StructCounter> lineCounters = processFiles(javaFilePaths);
+  [NEW] generateTerminalReport(folderPath, lineCounters);
+  [NEW] } catch (Exception e) {
+  [NEW] System.out.println(e.getMessage());
+  [NEW] }
+  [NEW] }
+  [NEW] 
+  [NEW] /**
+  [NEW] * Procesa los archivos Java proporcionados, validando su formato y lógica antes
+  [NEW] * de contar sus
+  [NEW] * líneas de código.
+  [NEW] *
+  [NEW] * @param javaFilePaths Lista de rutas de archivos Java a procesar.
+  [NEW] * @return Un objeto {@link LineCounter} con el conteo de líneas físicas y
+  [NEW] *         lógicas.
+  [NEW] * @throws FileNotFoundException  Si alguno de los archivos no se encuentra.
+  [NEW] * @throws InvalidFormatException Si se encuentra un error de formato en algún
+  [NEW] *                                archivo.
+  [NEW] */
+  [NEW] private static List<StructCounter> processFiles(List<Path> javaFilePaths)
+  [NEW] throws FileNotFoundException, InvalidFormatException {
+  [NEW] 
+  [NEW] List<StructCounter> lineCounters = new ArrayList<>();
+  [NEW] 
+  [NEW] for (Path filePath : javaFilePaths) {
+  [NEW] JavaFile javaFile = new JavaFile(filePath);
+  [NEW] 
+  [NEW] lineCounters.add(processLines(javaFile));
+  [NEW] }
+  [NEW] return lineCounters;
+  [NEW] }
+  [NEW] 
+  [NEW] /**
+  [NEW] * Cuenta las líneas físicas y lógicas de un archivo Java validando su formato y
+  [NEW] * contenido lógico.
+  [NEW] *
+  [NEW] * @param fileContent      Contenido del archivo sin comentarios ni líneas en
+  [NEW] *                         blanco.
+  [NEW] * @param formatValidator  Validador de formato de líneas.
+  [NEW] * @param logicalValidator Validador de lógica de líneas.
+  [NEW] * @param lineCounter      Contador de líneas donde se almacenan los resultados.
+  [NEW] * @throws InvalidFormatException Si alguna línea tiene un formato incorrecto.
+  [NEW] */
+  [NEW] private static StructCounter processLines(JavaFile javaFile) throws InvalidFormatException {
+  [ORIGINAL] 
+  [NEW] List<String> fileContent = javaFile.removeComments().removeBlankLines().getContent();
+  [NEW] StructCounter lineCounter = new StructCounter();
+  [NEW] CodeAnalyzer analyzer = new CodeAnalyzer(lineCounter);
+  [NEW] 
+  [NEW] for (String line : fileContent) {
+  [NEW] analyzer.processLine(line);
+  [NEW] }
+  [NEW] 
+  [NEW] return lineCounter;
+  [NEW] }
+  [NEW] 
+  [NEW] private static void compareWorkflow(String[] folderPaths) {
+  [NEW] try {
+  [NEW] Proyect proyect = makeProyect(folderPaths[0]);
+  [NEW] Proyect proyectToCompare = makeProyect(folderPaths[1]);
+  [NEW] ProyectComparator proyectComparator = new ProyectComparator(proyect, proyectToCompare);
+  [NEW] proyectComparator.compare();
+  [NEW] generateTxtReport(proyectComparator);
+  [NEW] } catch (FolderNotFoundException | JavaFilesNotFoundException e) {
+  [NEW] System.out.println(e.getMessage());
+  [ORIGINAL] }
+  [NEW] }
+  [NEW] 
+  [NEW] private static Proyect makeProyect(String folderPath) throws FolderNotFoundException, JavaFilesNotFoundException {
+  [NEW] List<Path> javaPathFiles = JavaFilesScanner.getJavaFiles(folderPath);
+  [NEW] Proyect proyect = new Proyect(folderPath, javaPathFiles);
+  [NEW] return proyect;
+  [NEW] }
+  [NEW] 
+  [NEW] /**
+  [NEW] * Genera un reporte con los resultados del análisis de líneas de código.
+  [NEW] *
+  [NEW] * @param folderPath  Ruta de la carpeta analizada.
+  [NEW] * @param lineCounter Contador de líneas de código con los resultados del
+  [NEW] *                    análisis.
+  [NEW] */
+  [NEW] private static void generateTerminalReport(String folderPath, List<StructCounter> lineCounters) {
+  [NEW] Reporter reporter = new TerminalReporter(Paths.get(folderPath), lineCounters);
+  [NEW] reporter.generateReport();
+  [NEW] }
+  [NEW] 
+  [NEW] private static void generateTxtReport(ProyectComparator proyectComparator) {
+  [NEW] Map<String, List<LineRecord>> report = proyectComparator.getGeneralReport();
+  [NEW] TxtReporter txtReporter = new TxtReporter(report);
+  [NEW] txtReporter.generateTxt();
+  [NEW] }
+  [ORIGINAL] 
+  [NEW] private ProgramBuilder() {
+  [NEW] }
+  [NEW] }
+
+Archivo: FolderNotFoundException.java [Version: B]
+  [ORIGINAL] package mantenimiento.codecounter.exceptions;
+  [ORIGINAL] 
+  [ORIGINAL] public class FolderNotFoundException extends Exception {
+  [ORIGINAL] private static final String ERROR_MESSAGE =
+  [ORIGINAL] "No se ha encontrado la carpeta o la ruta no corresponde a una carpeta %s";
+  [ORIGINAL] 
+  [ORIGINAL] public FolderNotFoundException(String folderPath) {
+  [ORIGINAL] super(String.format(ERROR_MESSAGE, folderPath));
+  [ORIGINAL] }
+  [ORIGINAL] }
+
+Archivo: FileNotFoundException.java [Version: A]
+  [ORIGINAL] package mantenimiento.codecounter.exceptions;
+  [ORIGINAL] 
+  [ORIGINAL] public class FileNotFoundException extends Exception {
+  [ORIGINAL] private static final String ERROR_MESSAGE = "No se ha encontrado el archivo: %s";
+  [ORIGINAL] 
+  [ORIGINAL] public FileNotFoundException(String filePath) {
+  [ORIGINAL] super(String.format(ERROR_MESSAGE, filePath));
+  [ORIGINAL] }
+  [ORIGINAL] }
+
+Archivo: JavaFile.java [Version: B]
+  [ORIGINAL] package mantenimiento.codecounter.models;
+  [ORIGINAL] 
+  [ORIGINAL] import java.nio.file.Files;
+  [ORIGINAL] import java.nio.file.Path;
+  [ORIGINAL] import java.util.ArrayList;
+  [ORIGINAL] import java.util.List;
+  [ORIGINAL] import mantenimiento.codecounter.exceptions.FileNotFoundException;
+  [ORIGINAL] 
+  [ORIGINAL] /**
+  [ORIGINAL] * Representacion de un archivo Java que provee metodos de acceso para su contenido y eliminar
+  [ORIGINAL] * informacion innecesaria para el conteno de lineas logicas y fisicas
+  [ORIGINAL] */
+  [ORIGINAL] public class JavaFile {
+  [ORIGINAL] private List<String> content;
+  [ORIGINAL] private String fileName;
+  [ORIGINAL] 
+  [ORIGINAL] /**
+  [ORIGINAL] * @param filePath Ruta del archivo
+  [ORIGINAL] * @throws FileNotFoundException Si la ruta es invalida
+  [ORIGINAL] */
+  [ORIGINAL] public JavaFile(Path filePath) throws FileNotFoundException {
+  [ORIGINAL] try {
+  [ORIGINAL] this.content = Files.readAllLines(filePath);
+  [ORIGINAL] this.fileName = filePath.getFileName().toString();
+  [ORIGINAL] } catch (Exception e) {
+  [ORIGINAL] throw new FileNotFoundException(filePath.toString());
+  [ORIGINAL] }
+  [ORIGINAL] }
+  [ORIGINAL] 
+  [ORIGINAL] /**
+  [ORIGINAL] * Remueve comentarios en linea y de bloque
+  [ORIGINAL] *
+  [ORIGINAL] * @return Devuelve la instancia misma del objeto
+  [ORIGINAL] */
+  [ORIGINAL] public JavaFile removeComments() {
+  [ORIGINAL] String commentRegext = "(?s)/\\*.*?\\*/|//[^\n]*";
+  [ORIGINAL] 
+  [ORIGINAL] String fileContent = String.join("\n", this.content);
+  [ORIGINAL] String codeWithOutComments = fileContent.replaceAll(commentRegext, "");
+  [ORIGINAL] 
+  [ORIGINAL] this.content = new ArrayList<>(List.of(codeWithOutComments.split("\n")));
+  [ORIGINAL] 
+  [ORIGINAL] return this;
+  [ORIGINAL] }
+  [ORIGINAL] 
+  [ORIGINAL] /**
+  [ORIGINAL] * Remueve lineas en blanco
+  [ORIGINAL] *
+  [ORIGINAL] * @return Devuelve la instancia misma del objeto
+  [ORIGINAL] */
+  [ORIGINAL] public JavaFile removeBlankLines() {
+  [ORIGINAL] this.content.removeIf(String::isBlank);
+  [ORIGINAL] return this;
+  [ORIGINAL] }
+  [ORIGINAL] 
+  [ORIGINAL] /**
+  [ORIGINAL] * @return Contenido del archivo java
+  [ORIGINAL] */
+  [ORIGINAL] public List<String> getContent() {
+  [ORIGINAL] return this.content.stream().map(String::trim).toList();
+  [ORIGINAL] }
+  [ORIGINAL] 
+  [ORIGINAL] /**
+  [ORIGINAL] * @return Nombre del archivo
+  [ORIGINAL] */
+  [ORIGINAL] public String getFileName() {
+  [ORIGINAL] return this.fileName;
+  [ORIGINAL] }
+  [ORIGINAL] }
+
+Archivo: Proyect.java [Version: B]
+  [ORIGINAL] package mantenimiento.codecounter.models;
+  [ORIGINAL] 
+  [ORIGINAL] import java.nio.file.Path;
+  [ORIGINAL] import java.util.ArrayList;
+  [ORIGINAL] import java.util.List;
+  [ORIGINAL] 
+  [ORIGINAL] import mantenimiento.codecounter.exceptions.FileNotFoundException;
+  [ORIGINAL] 
+  [NEW] public class Proyect {
+  [NEW] 
+  [NEW] private String path;
+  [NEW] 
+  [NEW] private List<Path> pathFiles;
+  [NEW] 
+  [NEW] private List<JavaFile> files;
+  [NEW] 
+  [NEW] public Proyect(String path, List<Path> pathFiles) {
+  [NEW] this.path = path;
+  [NEW] this.pathFiles = pathFiles;
+  [NEW] this.files = new ArrayList<>();
+  [NEW] makeFiles();
+  [NEW] }
+  [NEW] 
+  [NEW] public String getPath() {
+  [NEW] return path;
+  [NEW] }
+  [NEW] 
+  [NEW] public void setPath(String path) {
+  [NEW] this.path = path;
+  [NEW] }
+  [NEW] 
+  [NEW] public List<JavaFile> getFiles() {
+  [NEW] return files;
+  [NEW] }
+  [NEW] 
+  [NEW] public void setFiles(List<JavaFile> files) {
+  [NEW] this.files = files;
+  [NEW] }
+  [NEW] 
+  [NEW] private void makeFiles() {
+  [NEW] for (Path path : pathFiles) {
+  [NEW] try {
+  [NEW] this.files.add(new JavaFile(path));
+  [NEW] } catch (FileNotFoundException e) {
+  [NEW] e.printStackTrace();
+  [NEW] }
+  [NEW] }
+  [ORIGINAL] }
+  [NEW] 
+  [ORIGINAL] }
+
+Archivo: SingleAnnotationValidator.java [Version: A]
+  [ORIGINAL] package mantenimiento.codecounter.validators.format_validators;
+  [ORIGINAL] 
+  [ORIGINAL] import static mantenimiento.codecounter.constants.JavaRegextConstants.ANNOTATION_REGEX;
+  [ORIGINAL] import static mantenimiento.codecounter.constants.ReasonInvalidFormat.INVALID_ANOTATION_STATEMENT;
+  [ORIGINAL] 
+  [ORIGINAL] import mantenimiento.codecounter.exceptions.InvalidFormatException;
+  [ORIGINAL] import mantenimiento.codecounter.templates.FormatValidator;
+  [ORIGINAL] 
+  [ORIGINAL] /**
+  [ORIGINAL] * Clase encargada de verificar si una línea contiene una anotación válida en el formato correcto,
+  [ORIGINAL] * Una anotación válida debe comenzar con '@', seguida de un nombre que cumpla con las reglas de
+  [ORIGINAL] * identificadores de Java
+  [ORIGINAL] */
+  [ORIGINAL] public class SingleAnnotationValidator extends FormatValidator {
+  [ORIGINAL] 
+  [ORIGINAL] /**
+  [ORIGINAL] * Valida si la línea proporcionada contiene una anotación bien formada. Si la línea comienza con
+  [ORIGINAL] * '@', se verifica su formato; si está mal formada, lanza una excepción.
+  [ORIGINAL] *
+  [ORIGINAL] * @param lineOfFile Línea de código a validar.
+  [ORIGINAL] * @return {@code true} si la línea es una anotación válida
+  [ORIGINAL] * @throws InvalidFormatException Si la línea es una anotación pero está mal formada.
+  [ORIGINAL] */
+  [ORIGINAL] @Override
+  [ORIGINAL] public boolean isValid(String lineOfFile) throws InvalidFormatException {
+  [ORIGINAL] if (isAnnotation(lineOfFile)) {
+  [ORIGINAL] if (!isWellFormedAnnotation(lineOfFile)) {
+  [ORIGINAL] throw new InvalidFormatException(INVALID_ANOTATION_STATEMENT, lineOfFile);
+  [ORIGINAL] }
+  [ORIGINAL] return true;
+  [ORIGINAL] }
+  [ORIGINAL] return validateNext(lineOfFile);
+  [ORIGINAL] }
+  [ORIGINAL] 
+  [ORIGINAL] /**
+  [ORIGINAL] * Determina si la línea corresponde a una anotación, verificando si comienza con '@'.
+  [ORIGINAL] *
+  [ORIGINAL] * @param lineOfFile Línea de código a evaluar.
+  [ORIGINAL] * @return {@code true} si la línea comienza con '@', {@code false} en caso contrario.
+  [ORIGINAL] */
+  [ORIGINAL] private boolean isAnnotation(String lineOfFile) {
+  [ORIGINAL] return lineOfFile.trim().startsWith("@");
+  [ORIGINAL] }
+  [ORIGINAL] 
+  [ORIGINAL] /**
+  [ORIGINAL] * Verifica si una anotación está bien formada según la expresión regular definida en
+  [ORIGINAL] *
+  [ORIGINAL] * @param lineOfFile Línea de código a validar.
+  [ORIGINAL] * @return {@code true} si la anotación cumple con el formato definido, {@code false} si no.
+  [ORIGINAL] */
+  [ORIGINAL] private boolean isWellFormedAnnotation(String lineOfFile) {
+  [ORIGINAL] return lineOfFile.matches(ANNOTATION_REGEX);
+  [ORIGINAL] }
+  [ORIGINAL] }
+
+Archivo: CodeAnalyzer.java [Version: B]
+  [ORIGINAL] package mantenimiento.codecounter.models;
+  [ORIGINAL] 
+  [ORIGINAL] import java.util.ArrayDeque;
+  [ORIGINAL] import java.util.Deque;
+  [ORIGINAL] import mantenimiento.codecounter.exceptions.InvalidFormatException;
+  [ORIGINAL] import mantenimiento.codecounter.models.counters.StructCounter;
+  [ORIGINAL] import mantenimiento.codecounter.templates.LogicalValidator;
+  [ORIGINAL] import mantenimiento.codecounter.validators.ValidatorManager;
+  [ORIGINAL] import mantenimiento.codecounter.validators.logical_validators.MethodDeclarationValidator;
+  [ORIGINAL] import mantenimiento.codecounter.validators.logical_validators.TypeDeclarationValidator;
+  [ORIGINAL] 
+  [ORIGINAL] /**
+  [ORIGINAL] * Analiza líneas de código Java para contar clases (anidadas incluidas), métodos y líneas físicas.
+  [ORIGINAL] */
+  [ORIGINAL] public class CodeAnalyzer {
+  [ORIGINAL] 
+  [ORIGINAL] private final StructCounter counter;
+  [ORIGINAL] private final Deque<String> classContextStack;
+  [ORIGINAL] private final Deque<Integer> classStartBraceLevelStack;
+  [ORIGINAL] private int currentBraceLevel = 0;
+  [ORIGINAL] 
+  [ORIGINAL] /**
+  [ORIGINAL] * Constructor.
+  [ORIGINAL] *
+  [ORIGINAL] * @param counter El contador donde se almacenarán los resultados. No puede ser nulo.
+  [ORIGINAL] */
+  [ORIGINAL] public CodeAnalyzer(StructCounter counter) {
+  [ORIGINAL] this.counter = counter;
+  [ORIGINAL] this.classContextStack = new ArrayDeque<>();
+  [ORIGINAL] this.classStartBraceLevelStack = new ArrayDeque<>();
+  [ORIGINAL] }
+  [ORIGINAL] 
+  [ORIGINAL] /**
+  [ORIGINAL] * Procesa una línea de código fuente. Hace el análisis llamando a métodos auxiliares.
+  [ORIGINAL] *
+  [ORIGINAL] * @param line La línea de código a procesar.
+  [ORIGINAL] * @throws InvalidFormatException Si los validadores detectan un formato inválido.
+  [ORIGINAL] */
+  [ORIGINAL] public void processLine(String line) throws InvalidFormatException {
+  [ORIGINAL] String trimmedLine = preprocessLine(line);
+  [ORIGINAL] countLineForCurrentContext();
+  [ORIGINAL] DeclarationInfo declInfo = detectDeclarations(trimmedLine);
+  [ORIGINAL] processBracesAndUpdateContext(line, declInfo.potentialClassName());
+  [ORIGINAL] countMethodIfDeclared(declInfo.isMethod());
+  [ORIGINAL] }
+  [ORIGINAL] 
+  [ORIGINAL] /**
+  [ORIGINAL] * Preprocesa la línea: recorta espacios y verifica si debe ignorarse.
+  [ORIGINAL] *
+  [ORIGINAL] * @param line Línea original.
+  [ORIGINAL] * @return La línea recortada, o null si debe ignorarse.
+  [ORIGINAL] */
+  [ORIGINAL] String preprocessLine(String line) {
+  [ORIGINAL] String trimmedLine = line.trim();
+  [ORIGINAL] if (trimmedLine.isEmpty() || isCommentLine(trimmedLine)) {
+  [ORIGINAL] return null;
+  [ORIGINAL] }
+  [ORIGINAL] return trimmedLine;
+  [ORIGINAL] }
+  [ORIGINAL] 
+  [ORIGINAL] /** Llama a StructCounter para añadir una línea a todas las clases en el contexto actual. */
+  [ORIGINAL] private void countLineForCurrentContext() {
+  [ORIGINAL] if (!classContextStack.isEmpty()) {
+  [ORIGINAL] for (String classNameInStack : classContextStack) {
+  [ORIGINAL] counter.addLineToClass(classNameInStack);
+  [ORIGINAL] }
+  [ORIGINAL] }
+  [ORIGINAL] }
+  [ORIGINAL] 
+  [ORIGINAL] private record DeclarationInfo(boolean isType, boolean isMethod, String potentialClassName) {}
+  [ORIGINAL] 
+  [ORIGINAL] /**
+  [ORIGINAL] * Determina si la línea contiene una declaración de tipo o método.
+  [ORIGINAL] *
+  [ORIGINAL] * @param trimmedLine La línea de código recortada.
+  [ORIGINAL] * @return Un objeto DeclarationInfo con los resultados.
+  [ORIGINAL] * @throws InvalidFormatException Si los validadores lanzan la excepción.
+  [ORIGINAL] */
+  [ORIGINAL] private DeclarationInfo detectDeclarations(String trimmedLine) {
+  [ORIGINAL] LogicalValidator validator = ValidatorManager.getLogicalValidators(trimmedLine);
+  [ORIGINAL] boolean isType = validator instanceof TypeDeclarationValidator;
+  [ORIGINAL] boolean isMethod = validator instanceof MethodDeclarationValidator;
+  [ORIGINAL] String className = null;
+  [ORIGINAL] 
+  [ORIGINAL] if (isType) {
+  [ORIGINAL] className = ((TypeDeclarationValidator) validator).getTypeName(trimmedLine);
+  [ORIGINAL] if (className == null || className.trim().isEmpty()) {
+  [ORIGINAL] isType = false;
+  [ORIGINAL] className = null;
+  [ORIGINAL] }
+  [ORIGINAL] }
+  [ORIGINAL] return new DeclarationInfo(isType, isMethod, className);
+  [ORIGINAL] }
+  [ORIGINAL] 
+  [ORIGINAL] /**
+  [ORIGINAL] * Itera sobre los caracteres de la línea, actualiza el nivel de llaves, y llama a push/pop del
+  [ORIGINAL] * contexto de clase cuando corresponde.
+  [ORIGINAL] *
+  [ORIGINAL] * @param line La línea de código original (para iterar caracteres).
+  [ORIGINAL] * @param potentialClassNameForLine El nombre de la clase declarada en ESTA línea (si aplica),
+  [ORIGINAL] *     null si no.
+  [ORIGINAL] */
+  [ORIGINAL] private void processBracesAndUpdateContext(String line, String potentialClassNameForLine) {
+  [ORIGINAL] int levelBeforeProcessingLine = currentBraceLevel;
+  [ORIGINAL] boolean classAddedOnThisLine = false;
+  [ORIGINAL] 
+  [ORIGINAL] for (char c : line.toCharArray()) {
+  [ORIGINAL] if (c == '{') {
+  [ORIGINAL] if (potentialClassNameForLine != null && !classAddedOnThisLine) {
+  [ORIGINAL] pushClassContext(potentialClassNameForLine, levelBeforeProcessingLine);
+  [ORIGINAL] classAddedOnThisLine = true;
+  [ORIGINAL] }
+  [ORIGINAL] currentBraceLevel++;
+  [ORIGINAL] } else if (c == '}') {
+  [ORIGINAL] tryPopClassContext();
+  [ORIGINAL] if (currentBraceLevel > 0) {
+  [ORIGINAL] currentBraceLevel--;
+  [ORIGINAL] }
+  [ORIGINAL] }
+  [ORIGINAL] }
+  [ORIGINAL] if (potentialClassNameForLine != null && !classAddedOnThisLine) {
+  [ORIGINAL] pushClassContext(potentialClassNameForLine, currentBraceLevel);
+  [ORIGINAL] }
+  [ORIGINAL] }
+  [ORIGINAL] 
+  [ORIGINAL] /**
+  [ORIGINAL] * Intenta sacar una clase del contexto si el nivel de llaves actual coincide con el cierre
+  [ORIGINAL] * esperado de la clase más interna.
+  [ORIGINAL] */
+  [ORIGINAL] private void tryPopClassContext() {
+  [ORIGINAL] if (!classContextStack.isEmpty()
+  [ORIGINAL] && !classStartBraceLevelStack.isEmpty()
+  [ORIGINAL] && currentBraceLevel == classStartBraceLevelStack.peek() + 1) {
+  [ORIGINAL] popClassContext();
+  [ORIGINAL] }
+  [ORIGINAL] }
+  [ORIGINAL] 
+  [ORIGINAL] /**
+  [ORIGINAL] * Añade una clase al contexto y actualiza los contadores.
+  [ORIGINAL] *
+  [ORIGINAL] * @param className Nombre de la clase.
+  [ORIGINAL] * @param braceLevel Nivel de llaves antes de la apertura de esta clase.
+  [ORIGINAL] */
+  [ORIGINAL] private void pushClassContext(String className, int braceLevel) {
+  [ORIGINAL] if (classContextStack.isEmpty() || !classContextStack.peek().equals(className)) {
+  [ORIGINAL] classContextStack.push(className);
+  [ORIGINAL] classStartBraceLevelStack.push(braceLevel);
+  [ORIGINAL] counter.addClass(className);
+  [ORIGINAL] counter.addLineToClass(className);
+  [ORIGINAL] }
+  [ORIGINAL] }
+  [ORIGINAL] 
+  [ORIGINAL] /** Saca la clase más interna del contexto (de ambas pilas). */
+  [ORIGINAL] private void popClassContext() {
+  [ORIGINAL] if (!classContextStack.isEmpty()) {
+  [ORIGINAL] classContextStack.pop();
+  [ORIGINAL] }
+  [ORIGINAL] if (!classStartBraceLevelStack.isEmpty()) {
+  [ORIGINAL] classStartBraceLevelStack.pop();
+  [ORIGINAL] }
+  [ORIGINAL] }
+  [ORIGINAL] 
+  [ORIGINAL] /**
+  [ORIGINAL] * Llama al contador para incrementar el número de métodos si aplica.
+  [ORIGINAL] *
+  [ORIGINAL] * @param isMethodDeclaration true si la línea actual declaró un método.
+  [ORIGINAL] */
+  [ORIGINAL] private void countMethodIfDeclared(boolean isMethodDeclaration) {
+  [ORIGINAL] if (!classContextStack.isEmpty() && isMethodDeclaration) {
+  [ORIGINAL] counter.addMethodToLastClass();
+  [ORIGINAL] }
+  [ORIGINAL] }
+  [ORIGINAL] 
+  [ORIGINAL] /**
+  [ORIGINAL] * Verifica si la línea es un comentario simple de una línea.
+  [ORIGINAL] *
+  [ORIGINAL] * @param trimmedLine Línea recortada.
+  [ORIGINAL] * @return true si es comentario, false si no.
+  [ORIGINAL] */
+  [ORIGINAL] private boolean isCommentLine(String trimmedLine) {
+  [ORIGINAL] return trimmedLine.startsWith("//");
+  [ORIGINAL] }
+  [ORIGINAL] 
+  [ORIGINAL] /**
+  [ORIGINAL] * Devuelve el contador asociado a este analizador.
+  [ORIGINAL] *
+  [ORIGINAL] * @return El objeto StructCounter.
+  [ORIGINAL] */
+  [ORIGINAL] public StructCounter getCounter() {
+  [ORIGINAL] return counter;
+  [ORIGINAL] }
+  [ORIGINAL] }
+
+Archivo: MethodDeclarationValidator.java [Version: A]
+  [ORIGINAL] package mantenimiento.codecounter.validators.logical_validators;
+  [ORIGINAL] 
+  [ORIGINAL] import static mantenimiento.codecounter.constants.JavaRegextConstants.ACCESS_MODIFIERS_REGEX;
+  [ORIGINAL] import static mantenimiento.codecounter.constants.JavaRegextConstants.DATATYPE_DECLARATION_REGEX;
+  [ORIGINAL] import static mantenimiento.codecounter.constants.JavaRegextConstants.FINAL_OR_STATIC_REGEX;
+  [ORIGINAL] import static mantenimiento.codecounter.constants.JavaRegextConstants.IDENTIFIER_DECLARATION_REGEX;
+  [ORIGINAL] 
+  [ORIGINAL] import mantenimiento.codecounter.templates.LogicalValidator;
+  [ORIGINAL] 
+  [ORIGINAL] /**
+  [ORIGINAL] * Clase que verifica si existe una declaración de un método para poder contabilizarlo como línea
+  [ORIGINAL] * lógica
+  [ORIGINAL] */
+  [ORIGINAL] public class MethodDeclarationValidator implements LogicalValidator {
+  [ORIGINAL] 
+  [ORIGINAL] private static final String METHOD_DECLARATION =
+  [ORIGINAL] "^(\\s*"
+  [ORIGINAL] + ACCESS_MODIFIERS_REGEX
+  [ORIGINAL] + FINAL_OR_STATIC_REGEX
+  [ORIGINAL] + DATATYPE_DECLARATION_REGEX
+  [ORIGINAL] + IDENTIFIER_DECLARATION_REGEX
+  [ORIGINAL] + "\\(.*)";
+  [ORIGINAL] 
+  [ORIGINAL] /**
+  [ORIGINAL] * Determina si una línea de código corresponde a una declaración de un método para considerarla
+  [ORIGINAL] * como línea lógica
+  [ORIGINAL] *
+  [ORIGINAL] * @param lineOfCode linea de código por analizar
+  [ORIGINAL] * @return {@code true} si es declaración de método, {@code false} en caso contrario
+  [ORIGINAL] */
+  [ORIGINAL] @Override
+  [ORIGINAL] public boolean validateType(String lineOfCode) {
+  [ORIGINAL] return isMethodDeclaration(lineOfCode);
+  [ORIGINAL] }
+  [ORIGINAL] 
+  [ORIGINAL] /**
+  [ORIGINAL] * Verifica si es una declaración de método
+  [ORIGINAL] *
+  [ORIGINAL] * @param lineOfCode linea de código por analizar
+  [ORIGINAL] * @return {@code true} si es declaración de método, {@code false} en caso contrario
+  [ORIGINAL] */
+  [ORIGINAL] private boolean isMethodDeclaration(String lineOfCode) {
+  [ORIGINAL] return lineOfCode.matches(METHOD_DECLARATION)
+  [ORIGINAL] && !lineOfCode.contains(";")
+  [ORIGINAL] && !lineOfCode.contains("\"");
+  [ORIGINAL] }
+  [ORIGINAL] }
+
+Archivo: LogicalValidator.java [Version: A]
+  [ORIGINAL] package mantenimiento.codecounter.templates;
+  [ORIGINAL] 
+  [ORIGINAL] /*
+  [ORIGINAL] * Interfaz que define el comportamiento de una fábrica de validadores lógicos
+  [ORIGINAL] */
+  [ORIGINAL] public interface LogicalValidator {
+  [ORIGINAL] /**
+  [ORIGINAL] * Valida si la línea de código corresponde a una declaración de tipo
+  [ORIGINAL] *
+  [ORIGINAL] * @param linesOfCode
+  [ORIGINAL] * @return
+  [ORIGINAL] */
+  [ORIGINAL] public boolean validateType(String linesOfCode);
+  [ORIGINAL] }
+
+Archivo: ImportValidatorTest.java [Version: B]
+  [ORIGINAL] package mantenimiento.codecounter.validators.format_validators;
+  [ORIGINAL] 
+  [ORIGINAL] import static org.junit.jupiter.api.Assertions.assertThrows;
+  [ORIGINAL] import static org.junit.jupiter.api.Assertions.assertTrue;
+  [ORIGINAL] 
+  [ORIGINAL] import mantenimiento.codecounter.exceptions.InvalidFormatException;
+  [ORIGINAL] import org.junit.jupiter.api.DisplayName;
+  [ORIGINAL] import org.junit.jupiter.api.Test;
+  [ORIGINAL] 
+  [ORIGINAL] class ImportValidatorTest {
+  [ORIGINAL] 
+  [ORIGINAL] @Test
+  [ORIGINAL] @DisplayName("Debe de aceptar la declaracion de import")
+  [ORIGINAL] void testValidImport() throws InvalidFormatException {
+  [ORIGINAL] ImportValidator validator = new ImportValidator();
+  [ORIGINAL] assertTrue(validator.isValid("import java.util.List;"));
+  [ORIGINAL] assertTrue(validator.isValid("import static java.util.List;"));
+  [ORIGINAL] }
+  [ORIGINAL] 
+  [ORIGINAL] @Test
+  [ORIGINAL] @DisplayName("Debe de lanzar la excepion al detectar comodin en import")
+  [ORIGINAL] void importWithWildcardThrowsException() {
+  [ORIGINAL] ImportValidator validator = new ImportValidator();
+  [ORIGINAL] assertThrows(InvalidFormatException.class, () -> validator.isValid("import java.util.*;"));
+  [ORIGINAL] }
+  [ORIGINAL] 
+  [ORIGINAL] @Test
+  [ORIGINAL] @DisplayName("Debe de lanzar la excepion al detectar comodin en import static")
+  [ORIGINAL] void testStaticImportWithWildcardThrowsException() {
+  [ORIGINAL] ImportValidator validator = new ImportValidator();
+  [ORIGINAL] assertThrows(
+  [ORIGINAL] InvalidFormatException.class, () -> validator.isValid("import static java.lang.Math.*;"));
+  [ORIGINAL] }
+  [ORIGINAL] }
+
+Archivo: CodeAnalyzerTest.java [Version: A]
+  [ORIGINAL] package mantenimiento.codecounter.models;
+  [ORIGINAL] 
+  [ORIGINAL] import static org.junit.jupiter.api.Assertions.assertEquals;
+  [ORIGINAL] import static org.junit.jupiter.api.Assertions.assertNull;
+  [ORIGINAL] import static org.junit.jupiter.api.Assertions.assertTrue;
+  [ORIGINAL] 
+  [ORIGINAL] import mantenimiento.codecounter.exceptions.InvalidFormatException;
+  [ORIGINAL] import mantenimiento.codecounter.models.counters.StructCounter;
+  [ORIGINAL] import org.junit.jupiter.api.BeforeEach;
+  [ORIGINAL] import org.junit.jupiter.api.DisplayName;
+  [ORIGINAL] import org.junit.jupiter.api.Test;
+  [ORIGINAL] 
+  [ORIGINAL] class CodeAnalyzerTest {
+  [ORIGINAL] 
+  [ORIGINAL] private StructCounter structCounter;
+  [ORIGINAL] private CodeAnalyzer codeAnalyzer;
+  [ORIGINAL] 
+  [ORIGINAL] @BeforeEach
+  [ORIGINAL] void setUp() {
+  [ORIGINAL] structCounter = new StructCounter();
+  [ORIGINAL] codeAnalyzer = new CodeAnalyzer(structCounter);
+  [ORIGINAL] }
+  [ORIGINAL] 
+  [ORIGINAL] @Test
+  [ORIGINAL] @DisplayName("Procesar línea: línea de comentario")
+  [ORIGINAL] void testProcessLine_CommentLine() throws InvalidFormatException {
+  [ORIGINAL] String line = "// Esto es un comentario";
+  [ORIGINAL] 
+  [ORIGINAL] codeAnalyzer.processLine(line);
+  [ORIGINAL] 
+  [ORIGINAL] assertTrue(structCounter.getClasses().isEmpty());
+  [ORIGINAL] }
+  [ORIGINAL] 
+  [ORIGINAL] @Test
+  [ORIGINAL] @DisplayName("Procesar línea: línea vacía")
+  [ORIGINAL] void testProcessLine_EmptyLine() throws InvalidFormatException {
+  [ORIGINAL] String line = "   ";
+  [ORIGINAL] 
+  [ORIGINAL] codeAnalyzer.processLine(line);
+  [ORIGINAL] 
+  [ORIGINAL] assertTrue(structCounter.getClasses().isEmpty());
+  [ORIGINAL] }
+  [ORIGINAL] 
+  [ORIGINAL] @Test
+  [ORIGINAL] @DisplayName("Preprocesar línea: ignorar línea de comentario")
+  [ORIGINAL] void testPreprocessLine_IgnoreCommentLine() {
+  [ORIGINAL] String commentLine = "// Esto es un comentario";
+  [ORIGINAL] 
+  [ORIGINAL] String result = codeAnalyzer.preprocessLine(commentLine);
+  [ORIGINAL] 
+  [ORIGINAL] assertNull(result);
+  [ORIGINAL] }
+  [ORIGINAL] 
+  [ORIGINAL] @Test
+  [ORIGINAL] @DisplayName("Preprocesar línea: ignorar línea vacía")
+  [ORIGINAL] void testPreprocessLine_IgnoreEmptyLine() {
+  [ORIGINAL] String emptyLine = "   ";
+  [ORIGINAL] 
+  [ORIGINAL] String result = codeAnalyzer.preprocessLine(emptyLine);
+  [ORIGINAL] 
+  [ORIGINAL] assertNull(result);
+  [ORIGINAL] }
+  [ORIGINAL] 
+  [ORIGINAL] @Test
+  [ORIGINAL] @DisplayName("Preprocesar línea: línea válida")
+  [ORIGINAL] void testPreprocessLine_ValidLine() {
+  [ORIGINAL] String validLine = "public class TestClass {";
+  [ORIGINAL] 
+  [ORIGINAL] String result = codeAnalyzer.preprocessLine(validLine);
+  [ORIGINAL] 
+  [ORIGINAL] assertEquals("public class TestClass {", result);
+  [ORIGINAL] }
+  [ORIGINAL] 
+  [ORIGINAL] @Test
+  [ORIGINAL] @DisplayName("Obtener contador")
+  [ORIGINAL] void testGetCounter() {
+  [ORIGINAL] assertEquals(structCounter, codeAnalyzer.getCounter());
+  [ORIGINAL] }
+  [ORIGINAL] 
+  [ORIGINAL] @Test
+  [ORIGINAL] @DisplayName("Contar las clases anidadas")
+  [ORIGINAL] void testCountNestedClasses() throws InvalidFormatException {
+  [ORIGINAL] String line1 = "public class OuterClass {";
+  [ORIGINAL] String line2 = "public class InnerClass {";
+  [ORIGINAL] String line3 = "public class InnerMostClass {";
+  [ORIGINAL] 
+  [ORIGINAL] codeAnalyzer.processLine(line1);
+  [ORIGINAL] codeAnalyzer.processLine(line2);
+  [ORIGINAL] codeAnalyzer.processLine(line3);
+  [ORIGINAL] 
+  [ORIGINAL] assertEquals(3, structCounter.getClassesCount());
+  [ORIGINAL] }
+  [ORIGINAL] 
+  [ORIGINAL] @Test
+  [ORIGINAL] @DisplayName("Contar métodos en una clase")
+  [ORIGINAL] void testCountMethodsInClass() throws InvalidFormatException {
+  [ORIGINAL] String line1 = "public class TestClass {";
+  [ORIGINAL] String line2 = "public void testMethod() {";
+  [ORIGINAL] String line3 = "return; } }";
+  [ORIGINAL] 
+  [ORIGINAL] codeAnalyzer.processLine(line1);
+  [ORIGINAL] codeAnalyzer.processLine(line2);
+  [ORIGINAL] codeAnalyzer.processLine(line3);
+  [ORIGINAL] 
+  [ORIGINAL] assertEquals(1, structCounter.getClasses().get(0).getMethodsAmount());
+  [ORIGINAL] }
+  [ORIGINAL] 
+  [ORIGINAL] @Test
+  [ORIGINAL] @DisplayName("Contar líneas de código en una clase")
+  [ORIGINAL] void testCountLinesOfCodeInClass() throws InvalidFormatException {
+  [ORIGINAL] String line1 = "public class TestClass {";
+  [ORIGINAL] String line2 = "int a = 0;";
+  [ORIGINAL] String line3 = "return; } }";
+  [ORIGINAL] 
+  [ORIGINAL] codeAnalyzer.processLine(line1);
+  [ORIGINAL] codeAnalyzer.processLine(line2);
+  [ORIGINAL] codeAnalyzer.processLine(line3);
+  [ORIGINAL] 
+  [ORIGINAL] assertEquals(3, structCounter.getClasses().get(0).getLinesOfCode());
+  [ORIGINAL] }
+  [ORIGINAL] }
+
+Archivo: JavaRegextConstants.java [Version: A]
+  [ORIGINAL] package mantenimiento.codecounter.constants;
+  [ORIGINAL] 
+  [ORIGINAL] /**
+  [ORIGINAL] * Contiene constantes con expresiones regulares utilizadas para analizar estructuras y sintaxis del
+  [ORIGINAL] * lenguaje Java.
+  [ORIGINAL] */
+  [ORIGINAL] public class JavaRegextConstants {
+  [ORIGINAL] public static final String ACCESS_MODIFIERS_REGEX = "((public|private|protected)\\s+)?";
+  [ORIGINAL] public static final String DATATYPE_DECLARATION_REGEX = "(\\s*[a-zA-Z0-9]+(<[a-zA-Z0-9]+>)?\\s+)";
+  [ORIGINAL] public static final String PARAMETERS_DECLARATION_REGEX = "(\\([^)]*\\)\\s*)";
+  [ORIGINAL] public static final String IDENTIFIER_DECLARATION_REGEX = "\\w+\\s*";
+  [ORIGINAL] public static final String TYPE_KEYS = "((class|enum|interface)\\s+)";
+  [ORIGINAL] public static final String FINAL_OR_STATIC_REGEX =
+  [ORIGINAL] "(?:(?:static\\s+)?(?:final\\s+)?|(?:final\\s+)?(?:static\\s+)?)?";
+  [ORIGINAL] public static final String ANNOTATION_REGEX = "^@[A-Za-z_]\\w*(\\(.*\\))?\\s*$";
+  [ORIGINAL] 
+  [ORIGINAL] private JavaRegextConstants() {}
+  [ORIGINAL] }
+
+Archivo: ReasonInvalidFormat.java [Version: B]
+  [ORIGINAL] package mantenimiento.codecounter.constants;
+  [ORIGINAL] 
+  [ORIGINAL] /** Clase que representa razones de formato inválido en el código fuente. */
+  [ORIGINAL] public class ReasonInvalidFormat {
+  [ORIGINAL] public static final ReasonInvalidFormat INVALID_STYLE_K_AND_R =
+  [ORIGINAL] new ReasonInvalidFormat("Se debe seguir el estilo K&R para el uso de bloques.");
+  [ORIGINAL] public static final ReasonInvalidFormat INVALID_IMPORT_STATEMENT =
+  [ORIGINAL] new ReasonInvalidFormat(
+  [ORIGINAL] "Las importaciones de paquete deben de ser explicitas y con comodin *.");
+  [ORIGINAL] public static final ReasonInvalidFormat INVALID_ANOTATION_STATEMENT =
+  [ORIGINAL] new ReasonInvalidFormat("Cada anotación debe estar en una sola línea y bien formada.");
+  [ORIGINAL] public static final ReasonInvalidFormat INVALID_SINGLE_DECLARATION_STATEMENT =
+  [ORIGINAL] new ReasonInvalidFormat("No se permite realizar multiples declaraciones por linea");
+  [ORIGINAL] 
+  [ORIGINAL] private String reason;
+  [ORIGINAL] 
+  [ORIGINAL] private ReasonInvalidFormat(String reason) {
+  [ORIGINAL] this.reason = reason;
+  [ORIGINAL] }
+  [ORIGINAL] 
+  [ORIGINAL] @Override
+  [ORIGINAL] public String toString() {
+  [ORIGINAL] return this.reason;
+  [ORIGINAL] }
+  [ORIGINAL] }
+
+Archivo: StyleKAndRValidatorTest.java [Version: A]
+  [ORIGINAL] package mantenimiento.codecounter.validators.format_validators;
+  [ORIGINAL] 
+  [ORIGINAL] import static org.junit.jupiter.api.Assertions.assertThrows;
+  [ORIGINAL] import static org.junit.jupiter.api.Assertions.assertTrue;
+  [ORIGINAL] 
+  [ORIGINAL] import mantenimiento.codecounter.exceptions.InvalidFormatException;
+  [ORIGINAL] import org.junit.jupiter.api.DisplayName;
+  [ORIGINAL] import org.junit.jupiter.api.Test;
+  [ORIGINAL] 
+  [ORIGINAL] class StyleKAndRValidatorTest {
+  [ORIGINAL] 
+  [ORIGINAL] private final StyleKAndRValidator validator = new StyleKAndRValidator();
+  [ORIGINAL] 
+  [ORIGINAL] @Test
+  [ORIGINAL] @DisplayName(
+  [ORIGINAL] "Debe lanzar InvalidFormatException si la línea tiene un corchete de apertura inválido")
+  [ORIGINAL] void testInvalidOpeningBracketThrowsException() {
+  [ORIGINAL] String invalidLine = " {";
+  [ORIGINAL] assertThrows(InvalidFormatException.class, () -> validator.isValid(invalidLine));
+  [ORIGINAL] }
+  [ORIGINAL] 
+  [ORIGINAL] @Test
+  [ORIGINAL] @DisplayName(
+  [ORIGINAL] "Debe lanzar InvalidFormatException si la línea tiene un corchete de cierre inválido")
+  [ORIGINAL] void testInvalidClosingBracketThrowsException() {
+  [ORIGINAL] String invalidLine = "} if";
+  [ORIGINAL] assertThrows(InvalidFormatException.class, () -> validator.isValid(invalidLine));
+  [ORIGINAL] }
+  [ORIGINAL] 
+  [ORIGINAL] @Test
+  [ORIGINAL] @DisplayName("Debe lanzar InvalidFormatException si la línea contiene corchetes vacíos")
+  [ORIGINAL] void testEmptyBracketsThrowsException() {
+  [ORIGINAL] String invalidLine = "{}";
+  [ORIGINAL] assertThrows(InvalidFormatException.class, () -> validator.isValid(invalidLine));
+  [ORIGINAL] }
+  [ORIGINAL] 
+  [ORIGINAL] @Test
+  [ORIGINAL] @DisplayName(
+  [ORIGINAL] "Debe devolver lanzar InvalidFormatException si existen {} en una sola línea con o sin"
+  [ORIGINAL] + " contenido")
+  [ORIGINAL] void testValidLineReturnsTrue() {
+  [ORIGINAL] String validLine = "if (x > 0) { doSomething(); }";
+  [ORIGINAL] assertThrows(InvalidFormatException.class, () -> assertTrue(validator.isValid(validLine)));
+  [ORIGINAL] }
+  [ORIGINAL] }
+
+Archivo: JavaFileComparator.java [Version: B]
+  [ORIGINAL] package mantenimiento.codecounter.models.comparators;
+  [ORIGINAL] 
+  [NEW] import java.util.List;
+  [NEW] import java.util.stream.Collectors;
+  [NEW] import java.util.stream.Stream;
+  [NEW] 
+  [NEW] import mantenimiento.codecounter.constants.JavaRegextConstants;
+  [NEW] import mantenimiento.codecounter.models.reporters.ComparationReport;
+  [NEW] 
+  [NEW] public class JavaFileComparator {
+  [ORIGINAL] 
+  [NEW] private ComparationReport comparationReport;
+  [ORIGINAL] 
+  [NEW] private List<String> content;
+  [ORIGINAL] 
+  [NEW] private List<String> contentToCompare;
+  [ORIGINAL] 
+  [NEW] public JavaFileComparator(List<String> content, List<String> contentToCompare) {
+  [NEW] this.comparationReport = new ComparationReport();
+  [NEW] this.content = content;
+  [NEW] this.contentToCompare = contentToCompare;
+  [NEW] }
+  [NEW] 
+  [NEW] public void compareContent() {
+  [NEW] compareSameLines();
+  [NEW] compareDifferentLines();
+  [ORIGINAL] }
+  [ORIGINAL] 
+  [NEW] private void compareLine(String line, String lineToCompare, int i) {
+  [NEW] 
+  [NEW] if (line.equals(lineToCompare)) {
+  [NEW] this.comparationReport.makeReportLine(STATUS.ORIGINAL, line, lineToCompare);
+  [NEW] } else if (getSimplifiedContent(line) == getSimplifiedContent(lineToCompare)) {
+  [NEW] this.comparationReport.makeReportLine(STATUS.MODIFIED, line, lineToCompare);
+  [NEW] } else if (!line.equals(lineToCompare)) {
+  [NEW] this.comparationReport.makeReportLine(STATUS.NEW, line, lineToCompare);
+  [NEW] }
+  [NEW] 
+  [NEW] }
+  [NEW] 
+  [NEW] private void compareSameLines() {
+  [NEW] for (int i = 0, j = 0; i < content.size() && j < contentToCompare.size(); i++, j++) {
+  [NEW] String currentLine = content.get(i);
+  [NEW] String lineToCompare = contentToCompare.get(j);
+  [NEW] compareLine(currentLine, lineToCompare, i);
+  [ORIGINAL] }
+  [NEW] }
+  [NEW] 
+  [NEW] private String getSimplifiedContent(String line) {
+  [NEW] String simplified = Stream.of(line.split(" "))
+  [NEW] .filter(s -> !s.matches(JavaRegextConstants.ACCESS_MODIFIERS_REGEX))
+  [NEW] .filter(s -> !s.matches(JavaRegextConstants.IDENTIFIER_DECLARATION_REGEX))
+  [NEW] .filter(s -> !s.matches(JavaRegextConstants.FINAL_OR_STATIC_REGEX))
+  [NEW] .collect(Collectors.joining());
+  [NEW] System.out.println(simplified);
+  [NEW] return simplified;
+  [NEW] }
+  [NEW] 
+  [NEW] private void compareDifferentLines() {
+  [NEW] int difference = Math.abs(this.content.size() - this.contentToCompare.size());
+  [NEW] if (this.content.size() < this.contentToCompare.size()) {
+  [NEW] this.comparationReport.updateReport(this.content, difference);
+  [NEW] } else if (this.content.size() > this.contentToCompare.size()) {
+  [NEW] this.comparationReport.updateReport(this.content, this.contentToCompare, difference);
+  [NEW] }
+  [NEW] }
+  [NEW] 
+  [NEW] public ComparationReport getComparationReport() {
+  [NEW] return comparationReport;
+  [NEW] }
+  [NEW] 
+  [ORIGINAL] }
+
+Archivo: Main.java [Version: B]
+  [ORIGINAL] package mantenimiento.codecounter;
+  [ORIGINAL] 
+  [ORIGINAL] import java.util.Scanner;
+  [ORIGINAL] 
+  [ORIGINAL] import mantenimiento.codecounter.exceptions.FolderNotFoundException;
+  [ORIGINAL] import mantenimiento.codecounter.exceptions.JavaFilesNotFoundException;
+  [ORIGINAL] import mantenimiento.codecounter.models.ProgramBuilder;
+  [ORIGINAL] 
+  [ORIGINAL] public class Main {
+  [ORIGINAL] 
+  [ORIGINAL] public static void main(String[] args) throws FolderNotFoundException, JavaFilesNotFoundException {
+  [ORIGINAL] Scanner scanner = new Scanner(System.in);
+  [ORIGINAL] 
+  [ORIGINAL] ProgramBuilder.buildProgram(requestFolderPath(scanner));
+  [ORIGINAL] 
+  [ORIGINAL] System.out.println("\nPresiona Enter para salir...");
+  [ORIGINAL] scanner.nextLine();
+  [ORIGINAL] scanner.close();
+  [ORIGINAL] }
+  [ORIGINAL] 
+  [ORIGINAL] private static String requestFolderPath(Scanner scanner) {
+  [ORIGINAL] System.out.println("Ingresa la ruta de la carpeta del proyecto:");
+  [ORIGINAL] return scanner.nextLine();
+  [ORIGINAL] }
+  [ORIGINAL] }
+
+Archivo: InvalidFormatException.java [Version: B]
+  [ORIGINAL] package mantenimiento.codecounter.exceptions;
+  [ORIGINAL] 
+  [ORIGINAL] import mantenimiento.codecounter.constants.ReasonInvalidFormat;
+  [ORIGINAL] 
+  [ORIGINAL] public class InvalidFormatException extends Exception {
+  [ORIGINAL] private String fileName = "";
+  [ORIGINAL] 
+  [ORIGINAL] public InvalidFormatException(ReasonInvalidFormat error, String lineOfCode) {
+  [ORIGINAL] super(error.toString() + "\nLinea: " + lineOfCode);
+  [ORIGINAL] }
+  [ORIGINAL] 
+  [ORIGINAL] public InvalidFormatException(String message) {
+  [ORIGINAL] super(message);
+  [ORIGINAL] }
+  [ORIGINAL] 
+  [ORIGINAL] public void setFileName(String fileName) {
+  [ORIGINAL] this.fileName = fileName;
+  [ORIGINAL] }
+  [ORIGINAL] 
+  [ORIGINAL] public String getFileName() {
+  [ORIGINAL] return this.fileName;
+  [ORIGINAL] }
+  [ORIGINAL] }
+
+Archivo: SingleDeclarationValidator.java [Version: B]
+  [ORIGINAL] package mantenimiento.codecounter.validators.format_validators;
+  [ORIGINAL] 
+  [ORIGINAL] import static mantenimiento.codecounter.constants.ReasonInvalidFormat.INVALID_SINGLE_DECLARATION_STATEMENT;
+  [ORIGINAL] 
+  [ORIGINAL] import mantenimiento.codecounter.exceptions.InvalidFormatException;
+  [ORIGINAL] import mantenimiento.codecounter.templates.FormatValidator;
+  [ORIGINAL] 
+  [ORIGINAL] /** Clase que valida si existe una sola variable declarada por línea ejemplo: int value = 10; */
+  [ORIGINAL] public class SingleDeclarationValidator extends FormatValidator {
+  [ORIGINAL] private static final String MULTIPLE_DECLARATIONS_REGEX =
+  [ORIGINAL] "^\\s*\\w+[\\s.=*&%+\\-/^\\w]*[;,][\\s.=*&%+\\-/^\\w]*[;,].*$";
+  [ORIGINAL] 
+  [ORIGINAL] /**
+  [ORIGINAL] * Realiza la validacion del formato verificando si existe una sola declaración por línea
+  [ORIGINAL] *
+  [ORIGINAL] * @param lineOfFile linea de texto (sentencia de codigo) a validar
+  [ORIGINAL] * @return {@code true} si la línea cuenta con una sola declaración, {@code false} en caso
+  [ORIGINAL] *     contrario
+  [ORIGINAL] * @throws InvalidFormatException si existen más variables declaradas
+  [ORIGINAL] */
+  [ORIGINAL] @Override
+  [ORIGINAL] public boolean isValid(String lineOfFile) throws InvalidFormatException {
+  [ORIGINAL] if (hasMultipleDeclarations(lineOfFile)) {
+  [ORIGINAL] throw new InvalidFormatException(INVALID_SINGLE_DECLARATION_STATEMENT, lineOfFile);
+  [ORIGINAL] }
+  [ORIGINAL] 
+  [ORIGINAL] return this.validateNext(lineOfFile);
+  [ORIGINAL] }
+  [ORIGINAL] 
+  [ORIGINAL] /**
+  [ORIGINAL] * Verifica si la línea contiene múltiples declaraciones separadas por punto y coma o solo por
+  [ORIGINAL] * comas.
+  [ORIGINAL] *
+  [ORIGINAL] * @param lineOfFile La línea del archivo a validar.
+  [ORIGINAL] * @return {@code true} si hay múltiples declaraciones separadas por comas o punto y coma, {@code
+  [ORIGINAL] *     false} en caso contrario.
+  [ORIGINAL] */
+  [ORIGINAL] public boolean hasMultipleDeclarations(String lineOfFile) {
+  [ORIGINAL] return lineOfFile.matches(MULTIPLE_DECLARATIONS_REGEX);
+  [ORIGINAL] }
+  [ORIGINAL] }
+
+Archivo: ValidatorManager.java [Version: A]
+  [ORIGINAL] package mantenimiento.codecounter.validators;
+  [ORIGINAL] 
+  [ORIGINAL] import java.util.List;
+  [ORIGINAL] import mantenimiento.codecounter.templates.FormatValidator;
+  [ORIGINAL] import mantenimiento.codecounter.templates.LogicalValidator;
+  [ORIGINAL] import mantenimiento.codecounter.validators.format_validators.ImportValidator;
+  [ORIGINAL] import mantenimiento.codecounter.validators.format_validators.SingleAnnotationValidator;
+  [ORIGINAL] import mantenimiento.codecounter.validators.format_validators.SingleDeclarationValidator;
+  [ORIGINAL] import mantenimiento.codecounter.validators.format_validators.StyleKAndRValidator;
+  [ORIGINAL] import mantenimiento.codecounter.validators.logical_validators.MethodDeclarationValidator;
+  [ORIGINAL] import mantenimiento.codecounter.validators.logical_validators.TypeDeclarationValidator;
+  [ORIGINAL] 
+  [ORIGINAL] /** Brinda el acceso a los validadores de formato o de líneas lógicas */
+  [ORIGINAL] public class ValidatorManager {
+  [ORIGINAL] private static FormatValidator formatValidator = null;
+  [ORIGINAL] 
+  [ORIGINAL] /**
+  [ORIGINAL] * Genera la secuencia de validaciones de formato
+  [ORIGINAL] *
+  [ORIGINAL] * @return Encadenamiento de validadores de format
+  [ORIGINAL] */
+  [ORIGINAL] public static FormatValidator getFormatValidator() {
+  [ORIGINAL] 
+  [ORIGINAL] if (formatValidator != null) {
+  [ORIGINAL] return formatValidator;
+  [ORIGINAL] }
+  [ORIGINAL] 
+  [ORIGINAL] FormatValidator importValidator = new ImportValidator();
+  [ORIGINAL] FormatValidator styleKAndRValidator = new StyleKAndRValidator();
+  [ORIGINAL] FormatValidator singleAnnotationValidator = new SingleAnnotationValidator();
+  [ORIGINAL] FormatValidator singleDeclarationValidator = new SingleDeclarationValidator();
+  [ORIGINAL] 
+  [ORIGINAL] importValidator.setNextValidator(styleKAndRValidator);
+  [ORIGINAL] styleKAndRValidator.setNextValidator(singleAnnotationValidator);
+  [ORIGINAL] singleAnnotationValidator.setNextValidator(singleDeclarationValidator);
+  [ORIGINAL] formatValidator = importValidator;
+  [ORIGINAL] 
+  [ORIGINAL] return formatValidator;
+  [ORIGINAL] }
+  [ORIGINAL] 
+  [ORIGINAL] /**
+  [ORIGINAL] * Genera la secuencia de validaciones de líneas lógicas
+  [ORIGINAL] *
+  [ORIGINAL] * @return Lista de validadores lógicos
+  [ORIGINAL] */
+  [ORIGINAL] public static LogicalValidator getLogicalValidators(String lineOfCode) {
+  [ORIGINAL] 
+  [ORIGINAL] final List<LogicalValidator> logicalValidators =
+  [ORIGINAL] List.of(new MethodDeclarationValidator(), new TypeDeclarationValidator());
+  [ORIGINAL] if (lineOfCode == null || lineOfCode.isBlank()) {
+  [ORIGINAL] return null;
+  [ORIGINAL] }
+  [ORIGINAL] return logicalValidators.stream()
+  [ORIGINAL] .filter(e -> e.validateType(lineOfCode))
+  [ORIGINAL] .findFirst()
+  [ORIGINAL] .orElse(null);
+  [ORIGINAL] }
+  [ORIGINAL] 
+  [ORIGINAL] private ValidatorManager() {}
+  [ORIGINAL] }
+
+Archivo: JavaFilesScanner.java [Version: B]
+  [ORIGINAL] package mantenimiento.codecounter.utils;
+  [ORIGINAL] 
+  [ORIGINAL] import java.io.IOException;
+  [ORIGINAL] import java.nio.file.Files;
+  [ORIGINAL] import java.nio.file.Path;
+  [ORIGINAL] import java.nio.file.Paths;
+  [ORIGINAL] import java.util.List;
+  [ORIGINAL] import java.util.function.Predicate;
+  [ORIGINAL] import java.util.stream.Stream;
+  [ORIGINAL] import mantenimiento.codecounter.exceptions.FolderNotFoundException;
+  [ORIGINAL] import mantenimiento.codecounter.exceptions.JavaFilesNotFoundException;
+  [ORIGINAL] 
+  [ORIGINAL] public class JavaFilesScanner {
+  [ORIGINAL] /**
+  [ORIGINAL] * Método para obtener los archivos .java dentro de un directorio y sus subdirectorios.
+  [ORIGINAL] *
+  [ORIGINAL] * @param folderPath Ruta del directorio raíz.
+  [ORIGINAL] * @return Lista de rutas de archivos .java encontrados.
+  [ORIGINAL] * @throws FolderNotFoundException Si la carpeta no existe o no es válida.
+  [ORIGINAL] * @throws NoJavaFilesFoundException Si no se encuentran archivos .java en la carpeta.
+  [ORIGINAL] */
+  [ORIGINAL] public static List<Path> getJavaFiles(String folderPath)
+  [ORIGINAL] throws FolderNotFoundException, JavaFilesNotFoundException {
+  [ORIGINAL] Path path = Paths.get(folderPath);
+  [ORIGINAL] try (Stream<Path> stream = Files.walk(path)) {
+  [ORIGINAL] List<Path> javaFiles = stream.filter(Files::isRegularFile).filter(isJavaFile()).toList();
+  [ORIGINAL] 
+  [ORIGINAL] if (javaFiles.isEmpty()) {
+  [ORIGINAL] throw new JavaFilesNotFoundException();
+  [ORIGINAL] }
+  [ORIGINAL] 
+  [ORIGINAL] return javaFiles;
+  [ORIGINAL] 
+  [ORIGINAL] } catch (IOException e) {
+  [ORIGINAL] throw new FolderNotFoundException(folderPath);
+  [ORIGINAL] }
+  [ORIGINAL] }
+  [ORIGINAL] 
+  [ORIGINAL] /**
+  [ORIGINAL] * Método para verificar si un archivo es un archivo .java.
+  [ORIGINAL] *
+  [ORIGINAL] * @return Predicate que verifica si el archivo termina en ".java".
+  [ORIGINAL] */
+  [ORIGINAL] private static Predicate<Path> isJavaFile() {
+  [ORIGINAL] return fileName -> fileName.toString().endsWith(".java");
+  [ORIGINAL] }
+  [ORIGINAL] 
+  [ORIGINAL] private JavaFilesScanner() {}
+  [ORIGINAL] }
+
+Archivo: ProgramBuilder.java [Version: A]
+  [ORIGINAL] package mantenimiento.codecounter.models;
+  [ORIGINAL] 
+  [ORIGINAL] import java.nio.file.Path;
+  [ORIGINAL] import java.nio.file.Paths;
+  [ORIGINAL] import java.util.ArrayList;
+  [ORIGINAL] import java.util.List;
+  [ORIGINAL] import java.util.Map;
+  [ORIGINAL] import java.util.stream.Stream;
+  [ORIGINAL] 
+  [ORIGINAL] import mantenimiento.codecounter.demo.LineRecord;
+  [ORIGINAL] import mantenimiento.codecounter.exceptions.FileNotFoundException;
+  [ORIGINAL] import mantenimiento.codecounter.exceptions.FolderNotFoundException;
+  [ORIGINAL] import mantenimiento.codecounter.exceptions.InvalidFormatException;
+  [ORIGINAL] import mantenimiento.codecounter.exceptions.JavaFilesNotFoundException;
+  [ORIGINAL] import mantenimiento.codecounter.models.comparators.ProyectComparator;
+  [ORIGINAL] import mantenimiento.codecounter.models.counters.StructCounter;
+  [ORIGINAL] import mantenimiento.codecounter.models.reporters.Reporter;
+  [ORIGINAL] import mantenimiento.codecounter.models.reporters.TerminalReporter;
+  [ORIGINAL] import mantenimiento.codecounter.utils.JavaFilesScanner;
+  [DELETED] 
+  [DELETED] /**
+  [DELETED] * Clase encargada de analizar archivos Java dentro de una carpeta, contando
+  [DELETED] * líneas de código
+  [DELETED] * físicas y lógicas, y generando un reporte con los resultados.
+  [DELETED] */
+  [DELETED] public class ProgramBuilder {
+  [DELETED] /**
+  [DELETED] * Analiza los archivos Java dentro de la carpeta especificada, contando líneas
+  [DELETED] * de código y
+  [DELETED] * generando un reporte con los resultados.
+  [DELETED] *
+  [DELETED] * @param folderPath Ruta de la carpeta que contiene los archivos Java.
+  [DELETED] * @throws JavaFilesNotFoundException
+  [DELETED] * @throws FolderNotFoundException
+  [DELETED] */
+  [DELETED] public static void buildProgram(String folderPath) throws FolderNotFoundException, JavaFilesNotFoundException {
+  [DELETED] String[] paths = folderPath.split(" ");
+  [DELETED] Stream.of(paths).forEach(ProgramBuilder::countWorkflow);
+  [DELETED] if (paths.length == 2) {
+  [DELETED] compareWorkflow(paths);
+  [DELETED] }
+  [ORIGINAL] }
+  [DELETED] 
+  [DELETED] /**
+  [DELETED] * Procesa los archivos Java proporcionados, validando su formato y lógica antes
+  [DELETED] * de contar sus
+  [DELETED] * líneas de código.
+  [DELETED] *
+  [DELETED] * @param javaFilePaths Lista de rutas de archivos Java a procesar.
+  [DELETED] * @return Un objeto {@link LineCounter} con el conteo de líneas físicas y
+  [DELETED] *         lógicas.
+  [DELETED] * @throws FileNotFoundException  Si alguno de los archivos no se encuentra.
+  [DELETED] * @throws InvalidFormatException Si se encuentra un error de formato en algún
+  [DELETED] *                                archivo.
+  [DELETED] */
+  [DELETED] private static List<StructCounter> processFiles(List<Path> javaFilePaths)
+  [DELETED] throws FileNotFoundException, InvalidFormatException {
+  [DELETED] 
+  [DELETED] List<StructCounter> lineCounters = new ArrayList<>();
+  [DELETED] 
+  [DELETED] for (Path filePath : javaFilePaths) {
+  [DELETED] JavaFile javaFile = new JavaFile(filePath);
+  [DELETED] 
+  [DELETED] lineCounters.add(processLines(javaFile));
+  [DELETED] }
+  [DELETED] return lineCounters;
+  [DELETED] }
+  [DELETED] 
+  [DELETED] /**
+  [DELETED] * Cuenta las líneas físicas y lógicas de un archivo Java validando su formato y
+  [DELETED] * contenido lógico.
+  [DELETED] *
+  [DELETED] * @param fileContent      Contenido del archivo sin comentarios ni líneas en
+  [DELETED] *                         blanco.
+  [DELETED] * @param formatValidator  Validador de formato de líneas.
+  [DELETED] * @param logicalValidator Validador de lógica de líneas.
+  [DELETED] * @param lineCounter      Contador de líneas donde se almacenan los resultados.
+  [DELETED] * @throws InvalidFormatException Si alguna línea tiene un formato incorrecto.
+  [DELETED] */
+  [DELETED] private static StructCounter processLines(JavaFile javaFile) throws InvalidFormatException {
+  [DELETED] 
+  [DELETED] List<String> fileContent = javaFile.removeComments().removeBlankLines().getContent();
+  [DELETED] StructCounter lineCounter = new StructCounter();
+  [DELETED] CodeAnalyzer analyzer = new CodeAnalyzer(lineCounter);
+  [DELETED] 
+  [DELETED] for (String line : fileContent) {
+  [DELETED] analyzer.processLine(line);
+  [DELETED] }
+  [DELETED] 
+  [DELETED] return lineCounter;
+  [DELETED] }
+  [ORIGINAL] 
+  [DELETED] /**
+  [DELETED] * Genera un reporte con los resultados del análisis de líneas de código.
+  [DELETED] *
+  [DELETED] * @param folderPath  Ruta de la carpeta analizada.
+  [DELETED] * @param lineCounter Contador de líneas de código con los resultados del
+  [DELETED] *                    análisis.
+  [DELETED] */
+  [DELETED] private static void generateReport(String folderPath, List<StructCounter> lineCounters) {
+  [DELETED] Reporter reporter = new TerminalReporter(Paths.get(folderPath), lineCounters);
+  [DELETED] reporter.generateReport();
+  [DELETED] }
+  [DELETED] 
+  [DELETED] private static void countWorkflow(String folderPath) {
+  [DELETED] try {
+  [DELETED] List<Path> javaFilePaths = JavaFilesScanner.getJavaFiles(folderPath);
+  [DELETED] List<StructCounter> lineCounters = processFiles(javaFilePaths);
+  [DELETED] generateReport(folderPath, lineCounters);
+  [DELETED] } catch (Exception e) {
+  [DELETED] System.out.println(e.getMessage());
+  [DELETED] }
+  [ORIGINAL] }
+  [DELETED] 
+  [DELETED] private static Proyect makeProyect(String folderPath) throws FolderNotFoundException, JavaFilesNotFoundException {
+  [DELETED] List<Path> javaPathFiles = JavaFilesScanner.getJavaFiles(folderPath);
+  [DELETED] Proyect proyect = new Proyect(folderPath, javaPathFiles);
+  [DELETED] return proyect;
+  [DELETED] }
+  [DELETED] 
+  [DELETED] private static void compareWorkflow(String[] folderPaths) {
+  [DELETED] try {
+  [DELETED] Proyect proyect = makeProyect(folderPaths[0]);
+  [DELETED] Proyect proyectToCompare = makeProyect(folderPaths[1]);
+  [DELETED] ProyectComparator proyectComparator = new ProyectComparator(proyect, proyectToCompare);
+  [DELETED] proyectComparator.compare();
+  [DELETED] Map<String, List<LineRecord>> report = proyectComparator.getGeneralReport();
+  [DELETED] printReport(report);
+  [DELETED] } catch (FolderNotFoundException | JavaFilesNotFoundException e) {
+  [DELETED] System.out.println(e.getMessage());
+  [DELETED] }
+  [DELETED] 
+  [DELETED] }
+  [DELETED] 
+  [DELETED] private static void printReport(Map<String, List<LineRecord>> report){
+  [DELETED] for (Map.Entry<String, List<LineRecord>> entry : report.entrySet()) {
+  [DELETED] String fileName = entry.getKey();
+  [DELETED] List<LineRecord> records = entry.getValue();
+  [ORIGINAL] 
+  [DELETED] System.out.println("Archivo: " + fileName);
+  [DELETED] for (LineRecord record : records) {
+  [DELETED] System.out.println("  [" + record.status() + "] " + record.content());
+  [NEW] 
+  [NEW] private static void printReport(Map<String, List<LineRecord>> report){
+  [NEW] for (Map.Entry<String, List<LineRecord>> entry : report.entrySet()) {
+  [NEW] String fileName = entry.getKey();
+  [NEW] List<LineRecord> records = entry.getValue();
+  [NEW] 
+  [NEW] System.out.println("Archivo: " + fileName);
+  [NEW] for (LineRecord record : records) {
+
+Archivo: Reporter.java [Version: B]
+  [ORIGINAL] package mantenimiento.codecounter.models.reporters;
+  [ORIGINAL] 
+  [ORIGINAL] import java.nio.file.Path;
+  [ORIGINAL] import java.util.List;
+  [ORIGINAL] import mantenimiento.codecounter.models.counters.StructCounter;
+  [ORIGINAL] 
+  [ORIGINAL] /** Clase abstracta que define el comportamiento de un generador de reportes */
+  [ORIGINAL] public abstract class Reporter {
+  [ORIGINAL] protected String programName;
+  [ORIGINAL] protected List<StructCounter> lineCounters;
+  [ORIGINAL] 
+  [ORIGINAL] protected Reporter(Path filePath, List<StructCounter> lineCounters) {
+  [ORIGINAL] this.programName = filePath.getFileName().toString();
+  [ORIGINAL] this.lineCounters = lineCounters;
+  [ORIGINAL] }
+  [ORIGINAL] 
+  [ORIGINAL] /** Genera un reporte con la información de los contadores de líneas */
+  [ORIGINAL] public abstract void generateReport();
+  [ORIGINAL] }
+
+Archivo: FormatValidator.java [Version: A]
+  [ORIGINAL] package mantenimiento.codecounter.templates;
+  [ORIGINAL] 
+  [ORIGINAL] import mantenimiento.codecounter.exceptions.InvalidFormatException;
+  [ORIGINAL] 
+  [ORIGINAL] /** Proporciona una implementación base para la validación de formato del código. */
+  [ORIGINAL] public abstract class FormatValidator {
+  [ORIGINAL] 
+  [ORIGINAL] private FormatValidator nextValidator;
+  [ORIGINAL] 
+  [ORIGINAL] /**
+  [ORIGINAL] * Establece el siguiente validador en la cadena de validación lógica.
+  [ORIGINAL] *
+  [ORIGINAL] * @param nextLogicalValidator Siguiente validador lógico en la cadena.
+  [ORIGINAL] */
+  [ORIGINAL] public void setNextValidator(FormatValidator nextFormatValidator) {
+  [ORIGINAL] this.nextValidator = nextFormatValidator;
+  [ORIGINAL] }
+  [ORIGINAL] 
+  [ORIGINAL] public abstract boolean isValid(String lineOfFile) throws InvalidFormatException;
+  [ORIGINAL] 
+  [ORIGINAL] /**
+  [ORIGINAL] * Valida la siguiente regla en la cadena de responsabilidad.
+  [ORIGINAL] *
+  [ORIGINAL] * @param linesOfFile Lista de líneas de código a validar.
+  [ORIGINAL] * @return {@code true} si la validación es exitosa, {@code false} en caso contrario.
+  [ORIGINAL] */
+  [ORIGINAL] protected boolean validateNext(String lineOfFile) throws InvalidFormatException {
+  [ORIGINAL] if (nextValidator != null) {
+  [ORIGINAL] return nextValidator.isValid(lineOfFile);
+  [ORIGINAL] }
+  [ORIGINAL] 
+  [ORIGINAL] return true;
+  [ORIGINAL] }
+  [ORIGINAL] }
+
+Archivo: SingleAnnotationValidator.java [Version: B]
+  [ORIGINAL] package mantenimiento.codecounter.validators.format_validators;
+  [ORIGINAL] 
+  [ORIGINAL] import static mantenimiento.codecounter.constants.JavaRegextConstants.ANNOTATION_REGEX;
+  [ORIGINAL] import static mantenimiento.codecounter.constants.ReasonInvalidFormat.INVALID_ANOTATION_STATEMENT;
+  [ORIGINAL] 
+  [ORIGINAL] import mantenimiento.codecounter.exceptions.InvalidFormatException;
+  [ORIGINAL] import mantenimiento.codecounter.templates.FormatValidator;
+  [ORIGINAL] 
+  [ORIGINAL] /**
+  [ORIGINAL] * Clase encargada de verificar si una línea contiene una anotación válida en el formato correcto,
+  [ORIGINAL] * Una anotación válida debe comenzar con '@', seguida de un nombre que cumpla con las reglas de
+  [ORIGINAL] * identificadores de Java
+  [ORIGINAL] */
+  [ORIGINAL] public class SingleAnnotationValidator extends FormatValidator {
+  [ORIGINAL] 
+  [ORIGINAL] /**
+  [ORIGINAL] * Valida si la línea proporcionada contiene una anotación bien formada. Si la línea comienza con
+  [ORIGINAL] * '@', se verifica su formato; si está mal formada, lanza una excepción.
+  [ORIGINAL] *
+  [ORIGINAL] * @param lineOfFile Línea de código a validar.
+  [ORIGINAL] * @return {@code true} si la línea es una anotación válida
+  [ORIGINAL] * @throws InvalidFormatException Si la línea es una anotación pero está mal formada.
+  [ORIGINAL] */
+  [ORIGINAL] @Override
+  [ORIGINAL] public boolean isValid(String lineOfFile) throws InvalidFormatException {
+  [ORIGINAL] if (isAnnotation(lineOfFile)) {
+  [ORIGINAL] if (!isWellFormedAnnotation(lineOfFile)) {
+  [ORIGINAL] throw new InvalidFormatException(INVALID_ANOTATION_STATEMENT, lineOfFile);
+  [ORIGINAL] }
+  [ORIGINAL] return true;
+  [ORIGINAL] }
+  [ORIGINAL] return validateNext(lineOfFile);
+  [ORIGINAL] }
+  [ORIGINAL] 
+  [ORIGINAL] /**
+  [ORIGINAL] * Determina si la línea corresponde a una anotación, verificando si comienza con '@'.
+  [ORIGINAL] *
+  [ORIGINAL] * @param lineOfFile Línea de código a evaluar.
+  [ORIGINAL] * @return {@code true} si la línea comienza con '@', {@code false} en caso contrario.
+  [ORIGINAL] */
+  [ORIGINAL] private boolean isAnnotation(String lineOfFile) {
+  [ORIGINAL] return lineOfFile.trim().startsWith("@");
+  [ORIGINAL] }
+  [ORIGINAL] 
+  [ORIGINAL] /**
+  [ORIGINAL] * Verifica si una anotación está bien formada según la expresión regular definida en
+  [ORIGINAL] *
+  [ORIGINAL] * @param lineOfFile Línea de código a validar.
+  [ORIGINAL] * @return {@code true} si la anotación cumple con el formato definido, {@code false} si no.
+  [ORIGINAL] */
+  [ORIGINAL] private boolean isWellFormedAnnotation(String lineOfFile) {
+  [ORIGINAL] return lineOfFile.matches(ANNOTATION_REGEX);
+  [ORIGINAL] }
+  [ORIGINAL] }
+
+Archivo: SingleAnnotationValidatorTest.java [Version: B]
+  [ORIGINAL] package mantenimiento.codecounter.validators.format_validators;
+  [ORIGINAL] 
+  [ORIGINAL] import static org.junit.jupiter.api.Assertions.assertThrows;
+  [ORIGINAL] import static org.junit.jupiter.api.Assertions.assertTrue;
+  [ORIGINAL] 
+  [ORIGINAL] import mantenimiento.codecounter.exceptions.InvalidFormatException;
+  [ORIGINAL] import org.junit.jupiter.api.DisplayName;
+  [ORIGINAL] import org.junit.jupiter.api.Test;
+  [ORIGINAL] 
+  [ORIGINAL] class SingleAnnotationValidatorTest {
+  [ORIGINAL] private final SingleAnnotationValidator validator = new SingleAnnotationValidator();
+  [ORIGINAL] 
+  [ORIGINAL] @Test
+  [ORIGINAL] @DisplayName("Debe devolver true para una anotación válida en una sola línea: @Override")
+  [ORIGINAL] void testValidOverrideAnnotation() throws InvalidFormatException {
+  [ORIGINAL] assertTrue(validator.isValid("@Override"));
+  [ORIGINAL] }
+  [ORIGINAL] 
+  [ORIGINAL] @Test
+  [ORIGINAL] @DisplayName(
+  [ORIGINAL] "Debe devolver true para una anotación válida en una sola línea: @Rule(expected ="
+  [ORIGINAL] + " IllegalArgumentException.class)")
+  [ORIGINAL] void testValidTestAnnotation() throws InvalidFormatException {
+  [ORIGINAL] assertTrue(validator.isValid("@Rule(expected = IllegalArgumentException.class)"));
+  [ORIGINAL] }
+  [ORIGINAL] 
+  [ORIGINAL] @Test
+  [ORIGINAL] @DisplayName("Debe lanzar excepción para múltiples anotaciones en la misma línea")
+  [ORIGINAL] void testMultipleAnnotationsThrowsException() {
+  [ORIGINAL] String line = "@Override @Test @Something";
+  [ORIGINAL] assertThrows(InvalidFormatException.class, () -> validator.isValid(line));
+  [ORIGINAL] }
+  [ORIGINAL] 
+  [ORIGINAL] @Test
+  [ORIGINAL] @DisplayName("Debe lanzar excepción para anotación seguida de código en la misma línea")
+  [ORIGINAL] void testAnnotationWithCodeThrowsException() {
+  [ORIGINAL] String line = "@Override public void doSomething(){";
+  [ORIGINAL] assertThrows(InvalidFormatException.class, () -> validator.isValid(line));
+  [ORIGINAL] }
+  [ORIGINAL] 
+  [ORIGINAL] @Test
+  [ORIGINAL] @DisplayName("Debe lanzar excepción si la anotación es mal formada")
+  [ORIGINAL] void testMalformedAnnotationThrowsException() {
+  [ORIGINAL] assertThrows(InvalidFormatException.class, () -> validator.isValid("@"));
+  [ORIGINAL] assertThrows(InvalidFormatException.class, () -> validator.isValid("@123Invalid"));
+  [ORIGINAL] }
+  [ORIGINAL] }
+
+Archivo: FileNotFoundException.java [Version: B]
+  [ORIGINAL] package mantenimiento.codecounter.exceptions;
+  [ORIGINAL] 
+  [ORIGINAL] public class FileNotFoundException extends Exception {
+  [ORIGINAL] private static final String ERROR_MESSAGE = "No se ha encontrado el archivo: %s";
+  [ORIGINAL] 
+  [ORIGINAL] public FileNotFoundException(String filePath) {
+  [ORIGINAL] super(String.format(ERROR_MESSAGE, filePath));
+  [ORIGINAL] }
+  [ORIGINAL] }
+
+Archivo: JavaFile.java [Version: A]
+  [ORIGINAL] package mantenimiento.codecounter.models;
+  [ORIGINAL] 
+  [ORIGINAL] import java.nio.file.Files;
+  [ORIGINAL] import java.nio.file.Path;
+  [ORIGINAL] import java.util.ArrayList;
+  [ORIGINAL] import java.util.List;
+  [ORIGINAL] import mantenimiento.codecounter.exceptions.FileNotFoundException;
+  [ORIGINAL] 
+  [ORIGINAL] /**
+  [ORIGINAL] * Representacion de un archivo Java que provee metodos de acceso para su contenido y eliminar
+  [ORIGINAL] * informacion innecesaria para el conteno de lineas logicas y fisicas
+  [ORIGINAL] */
+  [ORIGINAL] public class JavaFile {
+  [ORIGINAL] private List<String> content;
+  [ORIGINAL] private String fileName;
+  [ORIGINAL] 
+  [ORIGINAL] /**
+  [ORIGINAL] * @param filePath Ruta del archivo
+  [ORIGINAL] * @throws FileNotFoundException Si la ruta es invalida
+  [ORIGINAL] */
+  [ORIGINAL] public JavaFile(Path filePath) throws FileNotFoundException {
+  [ORIGINAL] try {
+  [ORIGINAL] this.content = Files.readAllLines(filePath);
+  [ORIGINAL] this.fileName = filePath.getFileName().toString();
+  [ORIGINAL] } catch (Exception e) {
+  [ORIGINAL] throw new FileNotFoundException(filePath.toString());
+  [ORIGINAL] }
+  [ORIGINAL] }
+  [ORIGINAL] 
+  [ORIGINAL] /**
+  [ORIGINAL] * Remueve comentarios en linea y de bloque
+  [ORIGINAL] *
+  [ORIGINAL] * @return Devuelve la instancia misma del objeto
+  [ORIGINAL] */
+  [ORIGINAL] public JavaFile removeComments() {
+  [ORIGINAL] String commentRegext = "(?s)/\\*.*?\\*/|//[^\n]*";
+  [ORIGINAL] 
+  [ORIGINAL] String fileContent = String.join("\n", this.content);
+  [ORIGINAL] String codeWithOutComments = fileContent.replaceAll(commentRegext, "");
+  [ORIGINAL] 
+  [ORIGINAL] this.content = new ArrayList<>(List.of(codeWithOutComments.split("\n")));
+  [ORIGINAL] 
+  [ORIGINAL] return this;
+  [ORIGINAL] }
+  [ORIGINAL] 
+  [ORIGINAL] /**
+  [ORIGINAL] * Remueve lineas en blanco
+  [ORIGINAL] *
+  [ORIGINAL] * @return Devuelve la instancia misma del objeto
+  [ORIGINAL] */
+  [ORIGINAL] public JavaFile removeBlankLines() {
+  [ORIGINAL] this.content.removeIf(String::isBlank);
+  [ORIGINAL] return this;
+  [ORIGINAL] }
+  [ORIGINAL] 
+  [ORIGINAL] /**
+  [ORIGINAL] * @return Contenido del archivo java
+  [ORIGINAL] */
+  [ORIGINAL] public List<String> getContent() {
+  [ORIGINAL] return this.content.stream().map(String::trim).toList();
+  [ORIGINAL] }
+  [ORIGINAL] 
+  [ORIGINAL] /**
+  [ORIGINAL] * @return Nombre del archivo
+  [ORIGINAL] */
+  [ORIGINAL] public String getFileName() {
+  [ORIGINAL] return this.fileName;
+  [ORIGINAL] }
+  [ORIGINAL] }
+
+Archivo: Main.java [Version: A]
+  [ORIGINAL] package mantenimiento.codecounter;
+  [ORIGINAL] 
+  [ORIGINAL] import java.util.Scanner;
+  [ORIGINAL] 
+  [ORIGINAL] import mantenimiento.codecounter.exceptions.FolderNotFoundException;
+  [ORIGINAL] import mantenimiento.codecounter.exceptions.JavaFilesNotFoundException;
+  [ORIGINAL] import mantenimiento.codecounter.models.ProgramBuilder;
+  [ORIGINAL] 
+  [ORIGINAL] public class Main {
+  [ORIGINAL] 
+  [ORIGINAL] public static void main(String[] args) throws FolderNotFoundException, JavaFilesNotFoundException {
+  [ORIGINAL] Scanner scanner = new Scanner(System.in);
+  [ORIGINAL] 
+  [ORIGINAL] ProgramBuilder.buildProgram(requestFolderPath(scanner));
+  [ORIGINAL] 
+  [ORIGINAL] System.out.println("\nPresiona Enter para salir...");
+  [ORIGINAL] scanner.nextLine();
+  [ORIGINAL] scanner.close();
+  [ORIGINAL] }
+  [ORIGINAL] 
+  [ORIGINAL] private static String requestFolderPath(Scanner scanner) {
+  [ORIGINAL] System.out.println("Ingresa la ruta de la carpeta del proyecto:");
+  [ORIGINAL] return scanner.nextLine();
+  [ORIGINAL] }
+  [ORIGINAL] }
+
+Archivo: CodeAnalyzer.java [Version: A]
+  [ORIGINAL] package mantenimiento.codecounter.models;
+  [ORIGINAL] 
+  [ORIGINAL] import java.util.ArrayDeque;
+  [ORIGINAL] import java.util.Deque;
+  [ORIGINAL] import mantenimiento.codecounter.exceptions.InvalidFormatException;
+  [ORIGINAL] import mantenimiento.codecounter.models.counters.StructCounter;
+  [ORIGINAL] import mantenimiento.codecounter.templates.LogicalValidator;
+  [ORIGINAL] import mantenimiento.codecounter.validators.ValidatorManager;
+  [ORIGINAL] import mantenimiento.codecounter.validators.logical_validators.MethodDeclarationValidator;
+  [ORIGINAL] import mantenimiento.codecounter.validators.logical_validators.TypeDeclarationValidator;
+  [ORIGINAL] 
+  [ORIGINAL] /**
+  [ORIGINAL] * Analiza líneas de código Java para contar clases (anidadas incluidas), métodos y líneas físicas.
+  [ORIGINAL] */
+  [ORIGINAL] public class CodeAnalyzer {
+  [ORIGINAL] 
+  [ORIGINAL] private final StructCounter counter;
+  [ORIGINAL] private final Deque<String> classContextStack;
+  [ORIGINAL] private final Deque<Integer> classStartBraceLevelStack;
+  [ORIGINAL] private int currentBraceLevel = 0;
+  [ORIGINAL] 
+  [ORIGINAL] /**
+  [ORIGINAL] * Constructor.
+  [ORIGINAL] *
+  [ORIGINAL] * @param counter El contador donde se almacenarán los resultados. No puede ser nulo.
+  [ORIGINAL] */
+  [ORIGINAL] public CodeAnalyzer(StructCounter counter) {
+  [ORIGINAL] this.counter = counter;
+  [ORIGINAL] this.classContextStack = new ArrayDeque<>();
+  [ORIGINAL] this.classStartBraceLevelStack = new ArrayDeque<>();
+  [ORIGINAL] }
+  [ORIGINAL] 
+  [ORIGINAL] /**
+  [ORIGINAL] * Procesa una línea de código fuente. Hace el análisis llamando a métodos auxiliares.
+  [ORIGINAL] *
+  [ORIGINAL] * @param line La línea de código a procesar.
+  [ORIGINAL] * @throws InvalidFormatException Si los validadores detectan un formato inválido.
+  [ORIGINAL] */
+  [ORIGINAL] public void processLine(String line) throws InvalidFormatException {
+  [ORIGINAL] String trimmedLine = preprocessLine(line);
+  [ORIGINAL] countLineForCurrentContext();
+  [ORIGINAL] DeclarationInfo declInfo = detectDeclarations(trimmedLine);
+  [ORIGINAL] processBracesAndUpdateContext(line, declInfo.potentialClassName());
+  [ORIGINAL] countMethodIfDeclared(declInfo.isMethod());
+  [ORIGINAL] }
+  [ORIGINAL] 
+  [ORIGINAL] /**
+  [ORIGINAL] * Preprocesa la línea: recorta espacios y verifica si debe ignorarse.
+  [ORIGINAL] *
+  [ORIGINAL] * @param line Línea original.
+  [ORIGINAL] * @return La línea recortada, o null si debe ignorarse.
+  [ORIGINAL] */
+  [ORIGINAL] String preprocessLine(String line) {
+  [ORIGINAL] String trimmedLine = line.trim();
+  [ORIGINAL] if (trimmedLine.isEmpty() || isCommentLine(trimmedLine)) {
+  [ORIGINAL] return null;
+  [ORIGINAL] }
+  [ORIGINAL] return trimmedLine;
+  [ORIGINAL] }
+  [ORIGINAL] 
+  [ORIGINAL] /** Llama a StructCounter para añadir una línea a todas las clases en el contexto actual. */
+  [ORIGINAL] private void countLineForCurrentContext() {
+  [ORIGINAL] if (!classContextStack.isEmpty()) {
+  [ORIGINAL] for (String classNameInStack : classContextStack) {
+  [ORIGINAL] counter.addLineToClass(classNameInStack);
+  [ORIGINAL] }
+  [ORIGINAL] }
+  [ORIGINAL] }
+  [ORIGINAL] 
+  [ORIGINAL] private record DeclarationInfo(boolean isType, boolean isMethod, String potentialClassName) {}
+  [ORIGINAL] 
+  [ORIGINAL] /**
+  [ORIGINAL] * Determina si la línea contiene una declaración de tipo o método.
+  [ORIGINAL] *
+  [ORIGINAL] * @param trimmedLine La línea de código recortada.
+  [ORIGINAL] * @return Un objeto DeclarationInfo con los resultados.
+  [ORIGINAL] * @throws InvalidFormatException Si los validadores lanzan la excepción.
+  [ORIGINAL] */
+  [ORIGINAL] private DeclarationInfo detectDeclarations(String trimmedLine) {
+  [ORIGINAL] LogicalValidator validator = ValidatorManager.getLogicalValidators(trimmedLine);
+  [ORIGINAL] boolean isType = validator instanceof TypeDeclarationValidator;
+  [ORIGINAL] boolean isMethod = validator instanceof MethodDeclarationValidator;
+  [ORIGINAL] String className = null;
+  [ORIGINAL] 
+  [ORIGINAL] if (isType) {
+  [ORIGINAL] className = ((TypeDeclarationValidator) validator).getTypeName(trimmedLine);
+  [ORIGINAL] if (className == null || className.trim().isEmpty()) {
+  [ORIGINAL] isType = false;
+  [ORIGINAL] className = null;
+  [ORIGINAL] }
+  [ORIGINAL] }
+  [ORIGINAL] return new DeclarationInfo(isType, isMethod, className);
+  [ORIGINAL] }
+  [ORIGINAL] 
+  [ORIGINAL] /**
+  [ORIGINAL] * Itera sobre los caracteres de la línea, actualiza el nivel de llaves, y llama a push/pop del
+  [ORIGINAL] * contexto de clase cuando corresponde.
+  [ORIGINAL] *
+  [ORIGINAL] * @param line La línea de código original (para iterar caracteres).
+  [ORIGINAL] * @param potentialClassNameForLine El nombre de la clase declarada en ESTA línea (si aplica),
+  [ORIGINAL] *     null si no.
+  [ORIGINAL] */
+  [ORIGINAL] private void processBracesAndUpdateContext(String line, String potentialClassNameForLine) {
+  [ORIGINAL] int levelBeforeProcessingLine = currentBraceLevel;
+  [ORIGINAL] boolean classAddedOnThisLine = false;
+  [ORIGINAL] 
+  [ORIGINAL] for (char c : line.toCharArray()) {
+  [ORIGINAL] if (c == '{') {
+  [ORIGINAL] if (potentialClassNameForLine != null && !classAddedOnThisLine) {
+  [ORIGINAL] pushClassContext(potentialClassNameForLine, levelBeforeProcessingLine);
+  [ORIGINAL] classAddedOnThisLine = true;
+  [ORIGINAL] }
+  [ORIGINAL] currentBraceLevel++;
+  [ORIGINAL] } else if (c == '}') {
+  [ORIGINAL] tryPopClassContext();
+  [ORIGINAL] if (currentBraceLevel > 0) {
+  [ORIGINAL] currentBraceLevel--;
+  [ORIGINAL] }
+  [ORIGINAL] }
+  [ORIGINAL] }
+  [ORIGINAL] if (potentialClassNameForLine != null && !classAddedOnThisLine) {
+  [ORIGINAL] pushClassContext(potentialClassNameForLine, currentBraceLevel);
+  [ORIGINAL] }
+  [ORIGINAL] }
+  [ORIGINAL] 
+  [ORIGINAL] /**
+  [ORIGINAL] * Intenta sacar una clase del contexto si el nivel de llaves actual coincide con el cierre
+  [ORIGINAL] * esperado de la clase más interna.
+  [ORIGINAL] */
+  [ORIGINAL] private void tryPopClassContext() {
+  [ORIGINAL] if (!classContextStack.isEmpty()
+  [ORIGINAL] && !classStartBraceLevelStack.isEmpty()
+  [ORIGINAL] && currentBraceLevel == classStartBraceLevelStack.peek() + 1) {
+  [ORIGINAL] popClassContext();
+  [ORIGINAL] }
+  [ORIGINAL] }
+  [ORIGINAL] 
+  [ORIGINAL] /**
+  [ORIGINAL] * Añade una clase al contexto y actualiza los contadores.
+  [ORIGINAL] *
+  [ORIGINAL] * @param className Nombre de la clase.
+  [ORIGINAL] * @param braceLevel Nivel de llaves antes de la apertura de esta clase.
+  [ORIGINAL] */
+  [ORIGINAL] private void pushClassContext(String className, int braceLevel) {
+  [ORIGINAL] if (classContextStack.isEmpty() || !classContextStack.peek().equals(className)) {
+  [ORIGINAL] classContextStack.push(className);
+  [ORIGINAL] classStartBraceLevelStack.push(braceLevel);
+  [ORIGINAL] counter.addClass(className);
+  [ORIGINAL] counter.addLineToClass(className);
+  [ORIGINAL] }
+  [ORIGINAL] }
+  [ORIGINAL] 
+  [ORIGINAL] /** Saca la clase más interna del contexto (de ambas pilas). */
+  [ORIGINAL] private void popClassContext() {
+  [ORIGINAL] if (!classContextStack.isEmpty()) {
+  [ORIGINAL] classContextStack.pop();
+  [ORIGINAL] }
+  [ORIGINAL] if (!classStartBraceLevelStack.isEmpty()) {
+  [ORIGINAL] classStartBraceLevelStack.pop();
+  [ORIGINAL] }
+  [ORIGINAL] }
+  [ORIGINAL] 
+  [ORIGINAL] /**
+  [ORIGINAL] * Llama al contador para incrementar el número de métodos si aplica.
+  [ORIGINAL] *
+  [ORIGINAL] * @param isMethodDeclaration true si la línea actual declaró un método.
+  [ORIGINAL] */
+  [ORIGINAL] private void countMethodIfDeclared(boolean isMethodDeclaration) {
+  [ORIGINAL] if (!classContextStack.isEmpty() && isMethodDeclaration) {
+  [ORIGINAL] counter.addMethodToLastClass();
+  [ORIGINAL] }
+  [ORIGINAL] }
+  [ORIGINAL] 
+  [ORIGINAL] /**
+  [ORIGINAL] * Verifica si la línea es un comentario simple de una línea.
+  [ORIGINAL] *
+  [ORIGINAL] * @param trimmedLine Línea recortada.
+  [ORIGINAL] * @return true si es comentario, false si no.
+  [ORIGINAL] */
+  [ORIGINAL] private boolean isCommentLine(String trimmedLine) {
+  [ORIGINAL] return trimmedLine.startsWith("//");
+  [ORIGINAL] }
+  [ORIGINAL] 
+  [ORIGINAL] /**
+  [ORIGINAL] * Devuelve el contador asociado a este analizador.
+  [ORIGINAL] *
+  [ORIGINAL] * @return El objeto StructCounter.
+  [ORIGINAL] */
+  [ORIGINAL] public StructCounter getCounter() {
+  [ORIGINAL] return counter;
+  [ORIGINAL] }
+  [ORIGINAL] }
+
+Archivo: JavaFileTest.java [Version: A]
+  [ORIGINAL] package mantenimiento.codecounter.models;
+  [ORIGINAL] 
+  [ORIGINAL] import static org.junit.jupiter.api.Assertions.assertEquals;
+  [ORIGINAL] import static org.junit.jupiter.api.Assertions.assertFalse;
+  [ORIGINAL] import static org.junit.jupiter.api.Assertions.assertNotNull;
+  [ORIGINAL] 
+  [ORIGINAL] import java.io.IOException;
+  [ORIGINAL] import java.nio.file.Files;
+  [ORIGINAL] import java.nio.file.Path;
+  [ORIGINAL] import java.nio.file.Paths;
+  [ORIGINAL] import java.util.ArrayList;
+  [ORIGINAL] import java.util.List;
+  [ORIGINAL] import mantenimiento.codecounter.exceptions.FileNotFoundException;
+  [ORIGINAL] import org.junit.jupiter.api.AfterEach;
+  [ORIGINAL] import org.junit.jupiter.api.BeforeEach;
+  [ORIGINAL] import org.junit.jupiter.api.DisplayName;
+  [ORIGINAL] import org.junit.jupiter.api.Test;
+  [ORIGINAL] 
+  [ORIGINAL] class JavaFileTest {
+  [ORIGINAL] 
+  [ORIGINAL] private Path tempFile;
+  [ORIGINAL] 
+  [ORIGINAL] @BeforeEach
+  [ORIGINAL] void setUp() throws IOException {
+  [ORIGINAL] tempFile = Paths.get("testFile.java");
+  [ORIGINAL] Files.write(
+  [ORIGINAL] tempFile,
+  [ORIGINAL] new ArrayList<String>(
+  [ORIGINAL] List.of(
+  [ORIGINAL] "public class Test {",
+  [ORIGINAL] "    // Esto es un comentario en línea",
+  [ORIGINAL] "    /** ",
+  [ORIGINAL] "     *",
+  [ORIGINAL] "     * que ocupa varias líneas",
+  [ORIGINAL] "     */",
+  [ORIGINAL] "    public void method() {",
+  [ORIGINAL] "                             ",
+  [ORIGINAL] "        System.out.println(\"Hello World\");",
+  [ORIGINAL] "    }",
+  [ORIGINAL] "                             ",
+  [ORIGINAL] "}")));
+  [ORIGINAL] }
+  [ORIGINAL] 
+  [ORIGINAL] @AfterEach
+  [ORIGINAL] void tearDown() throws IOException {
+  [ORIGINAL] Files.deleteIfExists(tempFile);
+  [ORIGINAL] }
+  [ORIGINAL] 
+  [ORIGINAL] @Test
+  [ORIGINAL] @DisplayName("Debe de cargar el contenido correctamente")
+  [ORIGINAL] void testLoadFileContent() throws FileNotFoundException {
+  [ORIGINAL] JavaFile javaFile = new JavaFile(tempFile);
+  [ORIGINAL] List<String> content = javaFile.getContent();
+  [ORIGINAL] 
+  [ORIGINAL] assertNotNull(content);
+  [ORIGINAL] assertFalse(content.isEmpty());
+  [ORIGINAL] assertEquals(12, content.size());
+  [ORIGINAL] }
+  [ORIGINAL] 
+  [ORIGINAL] @Test
+  [ORIGINAL] @DisplayName("Debe de eliminar comentarios en bloque y de linea correctamente")
+  [ORIGINAL] void testRemoveComments() throws FileNotFoundException {
+  [ORIGINAL] JavaFile javaFile = new JavaFile(this.tempFile).removeComments();
+  [ORIGINAL] List<String> content = javaFile.getContent();
+  [ORIGINAL] 
+  [ORIGINAL] assertFalse(content.contains("// Esto es un comentario en línea"));
+  [ORIGINAL] assertFalse(content.contains("/**"));
+  [ORIGINAL] assertFalse(content.contains("*"));
+  [ORIGINAL] assertFalse(content.contains("* Comentario de bloque"));
+  [ORIGINAL] assertFalse(content.contains("* que ocupa varias líneas"));
+  [ORIGINAL] assertFalse(content.contains("*/"));
+  [ORIGINAL] }
+  [ORIGINAL] 
+  [ORIGINAL] @Test
+  [ORIGINAL] @DisplayName("Debe de eliminar lineas en blanco correctamente")
+  [ORIGINAL] void testRemoveBlankLines() throws FileNotFoundException {
+  [ORIGINAL] JavaFile javaFile = new JavaFile(this.tempFile).removeBlankLines();
+  [ORIGINAL] List<String> content = javaFile.getContent();
+  [ORIGINAL] 
+  [ORIGINAL] assertFalse(content.contains(""));
+  [ORIGINAL] }
+  [ORIGINAL] 
+  [ORIGINAL] @Test
+  [ORIGINAL] @DisplayName("Debe de remover lineas en blanco y comentarios")
+  [ORIGINAL] void testRemoveCommentsAndBlankLines() throws FileNotFoundException {
+  [ORIGINAL] JavaFile javaFile = new JavaFile(tempFile).removeComments().removeBlankLines();
+  [ORIGINAL] List<String> content = javaFile.getContent();
+  [ORIGINAL] 
+  [ORIGINAL] assertFalse(content.contains("// Esto es un comentario en línea"));
+  [ORIGINAL] assertFalse(content.contains("/* Comentario de bloque"));
+  [ORIGINAL] assertFalse(content.contains("que ocupa varias líneas */"));
+  [ORIGINAL] assertFalse(content.contains(""));
+  [ORIGINAL] 
+  [ORIGINAL] assertEquals(5, content.size());
+  [ORIGINAL] }
+  [ORIGINAL] }
+
+Archivo: ProyectComparator.java [Version: B]
+  [ORIGINAL] package mantenimiento.codecounter.models.comparators;
+  [ORIGINAL] 
+  [ORIGINAL] import java.util.ArrayList;
+  [ORIGINAL] import java.util.HashMap;
+  [ORIGINAL] import java.util.List;
+  [ORIGINAL] import java.util.Map;
+  [ORIGINAL] import java.util.Optional;
+  [ORIGINAL] 
+  [ORIGINAL] import mantenimiento.codecounter.demo.LineRecord;
+  [ORIGINAL] import mantenimiento.codecounter.models.JavaFile;
+  [ORIGINAL] import mantenimiento.codecounter.models.Proyect;
+  [NEW] import mantenimiento.codecounter.models.reporters.ComparationReport;
+  [NEW] 
+  [NEW] public class ProyectComparator {
+  [NEW] 
+  [NEW] private Proyect proyectToCompare;
+  [NEW] 
+  [NEW] private Proyect proyect;
+  [NEW] 
+  [NEW] private List<JavaFile> contentFiles;
+  [NEW] 
+  [NEW] private List<JavaFile> contentToCompareFiles;
+  [NEW] 
+  [NEW] private Map<String, List<LineRecord>> generalReport = new HashMap<>();
+  [NEW] 
+  [NEW] public ProyectComparator(Proyect proyect, Proyect proyectToCompare) {
+  [NEW] this.proyect = proyect;
+  [NEW] this.proyectToCompare = proyectToCompare;
+  [NEW] this.contentFiles = proyect.getFiles();
+  [NEW] this.contentToCompareFiles = proyectToCompare.getFiles();
+  [NEW] }
+  [NEW] 
+  [NEW] public void compare() {
+  [NEW] List<JavaFile> blackListOne = new ArrayList<>(this.proyect.getFiles());
+  [NEW] List<JavaFile> blackListTwo = new ArrayList<>(this.proyectToCompare.getFiles());
+  [NEW] 
+  [NEW] for (JavaFile javaFile : this.contentFiles) {
+  [NEW] String name = javaFile.getFileName();
+  [NEW] Optional<JavaFile> fileToComOptional = findFileTocompare(name);
+  [NEW] fileToComOptional.ifPresent(s -> compareFiles(javaFile, s));
+  [NEW] fileToComOptional.ifPresent(blackListTwo::remove);
+  [NEW] blackListOne.remove(javaFile);
+  [NEW] }
+  [NEW] 
+  [NEW] blackListOne.forEach(s -> generateReportForSingleFile(STATUS.DELETED, s, " [Version: A]"));
+  [NEW] blackListTwo.forEach(s -> generateReportForSingleFile(STATUS.NEW, s, " [Version: B]"));
+  [NEW] }
+  [NEW] 
+  [NEW] private Optional<JavaFile> findFileTocompare(String className) {
+  [NEW] return this.contentToCompareFiles.stream()
+  [NEW] .filter(s -> s.getFileName().equals(className))
+  [NEW] .findAny();
+  [NEW] }
+  [NEW] 
+  [NEW] private void compareFiles(JavaFile javaFile, JavaFile javaFileToCompare) {
+  [NEW] JavaFileComparator javaFileComparator = new JavaFileComparator(javaFile.getContent(),
+  [NEW] javaFileToCompare.getContent());
+  [NEW] 
+  [NEW] javaFileComparator.compareContent();
+  [NEW] 
+  [NEW] ComparationReport ComparationReport = javaFileComparator.getComparationReport();
+  [NEW] List<LineRecord> contentReport = ComparationReport.getCurrentContentReport();
+  [NEW] List<LineRecord> contentToCompareReport = ComparationReport.getContentToCompareReport();
+  [ORIGINAL] 
+  [NEW] generalReport.put(javaFile.getFileName() + " [Version: A]", contentReport);
+  [NEW] generalReport.put(javaFile.getFileName() + " [Version: B]", contentToCompareReport);
+  [NEW] 
+  [NEW] this.contentToCompareFiles.remove(javaFileToCompare);
+  [NEW] }
+  [NEW] 
+  [NEW] private void generateReportForSingleFile(STATUS status, JavaFile javaFile, String mention) {
+  [NEW] List<LineRecord> report = new ArrayList<>();
+  [NEW] javaFile.getContent().stream().forEach(s -> {
+  [NEW] report.add(new LineRecord(status, s));
+  [NEW] });
+  [NEW] ;
+  [NEW] generalReport.put(javaFile.getFileName() + " " + mention, report);
+  [ORIGINAL] }
+
+Archivo: JavaRegextConstants.java [Version: B]
+  [ORIGINAL] package mantenimiento.codecounter.constants;
+  [ORIGINAL] 
+  [ORIGINAL] /**
+  [ORIGINAL] * Contiene constantes con expresiones regulares utilizadas para analizar estructuras y sintaxis del
+  [ORIGINAL] * lenguaje Java.
+  [ORIGINAL] */
+  [ORIGINAL] public class JavaRegextConstants {
+  [ORIGINAL] public static final String ACCESS_MODIFIERS_REGEX = "((public|private|protected)\\s+)?";
+  [ORIGINAL] public static final String DATATYPE_DECLARATION_REGEX = "(\\s*[a-zA-Z0-9]+(<[a-zA-Z0-9]+>)?\\s+)";
+  [ORIGINAL] public static final String PARAMETERS_DECLARATION_REGEX = "(\\([^)]*\\)\\s*)";
+  [ORIGINAL] public static final String IDENTIFIER_DECLARATION_REGEX = "\\w+\\s*";
+  [ORIGINAL] public static final String TYPE_KEYS = "((class|enum|interface)\\s+)";
+  [ORIGINAL] public static final String FINAL_OR_STATIC_REGEX =
+  [ORIGINAL] "(?:(?:static\\s+)?(?:final\\s+)?|(?:final\\s+)?(?:static\\s+)?)?";
+  [ORIGINAL] public static final String ANNOTATION_REGEX = "^@[A-Za-z_]\\w*(\\(.*\\))?\\s*$";
+  [ORIGINAL] 
+  [ORIGINAL] private JavaRegextConstants() {}
+  [ORIGINAL] }
+
+Archivo: STATUS.java [Version: A]
+  [ORIGINAL] package mantenimiento.codecounter.models.comparators;
+  [ORIGINAL] 
+  [ORIGINAL] public enum STATUS {
+  [ORIGINAL] NEW, MODIFIED, DELETED, ORIGINAL
+  [DELETED] 
+  [NEW] NEW, MODIFIED, DELETED, ORIGINAL
+
+Archivo: JavaFileComparator.java [Version: A]
+  [ORIGINAL] package mantenimiento.codecounter.models.comparators;
+  [ORIGINAL] 
+  [DELETED] import java.util.ArrayList;
+  [DELETED] import java.util.List;
+  [DELETED] import java.util.stream.Collectors;
+  [DELETED] import java.util.stream.Stream;
+  [DELETED] 
+  [DELETED] 
+  [DELETED] import mantenimiento.codecounter.constants.JavaRegextConstants;
+  [DELETED] import mantenimiento.codecounter.demo.LineRecord;
+  [ORIGINAL] 
+  [DELETED] public class JavaFileComparator {
+  [ORIGINAL] 
+  [DELETED] private List<LineRecord> currentContentReport;
+  [ORIGINAL] 
+  [DELETED] private List<LineRecord> contentToCompareReport;
+  [ORIGINAL] 
+  [DELETED] private List<String> content;
+  [DELETED] 
+  [DELETED] private List<String> contentToCompare;
+  [DELETED] 
+  [DELETED] public JavaFileComparator(List<String> content, List<String> contentToCompare) {
+  [DELETED] this.currentContentReport = new ArrayList<>();
+  [DELETED] this.contentToCompareReport = new ArrayList<>();
+  [DELETED] this.content = content;
+  [DELETED] this.contentToCompare = contentToCompare;
+  [ORIGINAL] }
+  [ORIGINAL] 
+  [DELETED] public void compareContent() {
+  [DELETED] compareSameLines();
+  [DELETED] compareDifferentLines();
+  [DELETED] }
+  [DELETED] 
+  [DELETED] private void compareLine(String line, String lineToCompare, int i) {
+  [DELETED] if (line.equals(lineToCompare)) {
+  [DELETED] currentContentReport.add(new LineRecord(STATUS.DELETED, line));
+  [DELETED] contentToCompareReport.add(new LineRecord(STATUS.NEW, lineToCompare));
+  [DELETED] } else if (getSimplifiedContent(line) == getSimplifiedContent(lineToCompare)){
+  [DELETED] currentContentReport.add(new LineRecord(STATUS.ORIGINAL, line));
+  [DELETED] contentToCompareReport.add(new LineRecord(STATUS.MODIFIED, lineToCompare));
+  [DELETED] } else if (!line.equals(lineToCompare)){
+  [DELETED] currentContentReport.add(new LineRecord(STATUS.DELETED, line));
+  [DELETED] contentToCompareReport.add(new LineRecord(STATUS.NEW, lineToCompare));
+  [DELETED] }
+  [DELETED] 
+  [ORIGINAL] }
+  [DELETED] 
+  [DELETED] private void compareSameLines() {
+  [DELETED] for (int i = 0, j = 0; i < content.size() && j < contentToCompare.size(); i++, j++) {
+  [DELETED] String currentLine = content.get(i);
+  [DELETED] String lineToCompare = contentToCompare.get(j);
+  [DELETED] compareLine(currentLine, lineToCompare, i);
+  [DELETED] }
+  [DELETED] }
+  [DELETED] 
+  [DELETED] private String getSimplifiedContent(String line) {
+  [DELETED] String simplified = Stream.of(line.split(" "))
+  [DELETED] .filter(s -> !s.matches(JavaRegextConstants.ACCESS_MODIFIERS_REGEX))
+  [DELETED] .filter(s -> !s.matches(JavaRegextConstants.IDENTIFIER_DECLARATION_REGEX))
+  [DELETED] .filter(s -> !s.matches(JavaRegextConstants.FINAL_OR_STATIC_REGEX))
+  [DELETED] .collect(Collectors.joining());
+  [DELETED] System.out.println(simplified);
+  [DELETED] return simplified;
+  [DELETED] }
+  [DELETED] 
+  [DELETED] private void compareDifferentLines(){
+  [DELETED] int difference = Math.abs(this.content.size() - this.contentToCompare.size());
+  [DELETED] 
+  [DELETED] if (this.content.size() < this.contentToCompare.size()) {
+  [DELETED] int indexToCheck = this.contentToCompare.size() - difference - 1;
+  [DELETED] for (int i = indexToCheck; i < this.contentToCompare.size() - 1; i++) {
+  [ORIGINAL] }
+  [NEW] }
+  [NEW] 
+  [NEW] private void compareSameLines() {
+  [NEW] for (int i = 0, j = 0; i < content.size() && j < contentToCompare.size(); i++, j++) {
+  [NEW] String currentLine = content.get(i);
+  [NEW] String lineToCompare = contentToCompare.get(j);
+  [NEW] compareLine(currentLine, lineToCompare, i);
+  [NEW] }
+  [NEW] }
+  [NEW] 
+  [NEW] private String getSimplifiedContent(String line) {
+  [NEW] String simplified = Stream.of(line.split(" "))
+  [NEW] .filter(s -> !s.matches(JavaRegextConstants.ACCESS_MODIFIERS_REGEX))
+  [NEW] .filter(s -> !s.matches(JavaRegextConstants.IDENTIFIER_DECLARATION_REGEX))
+  [NEW] .filter(s -> !s.matches(JavaRegextConstants.FINAL_OR_STATIC_REGEX))
+  [NEW] .collect(Collectors.joining());
+  [NEW] System.out.println(simplified);
+  [NEW] return simplified;
+  [NEW] }
+  [NEW] 
+  [NEW] private void compareDifferentLines(){
+  [NEW] int difference = Math.abs(this.content.size() - this.contentToCompare.size());
+  [NEW] 
+  [NEW] if (this.content.size() < this.contentToCompare.size()) {
+  [NEW] int indexToCheck = this.contentToCompare.size() - difference - 1;
+  [NEW] for (int i = indexToCheck; i < this.contentToCompare.size() - 1; i++) {
+
+Archivo: LogicalValidator.java [Version: B]
+  [ORIGINAL] package mantenimiento.codecounter.templates;
+  [ORIGINAL] 
+  [ORIGINAL] /*
+  [ORIGINAL] * Interfaz que define el comportamiento de una fábrica de validadores lógicos
+  [ORIGINAL] */
+  [ORIGINAL] public interface LogicalValidator {
+  [ORIGINAL] /**
+  [ORIGINAL] * Valida si la línea de código corresponde a una declaración de tipo
+  [ORIGINAL] *
+  [ORIGINAL] * @param linesOfCode
+  [ORIGINAL] * @return
+  [ORIGINAL] */
+  [ORIGINAL] public boolean validateType(String linesOfCode);
+  [ORIGINAL] }
+
+Archivo: StyleKAndRValidator.java [Version: A]
+  [ORIGINAL] package mantenimiento.codecounter.validators.format_validators;
+  [ORIGINAL] 
+  [ORIGINAL] import static mantenimiento.codecounter.constants.ReasonInvalidFormat.INVALID_STYLE_K_AND_R;
+  [ORIGINAL] 
+  [ORIGINAL] import mantenimiento.codecounter.exceptions.InvalidFormatException;
+  [ORIGINAL] import mantenimiento.codecounter.templates.FormatValidator;
+  [ORIGINAL] 
+  [ORIGINAL] /** Clase que valida si se cumple el formato de uso de llaves K&R */
+  [ORIGINAL] public class StyleKAndRValidator extends FormatValidator {
+  [ORIGINAL] 
+  [ORIGINAL] private static final String INVALID_OPENING_BRACKED_REGEX = "^\\s*\\{\\s*";
+  [ORIGINAL] private static final String VALID_CLOSING_BRACKED_REGEX =
+  [ORIGINAL] "((\\s*\\}\\s*)|(\\s*\\}\\s*(while|else|catch|finally|\\)?;).*))";
+  [ORIGINAL] private static final String EMPTY_BRACKED_REGEX = "^\\s*\\{.*\\}\\s*";
+  [ORIGINAL] 
+  [ORIGINAL] /**
+  [ORIGINAL] * Realiza la validacion del formato verificando si se cumple el estilo de bloques K&R
+  [ORIGINAL] *
+  [ORIGINAL] * @param lineOfFile linea de texto (sentencia de codigo) a validar
+  [ORIGINAL] * @return {@code true} si se satisface el estilo de bloques K&R {@code false} en caso contrario
+  [ORIGINAL] * @throws InvalidFormatException si no se cumple estilo de bloque K&R
+  [ORIGINAL] */
+  [ORIGINAL] @Override
+  [ORIGINAL] public boolean isValid(String lineOfFile) throws InvalidFormatException {
+  [ORIGINAL] if (isInValidOpeningBracked(lineOfFile)
+  [ORIGINAL] || isInvalidClosingBracked(lineOfFile)
+  [ORIGINAL] || isEmptyBracked(lineOfFile)) {
+  [ORIGINAL] throw new InvalidFormatException(INVALID_STYLE_K_AND_R, lineOfFile);
+  [ORIGINAL] }
+  [ORIGINAL] return validateNext(lineOfFile);
+  [ORIGINAL] }
+  [ORIGINAL] 
+  [ORIGINAL] /**
+  [ORIGINAL] * Verifica si la línea del archivo contiene un corchete de apertura no válido.
+  [ORIGINAL] *
+  [ORIGINAL] * @param lineOfFile Línea del archivo a evaluar.
+  [ORIGINAL] * @return {@code true} si la línea coincide con el patrón de corchete de apertura no válido,
+  [ORIGINAL] *     {@code false} en caso contrario.
+  [ORIGINAL] */
+  [ORIGINAL] private boolean isInValidOpeningBracked(String lineOfFile) {
+  [ORIGINAL] return lineOfFile.matches(INVALID_OPENING_BRACKED_REGEX);
+  [ORIGINAL] }
+  [ORIGINAL] 
+  [ORIGINAL] /**
+  [ORIGINAL] * Verifica si la línea del archivo contiene un corchete de cierre no válido.
+  [ORIGINAL] *
+  [ORIGINAL] * @param lineOfFile Línea del archivo a evaluar.
+  [ORIGINAL] * @return {@code true} si la línea coincide con el patrón de corchete de cierre no válido, {@code
+  [ORIGINAL] *     false} en caso contrario.
+  [ORIGINAL] */
+  [ORIGINAL] private boolean isInvalidClosingBracked(String lineOfFile) {
+  [ORIGINAL] 
+  [ORIGINAL] return (lineOfFile.startsWith("}") || lineOfFile.endsWith("}"))
+  [ORIGINAL] && !lineOfFile.matches(VALID_CLOSING_BRACKED_REGEX);
+  [ORIGINAL] }
+  [ORIGINAL] 
+  [ORIGINAL] /**
+  [ORIGINAL] * Verifica si la línea del archivo contiene un par de corchetes vacío.
+  [ORIGINAL] *
+  [ORIGINAL] * @param lineOfFile Línea del archivo a evaluar.
+  [ORIGINAL] * @return {@code true} si la línea coincide con el patrón de corchetes vacíos, {@code false} en
+  [ORIGINAL] *     caso contrario.
+  [ORIGINAL] */
+  [ORIGINAL] private boolean isEmptyBracked(String lineOfFile) {
+  [ORIGINAL] return lineOfFile.matches(EMPTY_BRACKED_REGEX);
+  [ORIGINAL] }
+  [ORIGINAL] }
+
+Archivo: MethodDeclarationValidator.java [Version: B]
+  [ORIGINAL] package mantenimiento.codecounter.validators.logical_validators;
+  [ORIGINAL] 
+  [ORIGINAL] import static mantenimiento.codecounter.constants.JavaRegextConstants.ACCESS_MODIFIERS_REGEX;
+  [ORIGINAL] import static mantenimiento.codecounter.constants.JavaRegextConstants.DATATYPE_DECLARATION_REGEX;
+  [ORIGINAL] import static mantenimiento.codecounter.constants.JavaRegextConstants.FINAL_OR_STATIC_REGEX;
+  [ORIGINAL] import static mantenimiento.codecounter.constants.JavaRegextConstants.IDENTIFIER_DECLARATION_REGEX;
+  [ORIGINAL] 
+  [ORIGINAL] import mantenimiento.codecounter.templates.LogicalValidator;
+  [ORIGINAL] 
+  [ORIGINAL] /**
+  [ORIGINAL] * Clase que verifica si existe una declaración de un método para poder contabilizarlo como línea
+  [ORIGINAL] * lógica
+  [ORIGINAL] */
+  [ORIGINAL] public class MethodDeclarationValidator implements LogicalValidator {
+  [ORIGINAL] 
+  [ORIGINAL] private static final String METHOD_DECLARATION =
+  [ORIGINAL] "^(\\s*"
+  [ORIGINAL] + ACCESS_MODIFIERS_REGEX
+  [ORIGINAL] + FINAL_OR_STATIC_REGEX
+  [ORIGINAL] + DATATYPE_DECLARATION_REGEX
+  [ORIGINAL] + IDENTIFIER_DECLARATION_REGEX
+  [ORIGINAL] + "\\(.*)";
+  [ORIGINAL] 
+  [ORIGINAL] /**
+  [ORIGINAL] * Determina si una línea de código corresponde a una declaración de un método para considerarla
+  [ORIGINAL] * como línea lógica
+  [ORIGINAL] *
+  [ORIGINAL] * @param lineOfCode linea de código por analizar
+  [ORIGINAL] * @return {@code true} si es declaración de método, {@code false} en caso contrario
+  [ORIGINAL] */
+  [ORIGINAL] @Override
+  [ORIGINAL] public boolean validateType(String lineOfCode) {
+  [ORIGINAL] return isMethodDeclaration(lineOfCode);
+  [ORIGINAL] }
+  [ORIGINAL] 
+  [ORIGINAL] /**
+  [ORIGINAL] * Verifica si es una declaración de método
+  [ORIGINAL] *
+  [ORIGINAL] * @param lineOfCode linea de código por analizar
+  [ORIGINAL] * @return {@code true} si es declaración de método, {@code false} en caso contrario
+  [ORIGINAL] */
+  [ORIGINAL] private boolean isMethodDeclaration(String lineOfCode) {
+  [ORIGINAL] return lineOfCode.matches(METHOD_DECLARATION)
+  [ORIGINAL] && !lineOfCode.contains(";")
+  [ORIGINAL] && !lineOfCode.contains("\"");
+  [ORIGINAL] }
+  [ORIGINAL] }
+
+Archivo: LineRecord.java [Version: B]
+  [ORIGINAL] package mantenimiento.codecounter.demo;
+  [ORIGINAL] 
+  [ORIGINAL] import mantenimiento.codecounter.models.comparators.STATUS;
+  [ORIGINAL] 
+  [ORIGINAL] public record LineRecord (
+  [ORIGINAL] STATUS status,
+  [ORIGINAL] String content
+  [ORIGINAL] ) {
+  [ORIGINAL] 
+  [ORIGINAL] }
+
+Archivo: ImportValidator.java [Version: A]
+  [ORIGINAL] package mantenimiento.codecounter.validators.format_validators;
+  [ORIGINAL] 
+  [ORIGINAL] import static mantenimiento.codecounter.constants.ReasonInvalidFormat.INVALID_IMPORT_STATEMENT;
+  [ORIGINAL] 
+  [ORIGINAL] import mantenimiento.codecounter.exceptions.InvalidFormatException;
+  [ORIGINAL] import mantenimiento.codecounter.templates.FormatValidator;
+  [ORIGINAL] 
+  [ORIGINAL] /**
+  [ORIGINAL] * Clase que valida si la importacion de un paquete tiene un comodin y lanza una excepcion en caso
+  [ORIGINAL] * de haber
+  [ORIGINAL] *
+  [ORIGINAL] * <p>ej: import java.util*
+  [ORIGINAL] */
+  [ORIGINAL] public class ImportValidator extends FormatValidator {
+  [ORIGINAL] 
+  [ORIGINAL] /**
+  [ORIGINAL] * Realiza la validacion del formato verificando si es un import y si utiliza un comodin
+  [ORIGINAL] *
+  [ORIGINAL] * @param lineOfFile linea de texto (sentencia de codigo) a validar
+  [ORIGINAL] * @return {@code true} si el import es sin comodin
+  [ORIGINAL] * @throws InvalidFormatException si el import se realiza con comodin
+  [ORIGINAL] */
+  [ORIGINAL] @Override
+  [ORIGINAL] public boolean isValid(String lineOfFile) throws InvalidFormatException {
+  [ORIGINAL] if (isImportDeclaration(lineOfFile)) {
+  [ORIGINAL] if (isImportWithWildcard(lineOfFile)) {
+  [ORIGINAL] throw new InvalidFormatException(INVALID_IMPORT_STATEMENT, lineOfFile);
+  [ORIGINAL] }
+  [ORIGINAL] 
+  [ORIGINAL] return true;
+  [ORIGINAL] }
+  [ORIGINAL] 
+  [ORIGINAL] return this.validateNext(lineOfFile);
+  [ORIGINAL] }
+  [ORIGINAL] 
+  [ORIGINAL] /**
+  [ORIGINAL] * Valida si la sentencia corresponde a una declaracion de import
+  [ORIGINAL] *
+  [ORIGINAL] * @param lineOfCode sentencia a validar
+  [ORIGINAL] * @return {@code true} si es una declaracion de import, {@code false} si no corresponde
+  [ORIGINAL] */
+  [ORIGINAL] private boolean isImportDeclaration(String lineOfCode) {
+  [ORIGINAL] String importDeclarationRegex = "^import\\s+.*;$";
+  [ORIGINAL] return lineOfCode.matches(importDeclarationRegex);
+  [ORIGINAL] }
+  [ORIGINAL] 
+  [ORIGINAL] /**
+  [ORIGINAL] * Valida si la declaracion de import, incluso un import statico, tiene comodín
+  [ORIGINAL] *
+  [ORIGINAL] * @param lineOfCode sentencia a validar
+  [ORIGINAL] * @return {@code true} si el import es con comodin, {@code false} si no corresponde
+  [ORIGINAL] */
+  [ORIGINAL] private boolean isImportWithWildcard(String lineOfCode) {
+  [ORIGINAL] String wildcardImportRegex = "^import\\s+(static\\s+)?(?:\\w+\\.\\s*){1,10}\\*\\s*;";
+  [ORIGINAL] return lineOfCode.matches(wildcardImportRegex);
+  [ORIGINAL] }
+  [ORIGINAL] }
+
+Archivo: StyleKAndRValidatorTest.java [Version: B]
+  [ORIGINAL] package mantenimiento.codecounter.validators.format_validators;
+  [ORIGINAL] 
+  [ORIGINAL] import static org.junit.jupiter.api.Assertions.assertThrows;
+  [ORIGINAL] import static org.junit.jupiter.api.Assertions.assertTrue;
+  [ORIGINAL] 
+  [ORIGINAL] import mantenimiento.codecounter.exceptions.InvalidFormatException;
+  [ORIGINAL] import org.junit.jupiter.api.DisplayName;
+  [ORIGINAL] import org.junit.jupiter.api.Test;
+  [ORIGINAL] 
+  [ORIGINAL] class StyleKAndRValidatorTest {
+  [ORIGINAL] 
+  [ORIGINAL] private final StyleKAndRValidator validator = new StyleKAndRValidator();
+  [ORIGINAL] 
+  [ORIGINAL] @Test
+  [ORIGINAL] @DisplayName(
+  [ORIGINAL] "Debe lanzar InvalidFormatException si la línea tiene un corchete de apertura inválido")
+  [ORIGINAL] void testInvalidOpeningBracketThrowsException() {
+  [ORIGINAL] String invalidLine = " {";
+  [ORIGINAL] assertThrows(InvalidFormatException.class, () -> validator.isValid(invalidLine));
+  [ORIGINAL] }
+  [ORIGINAL] 
+  [ORIGINAL] @Test
+  [ORIGINAL] @DisplayName(
+  [ORIGINAL] "Debe lanzar InvalidFormatException si la línea tiene un corchete de cierre inválido")
+  [ORIGINAL] void testInvalidClosingBracketThrowsException() {
+  [ORIGINAL] String invalidLine = "} if";
+  [ORIGINAL] assertThrows(InvalidFormatException.class, () -> validator.isValid(invalidLine));
+  [ORIGINAL] }
+  [ORIGINAL] 
+  [ORIGINAL] @Test
+  [ORIGINAL] @DisplayName("Debe lanzar InvalidFormatException si la línea contiene corchetes vacíos")
+  [ORIGINAL] void testEmptyBracketsThrowsException() {
+  [ORIGINAL] String invalidLine = "{}";
+  [ORIGINAL] assertThrows(InvalidFormatException.class, () -> validator.isValid(invalidLine));
+  [ORIGINAL] }
+  [ORIGINAL] 
+  [ORIGINAL] @Test
+  [ORIGINAL] @DisplayName(
+  [ORIGINAL] "Debe devolver lanzar InvalidFormatException si existen {} en una sola línea con o sin"
+  [ORIGINAL] + " contenido")
+  [ORIGINAL] void testValidLineReturnsTrue() {
+  [ORIGINAL] String validLine = "if (x > 0) { doSomething(); }";
+  [ORIGINAL] assertThrows(InvalidFormatException.class, () -> assertTrue(validator.isValid(validLine)));
+  [ORIGINAL] }
+  [ORIGINAL] }
+
