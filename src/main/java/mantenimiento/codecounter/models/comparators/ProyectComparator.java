@@ -10,6 +10,7 @@ import mantenimiento.codecounter.demo.LineRecord;
 import mantenimiento.codecounter.models.JavaFile;
 import mantenimiento.codecounter.models.Proyect;
 import mantenimiento.codecounter.models.reporters.ComparationReport;
+import mantenimiento.codecounter.utils.LineSplitter;
 
 public class ProyectComparator {
 
@@ -38,7 +39,6 @@ public class ProyectComparator {
             String name = javaFile.getFileName();
             Optional<JavaFile> fileToComOptional = findFileTocompare(name);
             fileToComOptional.ifPresent(s -> compareFiles(javaFile, s));
-            //fileToComOptional.ifPresentOrElse(s -> compareFiles(javaFile, fileToComOptional.get()), null);
             fileToComOptional.ifPresent(blackListTwo::remove);
             blackListOne.remove(javaFile);
         }
@@ -70,15 +70,17 @@ public class ProyectComparator {
     }
 
     private void generateReportForSingleFile(STATUS status, JavaFile javaFile, String mention) {
-        List<LineRecord> report = new ArrayList<>();
-        javaFile.getContent().stream().forEach(s -> {
+    List<LineRecord> report = new ArrayList<>();
+    
+    javaFile.getContent().forEach(lineContent -> {
 
-            report.add(new LineRecord(status, s));
-            
-        });
-        ;
-        generalReport.put(javaFile.getFileName() + " " + mention, report);
-    }
+        LineRecord originalRecord = new LineRecord(status, lineContent);     
+        List<LineRecord> processedLines = LineSplitter.splitLongLines(originalRecord);
+        report.addAll(processedLines);
+    });
+    
+    generalReport.put(javaFile.getFileName() + " " + mention, report);
+}
 
     public Map<String, List<LineRecord>> getGeneralReport() {
         return generalReport;
