@@ -5,6 +5,12 @@
 - Versión recomendada de Java: 17+
 - Maven para la gestión de dependencias
 
+## 📂 Documentación
+
+Puedes acceder a recursos adicionales en el siguiente enlace:
+
+[Carpeta de documentación](https://alumnosuady-my.sharepoint.com/:f:/g/personal/a18003998_alumnos_uady_mx/Em8xFDpM7LJHskKBZcpV7iAB7viOSbBKU7ZoGBlStEmABA?e=cWOvdL)
+
 ## 🚀 Instalación y Configuración
 
 ### 📂 Clonar el repositorio

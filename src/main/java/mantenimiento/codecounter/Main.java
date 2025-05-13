@@ -1,14 +1,11 @@
 package mantenimiento.codecounter;
 
 import java.util.Scanner;
-
-import mantenimiento.codecounter.exceptions.FolderNotFoundException;
-import mantenimiento.codecounter.exceptions.JavaFilesNotFoundException;
 import mantenimiento.codecounter.models.ProgramBuilder;
 
 public class Main {
 
-  public static void main(String[] args) throws FolderNotFoundException, JavaFilesNotFoundException {
+  public static void main(String[] args) {
     Scanner scanner = new Scanner(System.in);
 
     ProgramBuilder.buildProgram(requestFolderPath(scanner));
