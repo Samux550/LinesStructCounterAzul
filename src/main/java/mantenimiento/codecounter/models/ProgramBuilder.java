@@ -134,7 +134,7 @@ public class ProgramBuilder {
   private static void generateTxtReport(ProyectComparator proyectComparator) {
     Map<String, List<LineRecord>> report = proyectComparator.getGeneralReport();
     TxtReporter txtReporter = new TxtReporter(report);
-    txtReporter.generateTxt();
+    txtReporter.generateTxtReports();
   }
 
   private ProgramBuilder() {

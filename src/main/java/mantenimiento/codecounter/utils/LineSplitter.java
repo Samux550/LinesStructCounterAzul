@@ -24,13 +24,13 @@ public class LineSplitter {
         String firstPart = lineContent.substring(0, splitPoint).trim();
         String secondPart = lineContent.substring(splitPoint).trim();
         
-        result.add(new LineRecord(STATUS.ORIGINAL, firstPart));
+        result.add(new LineRecord(STATUS.SPLITED, firstPart));
         result.add(new LineRecord(originalStatus, secondPart));
         
         LineRecord secondRecord = new LineRecord(originalStatus, secondPart);
         if (secondPart.length() > MAX_LINE_LENGTH) {
             List<LineRecord> subSplits = splitLongLines(secondRecord);
-            result.remove(result.size()-1); // Quitamos el registro largo
+            result.remove(result.size()-1);
             result.addAll(subSplits);
         }
         
