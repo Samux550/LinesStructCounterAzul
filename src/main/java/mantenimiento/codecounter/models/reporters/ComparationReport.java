@@ -37,15 +37,21 @@ public class ComparationReport {
     }
 
     public void updateReport(List<String> content, int difference) {
-        int indexToCheck = content.size() - difference - 1;
-        for (int i = indexToCheck; i < content.size() - 1; i++) {
+        int indexToCheck = content.size() - difference; 
+        if (indexToCheck < 0) {
+            indexToCheck = 0; 
+        }
+        for (int i = indexToCheck; i < content.size(); i++) {
             this.currentContentReport.add(new LineRecord(STATUS.DELETED, content.get(i)));
         }
     }
 
     public void updateReport(List<String> content, List<String> contentToCompare, int difference) {
-        int indexToCheck = contentToCompare.size() - difference - 1;
-        for (int i = indexToCheck; i < contentToCompare.size() - 1; i++) {
+        int indexToCheck = content.size() - difference;
+        if (indexToCheck < 0) {
+            indexToCheck = 0;
+        }
+        for (int i = indexToCheck; i < content.size(); i++) {
             this.currentContentReport.add(new LineRecord(STATUS.NEW, content.get(i)));
         }
     }
