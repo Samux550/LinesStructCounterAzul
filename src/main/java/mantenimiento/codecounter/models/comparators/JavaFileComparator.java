@@ -1,10 +1,6 @@
 package mantenimiento.codecounter.models.comparators;
 
 import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
-
-import mantenimiento.codecounter.constants.JavaRegextConstants;
 import mantenimiento.codecounter.models.reporters.ComparationReport;
 
 public class JavaFileComparator {
@@ -27,15 +23,9 @@ public class JavaFileComparator {
     }
 
     private void compareLine(String line, String lineToCompare, int i) {
-
-        if (line.equals(lineToCompare)) {
-            this.comparationReport.makeReportLine(STATUS.ORIGINAL, line, lineToCompare);
-        } else if (getSimplifiedContent(line) == getSimplifiedContent(lineToCompare)) {
-            this.comparationReport.makeReportLine(STATUS.MODIFIED, line, lineToCompare);
-        } else if (!line.equals(lineToCompare)) {
-            this.comparationReport.makeReportLine(STATUS.NEW, line, lineToCompare);
-        }
-
+        LineComparator lineComparator = new LineComparator(line, lineToCompare);
+        STATUS status = lineComparator.compare();
+        this.comparationReport.makeReportLine(status, line, lineToCompare);
     }
 
     private void compareSameLines() {
@@ -46,14 +36,7 @@ public class JavaFileComparator {
         }
     }
 
-    private String getSimplifiedContent(String line) {
-        String simplified = Stream.of(line.split(" "))
-                .filter(s -> !s.matches(JavaRegextConstants.ACCESS_MODIFIERS_REGEX))
-                .filter(s -> !s.matches(JavaRegextConstants.IDENTIFIER_DECLARATION_REGEX))
-                .filter(s -> !s.matches(JavaRegextConstants.FINAL_OR_STATIC_REGEX))
-                .collect(Collectors.joining());
-        return simplified;
-    }
+
 
     private void compareDifferentLines() {
         int difference = Math.abs(this.content.size() - this.contentToCompare.size());

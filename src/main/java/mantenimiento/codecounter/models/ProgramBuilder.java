@@ -34,7 +34,7 @@ public class ProgramBuilder {
    * @throws JavaFilesNotFoundException
    * @throws FolderNotFoundException
    */
-  public static void buildProgram(String folderPath) throws FolderNotFoundException, JavaFilesNotFoundException {
+  public static void buildProgram(String folderPath) {
     String[] paths = folderPath.split(" ");
     Stream.of(paths).forEach(ProgramBuilder::countWorkflow);
     if (paths.length == 2) {
