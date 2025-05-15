@@ -52,7 +52,6 @@ public class JavaFileComparator {
                 .filter(s -> !s.matches(JavaRegextConstants.IDENTIFIER_DECLARATION_REGEX))
                 .filter(s -> !s.matches(JavaRegextConstants.FINAL_OR_STATIC_REGEX))
                 .collect(Collectors.joining());
-        System.out.println(simplified);
         return simplified;
     }
 

@@ -38,9 +38,13 @@ public class ProyectComparator {
         for (JavaFile javaFile : this.contentFiles) {
             String name = javaFile.getFileName();
             Optional<JavaFile> fileToComOptional = findFileTocompare(name);
-            fileToComOptional.ifPresent(s -> compareFiles(javaFile, s));
-            fileToComOptional.ifPresent(blackListTwo::remove);
-            blackListOne.remove(javaFile);
+    
+            if (fileToComOptional.isPresent()) {
+                JavaFile matchedFile = fileToComOptional.get();
+                compareFiles(javaFile, matchedFile);
+                blackListTwo.remove(matchedFile);
+                blackListOne.remove(javaFile);
+            }
         }
 
         blackListOne.forEach(s -> generateReportForSingleFile(STATUS.DELETED, s, " [Version: A]"));
