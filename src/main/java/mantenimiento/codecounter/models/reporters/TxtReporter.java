@@ -58,6 +58,7 @@ public class TxtReporter {
             while (true) {
                 System.out.println("\nIngrese la ruta del directorio para guardar los reportes:");
                 String dirPath = scanner.nextLine().trim();
+                System.out.println();
                 
                 try {
                     Path dir = Paths.get(dirPath);
@@ -120,13 +121,14 @@ public class TxtReporter {
         System.out.println("\n=== RESUMEN GLOBAL DE CAMBIOS ===");
         System.out.println("Total de cambios en todo el proyecto:");
         
-        System.out.printf("Nuevas líneas (NEW): %d%n", globalChangeCounts.getOrDefault(NEW, 0));
+        System.out.printf("Líneas nuevas (NEW): %d%n", globalChangeCounts.getOrDefault(NEW, 0));
         System.out.printf("Líneas modificadas (MODIFIED): %d%n", globalChangeCounts.getOrDefault(MODIFIED, 0));
         System.out.printf("Líneas eliminadas (DELETED): %d%n", globalChangeCounts.getOrDefault(DELETED, 0));
         System.out.printf("Líneas sin cambios (ORIGINAL): %d%n", globalChangeCounts.getOrDefault(ORIGINAL, 0));
         
         long totalChanges = globalChangeCounts.values().stream().mapToLong(Integer::longValue).sum();
         System.out.printf("\nTotal de líneas procesadas: %d%n", totalChanges);
+        System.out.println();
     }
 
     /**

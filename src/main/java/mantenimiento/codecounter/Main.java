@@ -12,7 +12,13 @@ public class Main {
   }
 
   private static String requestFolderPath(Scanner scan) {
-    System.out.println("Ingresa la ruta de la carpeta del proyecto:");
+    System.out.println();
+    System.out.println("Ingrese la ruta o las rutas de las carpetas del proyecto:");
+    System.out.println(" - Para analizar un solo proyecto, introduzca UNA sola ruta.");
+    System.out.println(" - Para comparar dos proyectos, introduzca DOS rutas separadas por un espacio.");
+    System.out.println(" * Importante: Asegúrese de que las carpetas en las rutas NO contengan espacios.");
+    System.out.println();
+    System.out.print("Ruta(s): ");
     return scan.nextLine();
-  }
+}
 }

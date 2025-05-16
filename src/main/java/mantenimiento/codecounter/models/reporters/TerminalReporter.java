@@ -23,6 +23,7 @@ public class TerminalReporter extends Reporter {
    * columnas
    */
   private void printHeader() {
+    System.out.println();
     System.out.println(
         "---------------------------------------------------------------------------------");
     System.out.println("Programa: " + this.programName);
