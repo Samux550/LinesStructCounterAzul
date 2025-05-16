@@ -3,8 +3,8 @@ package mantenimiento.codecounter.models.reporters;
 import java.util.ArrayList;
 import java.util.List;
 
+import mantenimiento.codecounter.models.LineRecord;
 import mantenimiento.codecounter.models.comparators.Status;
-import mantenimiento.codecounter.utils.LineRecord;
 
 public class ComparationReport {
 

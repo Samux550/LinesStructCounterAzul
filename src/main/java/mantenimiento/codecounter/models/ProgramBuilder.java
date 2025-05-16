@@ -16,7 +16,6 @@ import mantenimiento.codecounter.models.counters.StructCounter;
 import mantenimiento.codecounter.models.reporters.Reporter;
 import mantenimiento.codecounter.models.reporters.TerminalReporter;
 import mantenimiento.codecounter.utils.JavaFilesScanner;
-import mantenimiento.codecounter.utils.LineRecord;
 import mantenimiento.codecounter.models.reporters.TxtReporter;
 
 /**
