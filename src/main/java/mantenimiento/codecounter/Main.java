@@ -6,13 +6,13 @@ import mantenimiento.codecounter.models.ProgramBuilder;
 public class Main {
 
   public static void main(String[] args) {
-    Scanner scan = new Scanner(System.in);
+    Scanner s = new Scanner(System.in);
 
-    ProgramBuilder.buildProgram(requestFolderPath(scan));
+    ProgramBuilder.buildProgram(requestFolderPath(s));
 
     System.out.println("\nPresiona Enter para salir...");
-    scan.nextLine();
-    scan.close();
+    s.nextLine();
+    s.close();
   }
 
   private static String requestFolderPath(Scanner scan) {

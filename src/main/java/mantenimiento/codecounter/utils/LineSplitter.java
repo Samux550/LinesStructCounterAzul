@@ -3,8 +3,7 @@ package mantenimiento.codecounter.utils;
 import java.util.ArrayList;
 import java.util.List;
 
-import mantenimiento.codecounter.demo.LineRecord;
-import mantenimiento.codecounter.models.comparators.STATUS;
+import mantenimiento.codecounter.models.comparators.Status;
 
 public class LineSplitter {
     
@@ -13,7 +12,7 @@ public class LineSplitter {
     public static List<LineRecord> splitLongLines(LineRecord originalRecord) {
         List<LineRecord> result = new ArrayList<>();
         String lineContent = originalRecord.content();
-        STATUS originalStatus = originalRecord.status();
+        Status originalStatus = originalRecord.status();
         
         if (lineContent.length() <= MAX_LINE_LENGTH) {
             result.add(originalRecord);
@@ -24,7 +23,7 @@ public class LineSplitter {
         String firstPart = lineContent.substring(0, splitPoint).trim();
         String secondPart = lineContent.substring(splitPoint).trim();
         
-        result.add(new LineRecord(STATUS.SPLITED, firstPart));
+        result.add(new LineRecord(Status.SPLITED, firstPart));
         result.add(new LineRecord(originalStatus, secondPart));
         
         LineRecord secondRecord = new LineRecord(originalStatus, secondPart);

@@ -7,7 +7,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Stream;
 
-import mantenimiento.codecounter.demo.LineRecord;
 import mantenimiento.codecounter.exceptions.FileNotFoundException;
 import mantenimiento.codecounter.exceptions.FolderNotFoundException;
 import mantenimiento.codecounter.exceptions.InvalidFormatException;
@@ -17,6 +16,7 @@ import mantenimiento.codecounter.models.counters.StructCounter;
 import mantenimiento.codecounter.models.reporters.Reporter;
 import mantenimiento.codecounter.models.reporters.TerminalReporter;
 import mantenimiento.codecounter.utils.JavaFilesScanner;
+import mantenimiento.codecounter.utils.LineRecord;
 import mantenimiento.codecounter.models.reporters.TxtReporter;
 
 /**
