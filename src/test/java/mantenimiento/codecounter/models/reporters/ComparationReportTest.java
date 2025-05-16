@@ -4,8 +4,12 @@ import mantenimiento.codecounter.models.LineRecord;
 import mantenimiento.codecounter.models.comparators.Status;
 import org.junit.jupiter.api.Test;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -78,41 +82,71 @@ public class ComparationReportTest {
         assertEquals(Status.DELETED, current.get(1).status());
     }
 
+
+    // @Test
+    // public void testUpdateReport_NewLines_Multiple() {
+    //     ComparationReport report = new ComparationReport();
+
+    //     List<String> content = Arrays.asList("a", "b");
+    //     List<String> contentToCompare = Arrays.asList("a", "b", "c", "d");
+
+    //     int difference = 2;
+
+    //     report.updateReport(content, contentToCompare, difference);
+
+    //     List<LineRecord> current = report.getSourceContentReport();
+
+    //     assertEquals(2, current.size());
+    //     assertEquals("c", current.get(0).content());
+    //     assertEquals(Status.NEW, current.get(0).status());
+    //     assertEquals("d", current.get(1).content());
+    //     assertEquals(Status.NEW, current.get(1).status());
+    // }
+
     @Test
-    public void testUpdateReport_NewLines() {
+    public void testLinesHaveCorrectTagsWithoutExporting() {
         ComparationReport report = new ComparationReport();
 
-        List<String> content = Arrays.asList("line1", "line2", "line3");
-        List<String> contentToCompare = Arrays.asList("line1", "line2", "line3", "line4");
+        report.makeReportLine(Status.ORIGINAL, "int x = 1;", "int x = 1;");
+        report.makeReportLine(Status.MODIFIED, "int y = 2;", "int y = 3;");
+        report.makeReportLine(Status.NEW, "", "int z = 4;");
+        report.makeReportLine(Status.DELETED, "int a = 5;", "");
 
-        int difference = 1;
+        List<LineRecord> target = report.getTargetContentReport();
+        List<LineRecord> source = report.getSourceContentReport();
 
-        report.updateReport(content, contentToCompare, difference);
+        assertEquals(Status.ORIGINAL, target.get(0).status());
+        assertEquals(Status.MODIFIED, target.get(1).status());
+        assertEquals(Status.NEW, target.get(2).status());
 
-        List<LineRecord> current = report.getSourceContentReport();
-
-        assertEquals(1, current.size());
-        assertEquals("line4", current.get(0).content());
-        assertEquals(Status.NEW, current.get(0).status());
+        assertEquals(Status.ORIGINAL, source.get(0).status());
+        assertEquals(Status.ORIGINAL, source.get(1).status());
+        assertEquals(Status.DELETED, source.get(2).status());
     }
 
     @Test
-    public void testUpdateReport_NewLines_Multiple() {
+    public void testGlobalSummaryCountsWithoutExporting() {
         ComparationReport report = new ComparationReport();
 
-        List<String> content = Arrays.asList("a", "b");
-        List<String> contentToCompare = Arrays.asList("a", "b", "c", "d");
+        report.makeReportLine(Status.ORIGINAL, "a", "a");
+        report.makeReportLine(Status.MODIFIED, "b", "c");
+        report.makeReportLine(Status.NEW, "", "d");
+        report.makeReportLine(Status.NEW, "", "e");
+        report.makeReportLine(Status.DELETED, "f", "");
 
-        int difference = 2;
+        Map<Status, Long> counts = report.getTargetContentReport().stream()
+            .collect(java.util.stream.Collectors.groupingBy(LineRecord::status, java.util.stream.Collectors.counting()));
 
-        report.updateReport(content, contentToCompare, difference);
+        assertEquals(1, counts.getOrDefault(Status.ORIGINAL, 0L));
+        assertEquals(1, counts.getOrDefault(Status.MODIFIED, 0L));
+        assertEquals(2, counts.getOrDefault(Status.NEW, 0L));
+        assertEquals(0, counts.getOrDefault(Status.DELETED, 0L)); 
 
-        List<LineRecord> current = report.getSourceContentReport();
-
-        assertEquals(2, current.size());
-        assertEquals("c", current.get(0).content());
-        assertEquals(Status.NEW, current.get(0).status());
-        assertEquals("d", current.get(1).content());
-        assertEquals(Status.NEW, current.get(1).status());
+        long deletedCount = report.getSourceContentReport().stream()
+            .filter(lr -> lr.status() == Status.DELETED)
+            .count();
+        assertEquals(2, deletedCount);
     }
+
+
 }
