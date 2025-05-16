@@ -74,7 +74,7 @@ public class ComparationReport {
      * marcándolas como nuevas.
      *
      * @param content           Lista de líneas del contenido nuevo.
-     * @param contentToCompare  Lista de líneas del contenido original (sin usar aquí, pero incluida para simetría).
+     * @param contentToCompare  Lista de líneas del contenido original.
      * @param difference        Número de líneas de diferencia respecto al contenido original.
      */
     public void updateReport(List<String> content, List<String> contentToCompare, int difference) {
@@ -82,7 +82,7 @@ public class ComparationReport {
         if (indexToCheck < 0) {
             indexToCheck = 0;
         }
-        for (int i = indexToCheck; i < content.size(); i++) {
+        for (int i = indexToCheck; i < contentToCompare.size(); i++) {
             this.currentContentReport.add(new LineRecord(STATUS.NEW, content.get(i)));
         }
     }

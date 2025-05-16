@@ -20,8 +20,8 @@ public class JavaFileComparator {
     /**
      * Crea una nueva instancia del comparador de archivos Java.
      * 
-     * @param content           contenido del archivo base
-     * @param contentToCompare  contenido del archivo a comparar
+     * @param content          contenido del archivo base
+     * @param contentToCompare contenido del archivo a comparar
      */
     public JavaFileComparator(List<String> content, List<String> contentToCompare) {
         this.comparationReport = new ComparationReport();
@@ -40,9 +40,9 @@ public class JavaFileComparator {
     /**
      * Compara dos líneas específicas y actualiza el reporte con su estado.
      * 
-     * @param line         línea del archivo original
+     * @param line          línea del archivo original
      * @param lineToCompare línea del archivo a comparar
-     * @param i            índice de la línea
+     * @param i             índice de la línea
      */
     private void compareLine(String line, String lineToCompare, int i) {
         if (line.equals(lineToCompare)) {
@@ -66,7 +66,8 @@ public class JavaFileComparator {
     }
 
     /**
-     * Simplifica una línea removiendo modificadores de acceso y otras palabras clave.
+     * Simplifica una línea removiendo modificadores de acceso y otras palabras
+     * clave.
      * 
      * @param line línea a simplificar
      * @return línea simplificada sin modificadores
@@ -86,9 +87,9 @@ public class JavaFileComparator {
     private void compareDifferentLines() {
         int difference = Math.abs(this.content.size() - this.contentToCompare.size());
         if (this.content.size() < this.contentToCompare.size()) {
-            this.comparationReport.updateReport(this.content, difference);
-        } else if (this.content.size() > this.contentToCompare.size()) {
             this.comparationReport.updateReport(this.content, this.contentToCompare, difference);
+        } else if (this.content.size() > this.contentToCompare.size()) {
+            this.comparationReport.updateReport(this.content, difference);
         }
     }
 
