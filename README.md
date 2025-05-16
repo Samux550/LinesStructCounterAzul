@@ -9,7 +9,7 @@
 
 Puedes acceder a recursos adicionales en el siguiente enlace:
 
-[Carpeta de documentación]([https://alumnosuady-my.sharepoint.com/:f:/g/personal/a18003998_alumnos_uady_mx/Em8xFDpM7LJHskKBZcpV7iAB7viOSbBKU7ZoGBlStEmABA?e=cWOvdL](https://alumnosuady-my.sharepoint.com/personal/a21216389_alumnos_uady_mx/_layouts/15/onedrive.aspx?id=%2Fpersonal%2Fa21216389_alumnos_uady_mx%2FDocuments%2FOctavo%20Semestre%2FMantenimiento%20de%20Software&ga=1))
+[Carpeta de documentación](https://alumnosuady-my.sharepoint.com/personal/a21216389_alumnos_uady_mx/_layouts/15/onedrive.aspx?id=%2Fpersonal%2Fa21216389_alumnos_uady_mx%2FDocuments%2FOctavo%20Semestre%2FMantenimiento%20de%20Software&ga=1)
 
 ## 🚀 Instalación y Configuración
 
