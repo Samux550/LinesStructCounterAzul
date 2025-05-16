@@ -79,8 +79,8 @@ public class ComparationReport {
         if (indexToCheck < 0) {
             indexToCheck = 0;
         }
-        for (int i = indexToCheck; i < contentToCompare.size(); i++) {
-            this.sourceContentReport.add(new LineRecord(Status.NEW, content.get(i)));
+        for (int i = indexToCheck; i < content.size(); i++) {
+            this.targetContentReport.add(new LineRecord(Status.NEW, content.get(i)));
         }
     }
 
