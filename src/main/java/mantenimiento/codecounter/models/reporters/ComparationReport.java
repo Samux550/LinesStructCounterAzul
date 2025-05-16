@@ -75,12 +75,12 @@ public class ComparationReport {
      * @param difference        Número de líneas de diferencia respecto al contenido original.
      */
     public void updateReport(List<String> content, List<String> contentToCompare, int difference) {
-        int indexToCheck = content.size() - difference;
+        int indexToCheck = contentToCompare.size() - difference;
         if (indexToCheck < 0) {
             indexToCheck = 0;
         }
-        for (int i = indexToCheck; i < content.size(); i++) {
-            this.targetContentReport.add(new LineRecord(Status.NEW, content.get(i)));
+        for (int i = indexToCheck; i < contentToCompare.size(); i++) {
+            this.targetContentReport.add(new LineRecord(Status.NEW, contentToCompare.get(i)));
         }
     }
 
