@@ -156,7 +156,7 @@ public class TxtReporter {
     writer.newLine();
 
     for (LineRecord record : records) {
-        // Dividir aquí (solo para visualización)
+        
         List<LineRecord> displayLines = LineSplitter.splitLongLines(record);
         for (LineRecord displayLine : displayLines) {
             writer.write(String.format("[%s] %s", displayLine.status(), displayLine.content()));
@@ -186,7 +186,7 @@ public class TxtReporter {
         writer.newLine();
 
         for (LineRecord record : version.getValue()) {
-            // Aplica LineSplitter aquí también
+
             List<LineRecord> displayLines = LineSplitter.splitLongLines(record);
             for (LineRecord displayLine : displayLines) {
                 writer.write(String.format("[%s] %s", displayLine.status(), displayLine.content()));

@@ -1,5 +1,6 @@
 package mantenimiento.codecounter.models.comparators;
 
+import java.io.BufferedWriter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -10,6 +11,7 @@ import mantenimiento.codecounter.demo.LineRecord;
 import mantenimiento.codecounter.models.JavaFile;
 import mantenimiento.codecounter.models.Proyect;
 import mantenimiento.codecounter.models.reporters.ComparationReport;
+import mantenimiento.codecounter.models.reporters.TxtReporter;
 import mantenimiento.codecounter.utils.LineSplitter;
 
 /**
@@ -94,9 +96,25 @@ public class ProyectComparator {
         this.contentToCompareFiles.remove(javaFileToCompare);
     }
 
-    private void generateReportForSingleFile(STATUS status, JavaFile javaFile, String mention) {
+    /**
+ * Genera un reporte para un archivo que existe solo en una versión del proyecto (A o B),
+ * agregando cada línea como un registro con el estado especificado (DELETED o NEW).
+ * Las líneas se almacenan sin división para mantener el conteo preciso de líneas físicas.
+ *
+ * @param status   Estado que se asignará a todas las líneas del archivo (DELETED para versión A,
+ *                 NEW para versión B).
+ * @param javaFile Archivo Java a procesar, del cual se extraerá el contenido línea por línea.
+ * @param mention  Sufijo identificador de versión (" [Version: A]" para archivos eliminados,
+ *                 " [Version: B]" para archivos nuevos).
+ *
+ * @implNote Este método no divide líneas largas; la división se realiza posteriormente
+ *           en {@link TxtReporter} para fines de visualización.
+ * @see TxtReporter#writeSingleFileReport(BufferedWriter, Map.Entry)
+ * @see LineRecord
+ */
+private void generateReportForSingleFile(STATUS status, JavaFile javaFile, String mention) {
     List<LineRecord> report = new ArrayList<>();
-    // Sin LineSplitter: se añaden líneas originales
+    
     javaFile.getContent().forEach(lineContent -> {
         report.add(new LineRecord(status, lineContent));
     });
