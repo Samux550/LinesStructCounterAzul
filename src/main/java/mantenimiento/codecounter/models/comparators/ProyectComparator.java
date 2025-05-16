@@ -7,49 +7,57 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
-import mantenimiento.codecounter.demo.LineRecord;
 import mantenimiento.codecounter.models.JavaFile;
+import mantenimiento.codecounter.models.LineRecord;
 import mantenimiento.codecounter.models.Proyect;
 import mantenimiento.codecounter.models.reporters.ComparationReport;
 import mantenimiento.codecounter.models.reporters.TxtReporter;
-import mantenimiento.codecounter.utils.LineSplitter;
 
 /**
- * Compara el contenido de dos proyectos que consisten en múltiples archivos Java.
- * Genera un reporte general con las diferencias detectadas entre los archivos.
+ * Compara cada uno de los archivos javas que compartan el nombre de los dos
+ * proyecto provistos
  */
 public class ProyectComparator {
 
-    private Proyect proyectToCompare;
-    private Proyect proyect;
-    private List<JavaFile> contentFiles;
-    private List<JavaFile> contentToCompareFiles;
+    private Proyect targetProject;
+
+    private Proyect sourceProject;
+
+    private List<JavaFile> sourceProjectFiles;
+
+    private List<JavaFile> targetProjectFiles;
+
     private Map<String, List<LineRecord>> generalReport = new HashMap<>();
 
     /**
-     * Crea una nueva instancia del comparador de proyectos.
+     * Constructor
      * 
-     * @param proyect          proyecto base
-     * @param proyectToCompare proyecto a comparar
+     * @param sourceProject proyecto para comparar
+     * @param targetProject proyecto a comparar
      */
-    public ProyectComparator(Proyect proyect, Proyect proyectToCompare) {
-        this.proyect = proyect;
-        this.proyectToCompare = proyectToCompare;
-        this.contentFiles = proyect.getFiles();
-        this.contentToCompareFiles = proyectToCompare.getFiles();
+    public ProyectComparator(Proyect sourceProject, Proyect targetProject) {
+        this.sourceProject = sourceProject;
+        this.targetProject = targetProject;
+        this.sourceProjectFiles = sourceProject.getFiles();
+        this.targetProjectFiles = targetProject.getFiles();
     }
 
     /**
-     * Inicia el proceso de comparación entre los archivos de los proyectos.
+     * Compara cada uno de los archivos con extensión .java de los proyectos
+     * provistos
+     * en el constructor. Si en la comparación existen archivos que no aparezcan en
+     * algún
+     * proyecto, su contenido será etiquetado como nuevo o eliminado según sea el
+     * caso.
      */
     public void compare() {
-        List<JavaFile> blackListOne = new ArrayList<>(this.proyect.getFiles());
-        List<JavaFile> blackListTwo = new ArrayList<>(this.proyectToCompare.getFiles());
+        List<JavaFile> blackListOne = new ArrayList<>(this.sourceProject.getFiles());
+        List<JavaFile> blackListTwo = new ArrayList<>(this.targetProject.getFiles());
 
-        for (JavaFile javaFile : this.contentFiles) {
+        for (JavaFile javaFile : this.sourceProjectFiles) {
             String name = javaFile.getFileName();
             Optional<JavaFile> fileToComOptional = findFileTocompare(name);
-    
+
             if (fileToComOptional.isPresent()) {
                 JavaFile matchedFile = fileToComOptional.get();
                 compareFiles(javaFile, matchedFile);
@@ -58,42 +66,45 @@ public class ProyectComparator {
             }
         }
 
-        blackListOne.forEach(s -> generateReportForSingleFile(STATUS.DELETED, s, " [Version: A]"));
-        blackListTwo.forEach(s -> generateReportForSingleFile(STATUS.NEW, s, " [Version: B]"));
+        blackListOne.forEach(s -> generateReportForSingleFile(Status.DELETED, s, " [Version: A]"));
+        blackListTwo.forEach(s -> generateReportForSingleFile(Status.NEW, s, " [Version: B]"));
     }
 
     /**
-     * Busca un archivo en el proyecto a comparar que tenga el mismo nombre.
+     * Realiza una busqueda de un archivo dentro de un proyecto de acuerdo con el
+     * nombre del archivo
      * 
-     * @param className nombre del archivo Java
-     * @return archivo Java con nombre coincidente si existe
+     * @param fileName nombre del archivo a buscar
+     * @return estructura Optional de la instancia de la clase a buscar
      */
-    private Optional<JavaFile> findFileTocompare(String className) {
-        return this.contentToCompareFiles.stream()
-                .filter(s -> s.getFileName().equals(className))
+    private Optional<JavaFile> findFileTocompare(String fileName) {
+        return this.targetProjectFiles.stream()
+                .filter(s -> s.getFileName().equals(fileName))
                 .findAny();
     }
 
     /**
-     * Compara dos archivos Java y actualiza el reporte general con sus diferencias.
+     * Implementa la lógica para comparar el contenido de dos archivos con estensión
+     * .java.
+     * Posteriormente agrega una instancia al reporte final del proyecto
      * 
-     * @param javaFile         archivo del proyecto base
-     * @param javaFileToCompare archivo del proyecto a comparar
+     * @param sourceJavaFile
+     * @param targetJavaFile
      */
-    private void compareFiles(JavaFile javaFile, JavaFile javaFileToCompare) {
-        JavaFileComparator javaFileComparator = new JavaFileComparator(javaFile.getContent(),
-                javaFileToCompare.getContent());
+    private void compareFiles(JavaFile sourceJavaFile, JavaFile targetJavaFile) {
+        JavaFileComparator javaFileComparator = new JavaFileComparator(sourceJavaFile.getContent(),
+                targetJavaFile.getContent());
 
         javaFileComparator.compareContent();
 
         ComparationReport comparationReport = javaFileComparator.getComparationReport();
-        List<LineRecord> contentReport = comparationReport.getCurrentContentReport();
-        List<LineRecord> contentToCompareReport = comparationReport.getContentToCompareReport();
+        List<LineRecord> contentReport = comparationReport.getSourceContentReport();
+        List<LineRecord> contentToCompareReport = comparationReport.getTargetContentReport();
 
-        generalReport.put(javaFile.getFileName() + " [Version: A]", contentReport);
-        generalReport.put(javaFile.getFileName() + " [Version: B]", contentToCompareReport);
+        generalReport.put(sourceJavaFile.getFileName() + " [Version: A]", contentReport);
+        generalReport.put(sourceJavaFile.getFileName() + " [Version: B]", contentToCompareReport);
 
-        this.contentToCompareFiles.remove(javaFileToCompare);
+        this.targetProjectFiles.remove(targetJavaFile);
     }
 
     /**
@@ -112,7 +123,7 @@ public class ProyectComparator {
  * @see TxtReporter#writeSingleFileReport(BufferedWriter, Map.Entry)
  * @see LineRecord
  */
-private void generateReportForSingleFile(STATUS status, JavaFile javaFile, String mention) {
+private void generateReportForSingleFile(Status status, JavaFile javaFile, String mention) {
     List<LineRecord> report = new ArrayList<>();
     
     javaFile.getContent().forEach(lineContent -> {

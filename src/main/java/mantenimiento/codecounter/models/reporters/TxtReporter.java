@@ -11,10 +11,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
 import java.util.stream.Collectors;
-import static mantenimiento.codecounter.models.comparators.STATUS.*;
+import static mantenimiento.codecounter.models.comparators.Status.*;
 
-import mantenimiento.codecounter.demo.LineRecord;
-import mantenimiento.codecounter.models.comparators.STATUS;
+import mantenimiento.codecounter.models.LineRecord;
+import mantenimiento.codecounter.models.comparators.Status;
 import mantenimiento.codecounter.utils.LineSplitter;
 
 /**
@@ -24,7 +24,7 @@ import mantenimiento.codecounter.utils.LineSplitter;
 public class TxtReporter {
     private Map<String, List<LineRecord>> report;
     private Path outputDirectory;
-    private Map<STATUS, Integer> globalChangeCounts;
+    private Map<Status, Integer> globalChangeCounts;
 
     /**
      * Constructor que inicializa el generador de reportes.
@@ -40,9 +40,9 @@ public class TxtReporter {
      * Inicializa el contador de cambios con valores en cero para cada tipo de estado.
      * @return Mapa con los contadores inicializados
      */
-    private Map<STATUS, Integer> initializeChangeCounts() {
-        Map<STATUS, Integer> counts = new HashMap<>();
-        for (STATUS status : values()) {
+    private Map<Status, Integer> initializeChangeCounts() {
+        Map<Status, Integer> counts = new HashMap<>();
+        for (Status status : values()) {
             counts.put(status, 0);
         }
         return counts;
@@ -54,20 +54,21 @@ public class TxtReporter {
      * @return Ruta absoluta del directorio de salida
      */
     private Path requestOutputDirectory() {
-        Scanner scanner = new Scanner(System.in);
-        while (true) {
-            System.out.println("\nIngrese la ruta del directorio para guardar los reportes:");
-            String dirPath = scanner.nextLine().trim();
-            
-            try {
-                Path dir = Paths.get(dirPath);
-                if (!Files.exists(dir)) {
-                    Files.createDirectories(dir);
+        try (Scanner scanner = new Scanner(System.in)) {
+            while (true) {
+                System.out.println("\nIngrese la ruta del directorio para guardar los reportes:");
+                String dirPath = scanner.nextLine().trim();
+                
+                try {
+                    Path dir = Paths.get(dirPath);
+                    if (!Files.exists(dir)) {
+                        Files.createDirectories(dir);
+                    }
+                    return dir.toAbsolutePath();
+                } catch (IOException e) {
+                    System.err.println("Error al acceder al directorio: " + e.getMessage());
+                    System.err.println("Por favor, ingrese una ruta válida.");
                 }
-                return dir.toAbsolutePath();
-            } catch (IOException e) {
-                System.err.println("Error al acceder al directorio: " + e.getMessage());
-                System.err.println("Por favor, ingrese una ruta válida.");
             }
         }
     }

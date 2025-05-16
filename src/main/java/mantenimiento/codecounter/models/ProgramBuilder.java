@@ -7,7 +7,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Stream;
 
-import mantenimiento.codecounter.demo.LineRecord;
 import mantenimiento.codecounter.exceptions.FileNotFoundException;
 import mantenimiento.codecounter.exceptions.FolderNotFoundException;
 import mantenimiento.codecounter.exceptions.InvalidFormatException;
@@ -33,7 +32,7 @@ public class ProgramBuilder {
    * @throws JavaFilesNotFoundException Si no se encuentran archivos Java.
    * @throws FolderNotFoundException    Si la carpeta no existe.
    */
-  public static void buildProgram(String folderPath) throws FolderNotFoundException, JavaFilesNotFoundException {
+  public static void buildProgram(String folderPath) {
     String[] paths = folderPath.split(" ");
     Stream.of(paths).forEach(ProgramBuilder::countWorkflow);
     if (paths.length == 2) {
@@ -155,8 +154,10 @@ public class ProgramBuilder {
    * Constructor privado para evitar la instanciación de la clase {@code ProgramBuilder}
    * ya que contiene únicamente métodos estáticos.
    */
-  private ProgramBuilder() {
-  }
+  private ProgramBuilder(){}
+  
+  public void dummyFunc(){}
+  
 }
 
 /*

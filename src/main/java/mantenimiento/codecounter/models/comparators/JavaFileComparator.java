@@ -1,15 +1,12 @@
 package mantenimiento.codecounter.models.comparators;
 
 import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
-
-import mantenimiento.codecounter.constants.JavaRegextConstants;
 import mantenimiento.codecounter.models.reporters.ComparationReport;
 
 /**
- * Compara el contenido de dos archivos Java línea por línea y genera un
- * reporte de comparación que incluye líneas originales, modificadas y nuevas.
+ * Compara el contenido de dos archivos con la extención .java
+ * Sirve como clase intermedia para incorporar la lógica de comparación de
+ * dos contenidos y la elaboración del reporte.
  */
 public class JavaFileComparator {
 
@@ -18,19 +15,18 @@ public class JavaFileComparator {
     private List<String> contentToCompare;
 
     /**
-     * Crea una nueva instancia del comparador de archivos Java.
-     * 
-     * @param content          contenido del archivo base
-     * @param contentToCompare contenido del archivo a comparar
+     * Constructor
+     * @param content contenido de un archivo con extensión .java 
+     * @param contentToCompare contenido de un archivo .java para comparar
      */
     public JavaFileComparator(List<String> content, List<String> contentToCompare) {
         this.comparationReport = new ComparationReport();
         this.content = content;
         this.contentToCompare = contentToCompare;
     }
-
+    
     /**
-     * Inicia el proceso de comparación entre los contenidos de los archivos.
+     * Compara el contenido de ambos archivos
      */
     public void compareContent() {
         compareSameLines();
@@ -38,51 +34,33 @@ public class JavaFileComparator {
     }
 
     /**
-     * Compara dos líneas específicas y actualiza el reporte con su estado.
-     * 
-     * @param line          línea del archivo original
-     * @param lineToCompare línea del archivo a comparar
-     * @param i             índice de la línea
+     * Ejecuta la lógica de comparación de dos líneas provistas como parámetros
+     * y añade una nueva entrada al reporte de comparación
+     * @param line línea de código a comparar
+     * @param lineToCompare línea de código para comparar
      */
-    private void compareLine(String line, String lineToCompare, int i) {
-        if (line.equals(lineToCompare)) {
-            this.comparationReport.makeReportLine(STATUS.ORIGINAL, line, lineToCompare);
-        } else if (getSimplifiedContent(line) == getSimplifiedContent(lineToCompare)) {
-            this.comparationReport.makeReportLine(STATUS.MODIFIED, line, lineToCompare);
-        } else if (!line.equals(lineToCompare)) {
-            this.comparationReport.makeReportLine(STATUS.NEW, line, lineToCompare);
-        }
+    private void compareLine(String line, String lineToCompare) {
+        LineComparator lineComparator = new LineComparator(line, lineToCompare);
+        Status status = lineComparator.compare();
+        this.comparationReport.makeReportLine(status, line, lineToCompare);
     }
 
     /**
-     * Compara las líneas en las posiciones correspondientes de ambos archivos.
+     * Compara aquellas líneas de código en ambos contenidos que compartan el mismo índice
      */
     private void compareSameLines() {
         for (int i = 0, j = 0; i < content.size() && j < contentToCompare.size(); i++, j++) {
             String currentLine = content.get(i);
             String lineToCompare = contentToCompare.get(j);
-            compareLine(currentLine, lineToCompare, i);
+            compareLine(currentLine, lineToCompare);
         }
     }
 
-    /**
-     * Simplifica una línea removiendo modificadores de acceso y otras palabras
-     * clave.
-     * 
-     * @param line línea a simplificar
-     * @return línea simplificada sin modificadores
-     */
-    private String getSimplifiedContent(String line) {
-        String simplified = Stream.of(line.split(" "))
-                .filter(s -> !s.matches(JavaRegextConstants.ACCESS_MODIFIERS_REGEX))
-                .filter(s -> !s.matches(JavaRegextConstants.IDENTIFIER_DECLARATION_REGEX))
-                .filter(s -> !s.matches(JavaRegextConstants.FINAL_OR_STATIC_REGEX))
-                .collect(Collectors.joining());
-        return simplified;
-    }
 
     /**
-     * Maneja las líneas adicionales si los archivos tienen diferentes longitudes.
+     * Genera un reporte de comparación de aquellas líneas que no se encuentren en un contenido u 
+     * otro a razón de que tener una mayor extensión. Dichos reportes empiezan a partir del índice
+     * del contenido con menos longitud.
      */
     private void compareDifferentLines() {
         int difference = Math.abs(this.content.size() - this.contentToCompare.size());
@@ -94,9 +72,8 @@ public class JavaFileComparator {
     }
 
     /**
-     * Retorna el reporte generado después de la comparación.
-     * 
-     * @return reporte de comparación
+     * Método que retorna el reporte final de los contenidos del archivo java en cuestión
+     * @return Retorna el reporte de cada línea de código de ambos contenidos
      */
     public ComparationReport getComparationReport() {
         return comparationReport;

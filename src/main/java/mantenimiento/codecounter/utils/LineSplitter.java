@@ -3,8 +3,8 @@ package mantenimiento.codecounter.utils;
 import java.util.ArrayList;
 import java.util.List;
 
-import mantenimiento.codecounter.demo.LineRecord;
-import mantenimiento.codecounter.models.comparators.STATUS;
+import mantenimiento.codecounter.models.LineRecord;
+import mantenimiento.codecounter.models.comparators.Status;
 
 /**
  * Clase utilitaria para dividir líneas de código que exceden un número máximo de caracteres.
@@ -25,9 +25,8 @@ public class LineSplitter {
     public static List<LineRecord> splitLongLines(LineRecord originalRecord) {
         List<LineRecord> result = new ArrayList<>();
         String lineContent = originalRecord.content();
-        STATUS originalStatus = originalRecord.status();
-
-        // Si no supera la longitud máxima, se retorna tal cual
+        Status originalStatus = originalRecord.status();
+        
         if (lineContent.length() <= MAX_LINE_LENGTH) {
             result.add(originalRecord);
             return result;
@@ -39,7 +38,7 @@ public class LineSplitter {
         String secondPart = lineContent.substring(splitPoint).trim();
 
         // Se agrega la primera parte marcada como SPLITED
-        result.add(new LineRecord(STATUS.SPLITED, firstPart));
+        result.add(new LineRecord(Status.SPLITED, firstPart));
         result.add(new LineRecord(originalStatus, secondPart));
 
         // Si la segunda parte aún es muy larga, se divide recursivamente

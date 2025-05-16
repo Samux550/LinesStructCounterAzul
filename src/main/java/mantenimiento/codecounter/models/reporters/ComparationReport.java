@@ -3,8 +3,8 @@ package mantenimiento.codecounter.models.reporters;
 import java.util.ArrayList;
 import java.util.List;
 
-import mantenimiento.codecounter.demo.LineRecord;
-import mantenimiento.codecounter.models.comparators.STATUS;
+import mantenimiento.codecounter.models.LineRecord;
+import mantenimiento.codecounter.models.comparators.Status;
 
 /**
  * Clase encargada de construir un reporte de comparación línea por línea
@@ -12,40 +12,37 @@ import mantenimiento.codecounter.models.comparators.STATUS;
  */
 public class ComparationReport {
 
-    /** Reporte correspondiente al contenido original o base. */
-    private List<LineRecord> currentContentReport;
+    private List<LineRecord> sourceContentReport;
 
-    /** Reporte correspondiente al contenido con el que se compara. */
-    private List<LineRecord> contentToCompareReport;
+    private List<LineRecord> targetContentReport;
 
     /**
      * Constructor que inicializa ambos reportes como listas vacías.
      */
     public ComparationReport() {
-        this.currentContentReport = new ArrayList<>();
-        this.contentToCompareReport = new ArrayList<>();
+        this.sourceContentReport = new ArrayList<>();
+        this.targetContentReport = new ArrayList<>();
     }
 
     /**
-     * Agrega una línea al reporte según el estado comparativo detectado entre dos versiones de código.
-     *
-     * @param status        Estado de la línea (ORIGINAL, MODIFIED, NEW).
-     * @param line          Línea del contenido original.
-     * @param lineToCompare Línea del contenido comparado.
+     * Realiza una instancia en el reporte de acruedo al estatus de la línea a comparar
+     * @param status estado de la línea de código a comparar
+     * @param sourceLine linea de código a comparar
+     * @param targetLine línea de código para comparar
      */
-    public void makeReportLine(STATUS status, String line, String lineToCompare) {
+    public void makeReportLine(Status status, String sourceLine, String targetLine) {
         switch (status) {
             case ORIGINAL:
-                currentContentReport.add(new LineRecord(STATUS.ORIGINAL, line));
-                contentToCompareReport.add(new LineRecord(STATUS.ORIGINAL, lineToCompare));
+                sourceContentReport.add(new LineRecord(Status.ORIGINAL, sourceLine));
+                targetContentReport.add(new LineRecord(Status.ORIGINAL, targetLine));
                 break;
             case MODIFIED:
-                currentContentReport.add(new LineRecord(STATUS.ORIGINAL, line));
-                contentToCompareReport.add(new LineRecord(STATUS.MODIFIED, lineToCompare));
+                sourceContentReport.add(new LineRecord(Status.ORIGINAL, sourceLine));
+                targetContentReport.add(new LineRecord(Status.MODIFIED, targetLine));
                 break;
             case NEW:
-                currentContentReport.add(new LineRecord(STATUS.DELETED, line));
-                contentToCompareReport.add(new LineRecord(STATUS.NEW, lineToCompare));
+                sourceContentReport.add(new LineRecord(Status.DELETED, sourceLine));
+                targetContentReport.add(new LineRecord(Status.NEW, targetLine));
                 break;
             default:
                 break;
@@ -65,7 +62,7 @@ public class ComparationReport {
             indexToCheck = 0;
         }
         for (int i = indexToCheck; i < content.size(); i++) {
-            this.currentContentReport.add(new LineRecord(STATUS.DELETED, content.get(i)));
+            this.sourceContentReport.add(new LineRecord(Status.DELETED, content.get(i)));
         }
     }
 
@@ -83,26 +80,24 @@ public class ComparationReport {
             indexToCheck = 0;
         }
         for (int i = indexToCheck; i < contentToCompare.size(); i++) {
-            this.currentContentReport.add(new LineRecord(STATUS.NEW, content.get(i)));
+            this.sourceContentReport.add(new LineRecord(Status.NEW, content.get(i)));
         }
     }
 
     /**
-     * Devuelve el reporte del contenido original.
-     *
-     * @return Lista de objetos {@link LineRecord} del contenido original.
+     * 
+     * @return retorna el reporte del contenido a comparar
      */
-    public List<LineRecord> getCurrentContentReport() {
-        return currentContentReport;
+    public List<LineRecord> getSourceContentReport() {
+        return sourceContentReport;
     }
 
     /**
-     * Devuelve el reporte del contenido comparado.
-     *
-     * @return Lista de objetos {@link LineRecord} del contenido comparado.
+     * 
+     * @return retorna el reporte del contenido para comparar
      */
-    public List<LineRecord> getContentToCompareReport() {
-        return contentToCompareReport;
+    public List<LineRecord> getTargetContentReport() {
+        return targetContentReport;
     }
 
     /**
