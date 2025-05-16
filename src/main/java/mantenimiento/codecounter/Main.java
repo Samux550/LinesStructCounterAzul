@@ -9,8 +9,6 @@ public class Main {
     Scanner s = new Scanner(System.in);
 
     ProgramBuilder.buildProgram(requestFolderPath(s));
-
-    System.out.println("\nPresiona Enter para salir...");
   }
 
   private static String requestFolderPath(Scanner scan) {
