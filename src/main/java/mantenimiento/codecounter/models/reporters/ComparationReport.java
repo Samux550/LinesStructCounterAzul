@@ -63,7 +63,7 @@ public class ComparationReport {
     public void updateReport(List<String> sourceContent, List<String> targetContent, int difference) {
         int indexToCheck = targetContent.size() - difference - 1;
         for (int i = indexToCheck; i < targetContent.size() - 1; i++) {
-            this.sourceContentReport.add(new LineRecord(Status.NEW, targetContent.get(i)));
+            this.sourceContentReport.add(new LineRecord(Status.NEW, sourceContent.get(i)));
         }
     }
 
