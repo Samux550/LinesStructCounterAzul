@@ -3,6 +3,7 @@ package mantenimiento.codecounter.utils;
 import java.util.ArrayList;
 import java.util.List;
 
+import mantenimiento.codecounter.models.LineRecord;
 import mantenimiento.codecounter.models.comparators.Status;
 
 public class LineSplitter {

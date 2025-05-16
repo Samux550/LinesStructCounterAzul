@@ -7,9 +7,9 @@ import java.util.Map;
 import java.util.Optional;
 
 import mantenimiento.codecounter.models.JavaFile;
+import mantenimiento.codecounter.models.LineRecord;
 import mantenimiento.codecounter.models.Proyect;
 import mantenimiento.codecounter.models.reporters.ComparationReport;
-import mantenimiento.codecounter.utils.LineRecord;
 import mantenimiento.codecounter.utils.LineSplitter;
 
 /**

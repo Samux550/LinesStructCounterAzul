@@ -67,9 +67,9 @@ public class JavaFileComparator {
     private void compareDifferentLines() {
         int difference = Math.abs(this.content.size() - this.contentToCompare.size());
         if (this.content.size() < this.contentToCompare.size()) {
-            this.comparationReport.updateReport(this.content, difference);
-        } else if (this.content.size() > this.contentToCompare.size()) {
             this.comparationReport.updateReport(this.content, this.contentToCompare, difference);
+        } else if (this.content.size() > this.contentToCompare.size()) {
+            this.comparationReport.updateReport(this.content, difference);
         }
     }
 

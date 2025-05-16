@@ -13,8 +13,8 @@ import java.util.Scanner;
 import java.util.stream.Collectors;
 import static mantenimiento.codecounter.models.comparators.Status.*;
 
+import mantenimiento.codecounter.models.LineRecord;
 import mantenimiento.codecounter.models.comparators.Status;
-import mantenimiento.codecounter.utils.LineRecord;
 
 /**
  * Genera reportes en formato TXT con los resultados de la comparación de archivos Java.
