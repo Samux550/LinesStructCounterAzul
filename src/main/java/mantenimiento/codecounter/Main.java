@@ -11,8 +11,6 @@ public class Main {
     ProgramBuilder.buildProgram(requestFolderPath(s));
 
     System.out.println("\nPresiona Enter para salir...");
-    s.nextLine();
-    s.close();
   }
 
   private static String requestFolderPath(Scanner scan) {
