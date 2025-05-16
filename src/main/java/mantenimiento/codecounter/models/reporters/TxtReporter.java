@@ -15,6 +15,7 @@ import static mantenimiento.codecounter.models.comparators.STATUS.*;
 
 import mantenimiento.codecounter.demo.LineRecord;
 import mantenimiento.codecounter.models.comparators.STATUS;
+import mantenimiento.codecounter.utils.LineSplitter;
 
 /**
  * Genera reportes en formato TXT con los resultados de la comparación de archivos Java.
@@ -146,19 +147,23 @@ public class TxtReporter {
      * @throws IOException Si ocurre un error al escribir el archivo
      */
     private void writeSingleFileReport(BufferedWriter writer, 
-                                     Map.Entry<String, List<LineRecord>> fileEntry) throws IOException {
-        String fileName = fileEntry.getKey();
-        List<LineRecord> records = fileEntry.getValue();
+                                 Map.Entry<String, List<LineRecord>> fileEntry) throws IOException {
+    String fileName = fileEntry.getKey();
+    List<LineRecord> records = fileEntry.getValue();
 
-        writer.write("=== ARCHIVO " + fileName + " ===");
-        writer.newLine();
-        writer.newLine();
+    writer.write("=== ARCHIVO " + fileName + " ===");
+    writer.newLine();
+    writer.newLine();
 
-        for (LineRecord record : records) {
-            writer.write(String.format("[%s] %s", record.status(), record.content()));
+    for (LineRecord record : records) {
+        // Dividir aquí (solo para visualización)
+        List<LineRecord> displayLines = LineSplitter.splitLongLines(record);
+        for (LineRecord displayLine : displayLines) {
+            writer.write(String.format("[%s] %s", displayLine.status(), displayLine.content()));
             writer.newLine();
         }
     }
+}
 
     /**
      * Genera un reporte comparativo entre dos versiones del mismo archivo.
@@ -167,27 +172,28 @@ public class TxtReporter {
      * @throws IOException Si ocurre un error al escribir el archivo
      */
     private void writeComparisonReport(BufferedWriter writer,
-                                     List<Map.Entry<String, List<LineRecord>>> versions) throws IOException {
-        versions.sort((a, b) -> a.getKey().contains("Version: A") ? -1 : 1);
+                                 List<Map.Entry<String, List<LineRecord>>> versions) throws IOException {
+    versions.sort((a, b) -> a.getKey().contains("Version: A") ? -1 : 1);
+    String baseName = versions.get(0).getKey().replaceAll(" \\[Version: [AB]\\]", "");
+    
+    writer.write("=== COMPARACIÓN PARA " + baseName + " ===");
+    writer.newLine();
+    writer.newLine();
 
-        String baseName = versions.get(0).getKey().replaceAll(" \\[Version: [AB]\\]", "");
-        
-        writer.write("=== COMPARACIÓN PARA " + baseName + " ===");
+    for (Map.Entry<String, List<LineRecord>> version : versions) {
+        String versionLabel = version.getKey().contains("Version: A") ? "VERSIÓN ANTIGUA" : "VERSIÓN NUEVA";
+        writer.write("--- " + versionLabel + " ---");
         writer.newLine();
-        writer.newLine();
 
-        for (Map.Entry<String, List<LineRecord>> version : versions) {
-            String versionLabel = version.getKey().contains("Version: A") ? "VERSIÓN ANTIGUA" : "VERSIÓN NUEVA";
-            
-            writer.write("--- " + versionLabel + " ---");
-            writer.newLine();
-
-            for (LineRecord record : version.getValue()) {
-                writer.write(String.format("[%s] %s", record.status(), record.content()));
+        for (LineRecord record : version.getValue()) {
+            // Aplica LineSplitter aquí también
+            List<LineRecord> displayLines = LineSplitter.splitLongLines(record);
+            for (LineRecord displayLine : displayLines) {
+                writer.write(String.format("[%s] %s", displayLine.status(), displayLine.content()));
                 writer.newLine();
             }
-            
-            writer.newLine();
         }
+        writer.newLine();
     }
+}
 }

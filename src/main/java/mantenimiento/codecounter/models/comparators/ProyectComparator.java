@@ -94,24 +94,14 @@ public class ProyectComparator {
         this.contentToCompareFiles.remove(javaFileToCompare);
     }
 
-    /**
-     * Genera un reporte para un archivo que está presente solo en uno de los proyectos.
-     * 
-     * @param status   estado de la línea (nuevo o eliminado)
-     * @param javaFile archivo para generar el reporte
-     * @param mention  etiqueta de versión
-     */
     private void generateReportForSingleFile(STATUS status, JavaFile javaFile, String mention) {
-        List<LineRecord> report = new ArrayList<>();
-    
-        javaFile.getContent().forEach(lineContent -> {
-            LineRecord originalRecord = new LineRecord(status, lineContent);     
-            List<LineRecord> processedLines = LineSplitter.splitLongLines(originalRecord);
-            report.addAll(processedLines);
-        });
-    
-        generalReport.put(javaFile.getFileName() + " " + mention, report);
-    }
+    List<LineRecord> report = new ArrayList<>();
+    // Sin LineSplitter: se añaden líneas originales
+    javaFile.getContent().forEach(lineContent -> {
+        report.add(new LineRecord(status, lineContent));
+    });
+    generalReport.put(javaFile.getFileName() + mention, report);
+}
 
     /**
      * Obtiene el reporte general de comparación entre ambos proyectos.
