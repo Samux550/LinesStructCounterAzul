@@ -1,0 +1,26 @@
+=== COMPARACIÓN PARA FileNotFoundException.java ===
+
+--- VERSIÓN ANTIGUA ---
+[ORIGINAL] package mantenimiento.codecounter.exceptions;
+[ORIGINAL] 
+[ORIGINAL] public class FileNotFoundException extends Exception {
+[SPLITED] private static final String ERROR_MESSAGE = "No se ha encontrado el archivo:
+[ORIGINAL] %s";
+[ORIGINAL] 
+[ORIGINAL] public FileNotFoundException(String filePath) {
+[ORIGINAL] super(String.format(ERROR_MESSAGE, filePath));
+[ORIGINAL] }
+[ORIGINAL] }
+
+--- VERSIÓN NUEVA ---
+[ORIGINAL] package mantenimiento.codecounter.exceptions;
+[ORIGINAL] 
+[ORIGINAL] public class FileNotFoundException extends Exception {
+[SPLITED] private static final String ERROR_MESSAGE = "No se ha encontrado el archivo:
+[ORIGINAL] %s";
+[ORIGINAL] 
+[ORIGINAL] public FileNotFoundException(String filePath) {
+[ORIGINAL] super(String.format(ERROR_MESSAGE, filePath));
+[ORIGINAL] }
+[ORIGINAL] }
+

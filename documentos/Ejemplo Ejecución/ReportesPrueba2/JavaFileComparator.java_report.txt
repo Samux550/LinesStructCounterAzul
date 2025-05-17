@@ -1,0 +1,89 @@
+=== ARCHIVO JavaFileComparator.java [Version: A] ===
+
+[DELETED] package mantenimiento.codecounter.models.comparators;
+[DELETED] 
+[DELETED] import java.util.List;
+[DELETED] import mantenimiento.codecounter.models.reporters.ComparationReport;
+[DELETED] 
+[DELETED] /**
+[DELETED] * Compara el contenido de dos archivos con la extención .java
+[DELETED] * Sirve como clase intermedia para incorporar la lógica de comparación de
+[DELETED] * dos contenidos y la elaboración del reporte.
+[DELETED] */
+[DELETED] public class JavaFileComparator {
+[DELETED] 
+[DELETED] private ComparationReport comparationReport;
+[DELETED] private List<String> content;
+[DELETED] private List<String> contentToCompare;
+[DELETED] 
+[DELETED] /**
+[DELETED] * Constructor
+[DELETED] * @param content contenido de un archivo con extensión .java
+[DELETED] * @param contentToCompare contenido de un archivo .java para comparar
+[DELETED] */
+[DELETED] public JavaFileComparator(List<String> content, List<String> contentToCompare) {
+[DELETED] this.comparationReport = new ComparationReport();
+[DELETED] this.content = content;
+[DELETED] this.contentToCompare = contentToCompare;
+[DELETED] }
+[DELETED] 
+[DELETED] /**
+[DELETED] * Compara el contenido de ambos archivos
+[DELETED] */
+[DELETED] public void compareContent() {
+[DELETED] compareSameLines();
+[DELETED] compareDifferentLines();
+[DELETED] }
+[DELETED] 
+[DELETED] /**
+[DELETED] * Ejecuta la lógica de comparación de dos líneas provistas como parámetros
+[DELETED] * y añade una nueva entrada al reporte de comparación
+[DELETED] * @param line línea de código a comparar
+[DELETED] * @param lineToCompare línea de código para comparar
+[DELETED] */
+[DELETED] private void compareLine(String line, String lineToCompare) {
+[DELETED] LineComparator lineComparator = new LineComparator(line, lineToCompare);
+[DELETED] Status status = lineComparator.compare();
+[DELETED] this.comparationReport.makeReportLine(status, line, lineToCompare);
+[DELETED] }
+[DELETED] 
+[DELETED] /**
+[SPLITED] * Compara aquellas líneas de código en ambos contenidos que compartan el mismo
+[DELETED] índice
+[DELETED] */
+[DELETED] private void compareSameLines() {
+[SPLITED] for (int i = 0, j = 0; i < content.size() && j < contentToCompare.size(); i++,
+[DELETED] j++) {
+[DELETED] String currentLine = content.get(i);
+[DELETED] String lineToCompare = contentToCompare.get(j);
+[DELETED] compareLine(currentLine, lineToCompare);
+[DELETED] }
+[DELETED] }
+[DELETED] 
+[DELETED] 
+[DELETED] /**
+[SPLITED] * Genera un reporte de comparación de aquellas líneas que no se encuentren en un
+[DELETED] contenido u
+[SPLITED] * otro a razón de que tener una mayor extensión. Dichos reportes empiezan a
+[DELETED] partir del índice
+[DELETED] * del contenido con menos longitud.
+[DELETED] */
+[DELETED] private void compareDifferentLines() {
+[DELETED] int difference = Math.abs(this.content.size() - this.contentToCompare.size());
+[DELETED] if (this.content.size() < this.contentToCompare.size()) {
+[SPLITED] this.comparationReport.updateReport(this.content, this.contentToCompare,
+[DELETED] difference);
+[DELETED] } else if (this.content.size() > this.contentToCompare.size()) {
+[DELETED] this.comparationReport.updateReport(this.content, difference);
+[DELETED] }
+[DELETED] }
+[DELETED] 
+[DELETED] /**
+[SPLITED] * Método que retorna el reporte final de los contenidos del archivo java en
+[DELETED] cuestión
+[DELETED] * @return Retorna el reporte de cada línea de código de ambos contenidos
+[DELETED] */
+[DELETED] public ComparationReport getComparationReport() {
+[DELETED] return comparationReport;
+[DELETED] }
+[DELETED] }

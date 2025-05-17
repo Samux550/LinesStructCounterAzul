@@ -1,0 +1,55 @@
+=== COMPARACIÓN PARA Main.java ===
+
+--- VERSIÓN ANTIGUA ---
+[ORIGINAL] package mantenimiento.codecounter;
+[ORIGINAL] 
+[ORIGINAL] import java.util.Scanner;
+[ORIGINAL] import mantenimiento.codecounter.models.ProgramBuilder;
+[ORIGINAL] 
+[ORIGINAL] public class Main {
+[ORIGINAL] 
+[ORIGINAL] public static void main(String[] args) {
+[ORIGINAL] Scanner scanner = new Scanner(System.in);
+[ORIGINAL] 
+[ORIGINAL] ProgramBuilder.buildProgram(requestFolderPath(scanner));
+[DELETED] 
+[DELETED] System.out.println("\nPresiona Enter para salir...");
+[DELETED] scanner.nextLine();
+[DELETED] scanner.close();
+[DELETED] }
+[DELETED] 
+[DELETED] private static String requestFolderPath(Scanner scanner) {
+[DELETED] System.out.println("Ingresa la ruta de la carpeta del proyecto:");
+[DELETED] return scanner.nextLine();
+[DELETED] }
+[DELETED] }
+
+--- VERSIÓN NUEVA ---
+[ORIGINAL] package mantenimiento.codecounter;
+[ORIGINAL] 
+[ORIGINAL] import java.util.Scanner;
+[ORIGINAL] import mantenimiento.codecounter.models.ProgramBuilder;
+[ORIGINAL] 
+[ORIGINAL] public class Main {
+[ORIGINAL] 
+[ORIGINAL] public static void main(String[] args) {
+[MODIFIED] Scanner s = new Scanner(System.in);
+[ORIGINAL] 
+[MODIFIED] ProgramBuilder.buildProgram(requestFolderPath(s));
+[NEW] }
+[NEW] 
+[NEW] private static String requestFolderPath(Scanner scan) {
+[NEW] System.out.println();
+[NEW] System.out.println("Ingrese la ruta o las rutas de las carpetas del proyecto:");
+[SPLITED] System.out.println(" - Para analizar un solo proyecto, introduzca UNA sola
+[NEW] ruta.");
+[SPLITED] System.out.println(" - Para comparar dos proyectos, introduzca DOS rutas
+[NEW] separadas por un espacio.");
+[SPLITED] System.out.println(" * Importante: Asegúrese de que las carpetas en las rutas NO
+[NEW] contengan espacios.");
+[NEW] System.out.println();
+[NEW] System.out.print("Ruta(s): ");
+[NEW] return scan.nextLine();
+[NEW] }
+[NEW] }
+

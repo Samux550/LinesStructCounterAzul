@@ -1,0 +1,327 @@
+=== COMPARACIÓN PARA ProgramBuilder.java ===
+
+--- VERSIÓN ANTIGUA ---
+[ORIGINAL] package mantenimiento.codecounter.models;
+[ORIGINAL] 
+[ORIGINAL] import java.nio.file.Path;
+[ORIGINAL] import java.nio.file.Paths;
+[ORIGINAL] import java.util.ArrayList;
+[ORIGINAL] import java.util.List;
+[DELETED] import java.util.Map;
+[DELETED] import java.util.stream.Stream;
+[DELETED] 
+[DELETED] import mantenimiento.codecounter.exceptions.FileNotFoundException;
+[DELETED] import mantenimiento.codecounter.exceptions.FolderNotFoundException;
+[DELETED] import mantenimiento.codecounter.exceptions.InvalidFormatException;
+[DELETED] import mantenimiento.codecounter.exceptions.JavaFilesNotFoundException;
+[DELETED] import mantenimiento.codecounter.models.comparators.ProyectComparator;
+[DELETED] import mantenimiento.codecounter.models.counters.StructCounter;
+[DELETED] import mantenimiento.codecounter.models.reporters.Reporter;
+[DELETED] import mantenimiento.codecounter.models.reporters.TerminalReporter;
+[DELETED] import mantenimiento.codecounter.utils.JavaFilesScanner;
+[DELETED] import mantenimiento.codecounter.models.reporters.TxtReporter;
+[DELETED] 
+[DELETED] /**
+[DELETED] * Clase encargada de analizar archivos Java dentro de una carpeta, contando
+[DELETED] * líneas de código físicas y lógicas, y generando un reporte con los resultados.
+[ORIGINAL] */
+[DELETED] public class ProgramBuilder {
+[DELETED] 
+[DELETED] /**
+[DELETED] * Analiza los archivos Java dentro de la carpeta especificada, contando líneas
+[DELETED] * de código y generando un reporte con los resultados.
+[DELETED] *
+[DELETED] * @param folderPath Ruta de la carpeta que contiene los archivos Java.
+[DELETED] * @throws JavaFilesNotFoundException Si no se encuentran archivos Java.
+[DELETED] * @throws FolderNotFoundException    Si la carpeta no existe.
+[DELETED] */
+[DELETED] public static void buildProgram(String folderPath) {
+[DELETED] String[] paths = folderPath.split(" ");
+[DELETED] Stream.of(paths).forEach(ProgramBuilder::countWorkflow);
+[DELETED] if (paths.length == 2) {
+[DELETED] compareWorkflow(paths);
+[DELETED] }
+[DELETED] }
+[DELETED] 
+[DELETED] /**
+[SPLITED] * Flujo de trabajo para el conteo de líneas, clases y metodos en los archivos
+[DELETED] Java dentro de una carpeta.
+[DELETED] *
+[DELETED] * @param folderPath Ruta de la carpeta a procesar.
+[DELETED] */
+[DELETED] private static void countWorkflow(String folderPath) {
+[DELETED] try {
+[DELETED] List<Path> javaFilePaths = JavaFilesScanner.getJavaFiles(folderPath);
+[DELETED] List<StructCounter> lineCounters = processFiles(javaFilePaths);
+[DELETED] generateTerminalReport(folderPath, lineCounters);
+[DELETED] } catch (Exception e) {
+[DELETED] System.out.println(e.getMessage());
+[ORIGINAL] }
+[DELETED] }
+[DELETED] 
+[DELETED] /**
+[DELETED] * Procesa los archivos Java proporcionados, validando su formato y lógica antes
+[DELETED] * de contar sus líneas de código.
+[DELETED] *
+[DELETED] * @param javaFilePaths Lista de rutas de archivos Java a procesar.
+[SPLITED] * @return Lista de objetos {@link StructCounter} con el conteo de líneas físicas
+[DELETED] y lógicas.
+[DELETED] * @throws FileNotFoundException  Si alguno de los archivos no se encuentra.
+[SPLITED] * @throws InvalidFormatException Si se encuentra un error de formato en algún
+[DELETED] archivo.
+[DELETED] */
+[DELETED] private static List<StructCounter> processFiles(List<Path> javaFilePaths)
+[DELETED] throws FileNotFoundException, InvalidFormatException {
+[DELETED] 
+[DELETED] List<StructCounter> lineCounters = new ArrayList<>();
+[ORIGINAL] 
+[DELETED] for (Path filePath : javaFilePaths) {
+[DELETED] JavaFile javaFile = new JavaFile(filePath);
+[DELETED] 
+[DELETED] lineCounters.add(processLines(javaFile));
+[DELETED] }
+[DELETED] return lineCounters;
+[DELETED] }
+[DELETED] 
+[DELETED] /**
+[SPLITED] * Cuenta las líneas físicas y lógicas de un archivo Java validando su formato y
+[DELETED] contenido lógico.
+[DELETED] *
+[DELETED] * @param javaFile Archivo Java a procesar.
+[DELETED] * @return Contador de líneas con los resultados.
+[DELETED] * @throws InvalidFormatException Si alguna línea tiene un formato incorrecto.
+[DELETED] */
+[SPLITED] private static StructCounter processLines(JavaFile javaFile) throws
+[DELETED] InvalidFormatException {
+[DELETED] 
+[SPLITED] List<String> fileContent =
+[DELETED] javaFile.removeComments().removeBlankLines().getContent();
+[DELETED] StructCounter lineCounter = new StructCounter();
+[DELETED] CodeAnalyzer analyzer = new CodeAnalyzer(lineCounter);
+[DELETED] 
+[DELETED] for (String line : fileContent) {
+[DELETED] analyzer.processLine(line);
+[DELETED] }
+[DELETED] 
+[DELETED] return lineCounter;
+[DELETED] }
+[DELETED] 
+[DELETED] /**
+[DELETED] * Flujo de trabajo para comparar los cambios entre 2 proyectos
+[DELETED] *
+[SPLITED] * @param folderPaths Arreglo con dos rutas de carpetas que contienen los
+[DELETED] proyectos a comparar.
+[DELETED] */
+[DELETED] private static void compareWorkflow(String[] folderPaths) {
+[DELETED] try {
+[DELETED] Proyect proyect = makeProyect(folderPaths[0]);
+[DELETED] Proyect proyectToCompare = makeProyect(folderPaths[1]);
+[SPLITED] ProyectComparator proyectComparator = new ProyectComparator(proyect,
+[DELETED] proyectToCompare);
+[DELETED] proyectComparator.compare();
+[DELETED] generateTxtReport(proyectComparator);
+[DELETED] } catch (FolderNotFoundException | JavaFilesNotFoundException e) {
+[DELETED] System.out.println(e.getMessage());
+[DELETED] }
+[DELETED] }
+[DELETED] 
+[DELETED] /**
+[SPLITED] * Crea un objeto {@link Proyect} a partir de la carpeta que contiene archivos
+[DELETED] Java.
+[DELETED] *
+[DELETED] * @param folderPath Ruta de la carpeta del proyecto.
+[DELETED] * @return Objeto {@link Proyect} inicializado.
+[DELETED] * @throws FolderNotFoundException    Si la carpeta no existe.
+[DELETED] * @throws JavaFilesNotFoundException Si no se encuentran archivos Java.
+[DELETED] */
+[SPLITED] private static Proyect makeProyect(String folderPath) throws
+[DELETED] FolderNotFoundException, JavaFilesNotFoundException {
+[DELETED] List<Path> javaPathFiles = JavaFilesScanner.getJavaFiles(folderPath);
+[DELETED] Proyect proyect = new Proyect(folderPath, javaPathFiles);
+[DELETED] return proyect;
+[DELETED] }
+[DELETED] 
+[DELETED] /**
+[SPLITED] * Genera un reporte en la terminal con los resultados del análisis de líneas de
+[DELETED] código.
+[DELETED] *
+[DELETED] * @param folderPath   Ruta de la carpeta analizada.
+[SPLITED] * @param lineCounters Lista de contadores de líneas con los resultados del
+[DELETED] análisis.
+[DELETED] */
+[SPLITED] private static void generateTerminalReport(String folderPath,
+[DELETED] List<StructCounter> lineCounters) {
+[DELETED] Reporter reporter = new TerminalReporter(Paths.get(folderPath), lineCounters);
+[DELETED] reporter.generateReport();
+[DELETED] }
+[DELETED] 
+[DELETED] /**
+[SPLITED] * Genera un reporte en archivo de texto con los resultados de la comparación
+[DELETED] entre proyectos.
+[DELETED] *
+[SPLITED] * @param proyectComparator Comparador que contiene los resultados de la
+[DELETED] comparación.
+[DELETED] */
+[DELETED] private static void generateTxtReport(ProyectComparator proyectComparator) {
+[DELETED] Map<String, List<LineRecord>> report = proyectComparator.getGeneralReport();
+[DELETED] TxtReporter txtReporter = new TxtReporter(report);
+[DELETED] txtReporter.generateTxtReports();
+[DELETED] }
+[DELETED] 
+[DELETED] /**
+[SPLITED] * Constructor privado para evitar la instanciación de la clase {@code
+[DELETED] ProgramBuilder}
+[DELETED] * ya que contiene únicamente métodos estáticos.
+[DELETED] */
+[DELETED] private ProgramBuilder(){}
+[DELETED] 
+[DELETED] public void dummyFunc(){}
+[DELETED] 
+[DELETED] }
+[DELETED] 
+[DELETED] /*
+[DELETED] * Changelog de cambios respecto a la versión anterior de ProgramBuilder:
+[DELETED] *
+[DELETED] * [✔] Refactorización de método principal:
+[SPLITED] *     - El método buildProgram(String folderPath) fue refactorizado para
+[DELETED] soportar múltiples rutas separadas por espacio.
+[SPLITED] *     - Se agregó la lógica para bifurcar entre análisis individual
+[DELETED] (countWorkflow) y comparación entre dos carpetas (compareWorkflow).
+[DELETED] 
+[DELETED] * [✔] División en flujos de trabajo separados:
+[SPLITED] *     - Se extrajo el análisis de una sola carpeta a countWorkflow(String
+[DELETED] folderPath).
+[SPLITED] *     - Se agregó compareWorkflow(String[] folderPaths) para manejar comparación
+[DELETED] entre dos proyectos.
+[DELETED] 
+[DELETED] * [✔] Nueva funcionalidad de comparación entre proyectos:
+[SPLITED] *     - Se incorporó la clase ProyectComparator para detectar diferencias entre
+[DELETED] dos conjuntos de archivos Java.
+[SPLITED] *     - Se agregó soporte para generar reportes de comparación en archivo de
+[DELETED] texto mediante TxtReporter.
+[DELETED] 
+[DELETED] * [✔] Nuevas excepciones:
+[SPLITED] *     - Se manejan nuevas excepciones específicas: FolderNotFoundException y
+[DELETED] JavaFilesNotFoundException.
+[SPLITED] *     - Estas excepciones mejoran la validación y el control de errores cuando
+[DELETED] no se encuentran carpetas o archivos Java.
+[DELETED] 
+[DELETED] * [✔] Mejora en generación de reportes:
+[DELETED] *     - Se mantiene TerminalReporter para el análisis individual.
+[SPLITED] *     - Se agrega TxtReporter como nueva opción para el resultado de
+[DELETED] comparaciones.
+[DELETED] 
+[DELETED] * [✔] Mejora en documentación y Javadoc:
+[SPLITED] *     - Se amplió la documentación de los métodos y se actualizaron las
+[DELETED] descripciones para reflejar mejor sus responsabilidades.
+[DELETED] 
+[DELETED] * [✔] Buenas prácticas:
+[DELETED] *     - Se mantuvo el constructor privado para prevenir instanciación.
+[SPLITED] *     - Se reorganizó el orden de los métodos para mejorar la legibilidad
+[DELETED] (buildProgram al inicio, utilitarios al final).
+[DELETED] *
+[DELETED] */
+
+--- VERSIÓN NUEVA ---
+[ORIGINAL] package mantenimiento.codecounter.models;
+[ORIGINAL] 
+[ORIGINAL] import java.nio.file.Path;
+[ORIGINAL] import java.nio.file.Paths;
+[ORIGINAL] import java.util.ArrayList;
+[ORIGINAL] import java.util.List;
+[NEW] import mantenimiento.codecounter.exceptions.FileNotFoundException;
+[NEW] import mantenimiento.codecounter.exceptions.InvalidFormatException;
+[NEW] import mantenimiento.codecounter.models.counters.StructCounter;
+[NEW] import mantenimiento.codecounter.models.reporters.Reporter;
+[NEW] import mantenimiento.codecounter.models.reporters.TerminalReporter;
+[NEW] import mantenimiento.codecounter.utils.JavaFilesScanner;
+[NEW] 
+[NEW] /**
+[SPLITED] * Clase encargada de analizar archivos Java dentro de una carpeta, contando
+[NEW] líneas de código
+[NEW] * físicas y lógicas, y generando un reporte con los resultados.
+[NEW] */
+[NEW] public class ProgramBuilder {
+[NEW] /**
+[SPLITED] * Analiza los archivos Java dentro de la carpeta especificada, contando líneas
+[NEW] de código y
+[NEW] * generando un reporte con los resultados.
+[NEW] *
+[NEW] * @param folderPath Ruta de la carpeta que contiene los archivos Java.
+[ORIGINAL] */
+[NEW] public static void buildProgram(String folderPath) {
+[NEW] try {
+[NEW] List<Path> javaFilePaths = JavaFilesScanner.getJavaFiles(folderPath);
+[NEW] List<StructCounter> lineCounters = processFiles(javaFilePaths);
+[NEW] generateReport(folderPath, lineCounters);
+[NEW] } catch (Exception e) {
+[NEW] System.out.println(e.getMessage());
+[NEW] }
+[NEW] }
+[NEW] 
+[NEW] /**
+[SPLITED] * Procesa los archivos Java proporcionados, validando su formato y lógica antes
+[NEW] de contar sus
+[NEW] * líneas de código.
+[NEW] *
+[NEW] * @param javaFilePaths Lista de rutas de archivos Java a procesar.
+[SPLITED] * @return Un objeto {@link LineCounter} con el conteo de líneas físicas y
+[NEW] lógicas.
+[NEW] * @throws FileNotFoundException Si alguno de los archivos no se encuentra.
+[SPLITED] * @throws InvalidFormatException Si se encuentra un error de formato en algún
+[NEW] archivo.
+[NEW] */
+[NEW] private static List<StructCounter> processFiles(List<Path> javaFilePaths)
+[NEW] throws FileNotFoundException, InvalidFormatException {
+[NEW] 
+[NEW] List<StructCounter> lineCounters = new ArrayList<>();
+[NEW] 
+[NEW] for (Path filePath : javaFilePaths) {
+[NEW] JavaFile javaFile = new JavaFile(filePath);
+[NEW] 
+[NEW] lineCounters.add(processLines(javaFile));
+[NEW] }
+[NEW] return lineCounters;
+[ORIGINAL] }
+[NEW] 
+[NEW] /**
+[SPLITED] * Cuenta las líneas físicas y lógicas de un archivo Java validando su formato y
+[NEW] contenido lógico.
+[NEW] *
+[NEW] * @param fileContent Contenido del archivo sin comentarios ni líneas en blanco.
+[NEW] * @param formatValidator Validador de formato de líneas.
+[NEW] * @param logicalValidator Validador de lógica de líneas.
+[NEW] * @param lineCounter Contador de líneas donde se almacenan los resultados.
+[NEW] * @throws InvalidFormatException Si alguna línea tiene un formato incorrecto.
+[NEW] */
+[SPLITED] private static StructCounter processLines(JavaFile javaFile) throws
+[NEW] InvalidFormatException {
+[NEW] 
+[SPLITED] List<String> fileContent =
+[NEW] javaFile.removeComments().removeBlankLines().getContent();
+[NEW] StructCounter lineCounter = new StructCounter();
+[NEW] CodeAnalyzer analyzer = new CodeAnalyzer(lineCounter);
+[ORIGINAL] 
+[NEW] for (String line : fileContent) {
+[NEW] analyzer.processLine(line);
+[NEW] }
+[NEW] 
+[NEW] return lineCounter;
+[NEW] }
+[NEW] 
+[NEW] /**
+[NEW] * Genera un reporte con los resultados del análisis de líneas de código.
+[NEW] *
+[NEW] * @param folderPath Ruta de la carpeta analizada.
+[SPLITED] * @param lineCounter Contador de líneas de código con los resultados del
+[NEW] análisis.
+[NEW] */
+[SPLITED] private static void generateReport(String folderPath, List<StructCounter>
+[NEW] lineCounters) {
+[NEW] Reporter reporter = new TerminalReporter(Paths.get(folderPath), lineCounters);
+[NEW] reporter.generateReport();
+[NEW] }
+[NEW] 
+[NEW] private ProgramBuilder() {}
+[NEW] }
+

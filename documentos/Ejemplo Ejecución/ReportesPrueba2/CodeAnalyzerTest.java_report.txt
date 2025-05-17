@@ -1,0 +1,248 @@
+=== COMPARACIÓN PARA CodeAnalyzerTest.java ===
+
+--- VERSIÓN ANTIGUA ---
+[ORIGINAL] package mantenimiento.codecounter.models;
+[ORIGINAL] 
+[ORIGINAL] import static org.junit.jupiter.api.Assertions.assertEquals;
+[ORIGINAL] import static org.junit.jupiter.api.Assertions.assertNull;
+[ORIGINAL] import static org.junit.jupiter.api.Assertions.assertTrue;
+[ORIGINAL] 
+[ORIGINAL] import mantenimiento.codecounter.exceptions.InvalidFormatException;
+[ORIGINAL] import mantenimiento.codecounter.models.counters.StructCounter;
+[ORIGINAL] import org.junit.jupiter.api.BeforeEach;
+[ORIGINAL] import org.junit.jupiter.api.DisplayName;
+[ORIGINAL] import org.junit.jupiter.api.Test;
+[ORIGINAL] 
+[ORIGINAL] class CodeAnalyzerTest {
+[ORIGINAL] 
+[ORIGINAL] private StructCounter structCounter;
+[ORIGINAL] private CodeAnalyzer codeAnalyzer;
+[ORIGINAL] 
+[ORIGINAL] @BeforeEach
+[ORIGINAL] void setUp() {
+[ORIGINAL] structCounter = new StructCounter();
+[ORIGINAL] codeAnalyzer = new CodeAnalyzer(structCounter);
+[ORIGINAL] }
+[ORIGINAL] 
+[ORIGINAL] @Test
+[ORIGINAL] @DisplayName("Procesar línea: línea de comentario")
+[ORIGINAL] void testProcessLine_CommentLine() throws InvalidFormatException {
+[ORIGINAL] String line = "// Esto es un comentario";
+[ORIGINAL] 
+[ORIGINAL] codeAnalyzer.processLine(line);
+[ORIGINAL] 
+[ORIGINAL] assertTrue(structCounter.getClasses().isEmpty());
+[ORIGINAL] }
+[ORIGINAL] 
+[ORIGINAL] @Test
+[ORIGINAL] @DisplayName("Procesar línea: línea vacía")
+[ORIGINAL] void testProcessLine_EmptyLine() throws InvalidFormatException {
+[ORIGINAL] String line = "   ";
+[ORIGINAL] 
+[ORIGINAL] codeAnalyzer.processLine(line);
+[ORIGINAL] 
+[ORIGINAL] assertTrue(structCounter.getClasses().isEmpty());
+[ORIGINAL] }
+[ORIGINAL] 
+[ORIGINAL] @Test
+[ORIGINAL] @DisplayName("Preprocesar línea: ignorar línea de comentario")
+[ORIGINAL] void testPreprocessLine_IgnoreCommentLine() {
+[ORIGINAL] String commentLine = "// Esto es un comentario";
+[ORIGINAL] 
+[ORIGINAL] String result = codeAnalyzer.preprocessLine(commentLine);
+[ORIGINAL] 
+[ORIGINAL] assertNull(result);
+[ORIGINAL] }
+[ORIGINAL] 
+[ORIGINAL] @Test
+[ORIGINAL] @DisplayName("Preprocesar línea: ignorar línea vacía")
+[ORIGINAL] void testPreprocessLine_IgnoreEmptyLine() {
+[ORIGINAL] String emptyLine = "   ";
+[ORIGINAL] 
+[ORIGINAL] String result = codeAnalyzer.preprocessLine(emptyLine);
+[ORIGINAL] 
+[ORIGINAL] assertNull(result);
+[ORIGINAL] }
+[ORIGINAL] 
+[ORIGINAL] @Test
+[ORIGINAL] @DisplayName("Preprocesar línea: línea válida")
+[ORIGINAL] void testPreprocessLine_ValidLine() {
+[ORIGINAL] String validLine = "public class TestClass {";
+[ORIGINAL] 
+[ORIGINAL] String result = codeAnalyzer.preprocessLine(validLine);
+[ORIGINAL] 
+[ORIGINAL] assertEquals("public class TestClass {", result);
+[ORIGINAL] }
+[ORIGINAL] 
+[ORIGINAL] @Test
+[ORIGINAL] @DisplayName("Obtener contador")
+[ORIGINAL] void testGetCounter() {
+[ORIGINAL] assertEquals(structCounter, codeAnalyzer.getCounter());
+[ORIGINAL] }
+[ORIGINAL] 
+[ORIGINAL] @Test
+[ORIGINAL] @DisplayName("Contar las clases anidadas")
+[ORIGINAL] void testCountNestedClasses() throws InvalidFormatException {
+[ORIGINAL] String line1 = "public class OuterClass {";
+[ORIGINAL] String line2 = "public class InnerClass {";
+[ORIGINAL] String line3 = "public class InnerMostClass {";
+[ORIGINAL] 
+[ORIGINAL] codeAnalyzer.processLine(line1);
+[ORIGINAL] codeAnalyzer.processLine(line2);
+[ORIGINAL] codeAnalyzer.processLine(line3);
+[ORIGINAL] 
+[ORIGINAL] assertEquals(3, structCounter.getClassesCount());
+[ORIGINAL] }
+[ORIGINAL] 
+[ORIGINAL] @Test
+[ORIGINAL] @DisplayName("Contar métodos en una clase")
+[ORIGINAL] void testCountMethodsInClass() throws InvalidFormatException {
+[ORIGINAL] String line1 = "public class TestClass {";
+[ORIGINAL] String line2 = "public void testMethod() {";
+[ORIGINAL] String line3 = "return; } }";
+[ORIGINAL] 
+[ORIGINAL] codeAnalyzer.processLine(line1);
+[ORIGINAL] codeAnalyzer.processLine(line2);
+[ORIGINAL] codeAnalyzer.processLine(line3);
+[ORIGINAL] 
+[ORIGINAL] assertEquals(1, structCounter.getClasses().get(0).getMethodsAmount());
+[ORIGINAL] }
+[ORIGINAL] 
+[ORIGINAL] @Test
+[ORIGINAL] @DisplayName("Contar líneas de código en una clase")
+[ORIGINAL] void testCountLinesOfCodeInClass() throws InvalidFormatException {
+[ORIGINAL] String line1 = "public class TestClass {";
+[ORIGINAL] String line2 = "int a = 0;";
+[ORIGINAL] String line3 = "return; } }";
+[ORIGINAL] 
+[ORIGINAL] codeAnalyzer.processLine(line1);
+[ORIGINAL] codeAnalyzer.processLine(line2);
+[ORIGINAL] codeAnalyzer.processLine(line3);
+[ORIGINAL] 
+[ORIGINAL] assertEquals(3, structCounter.getClasses().get(0).getLinesOfCode());
+[ORIGINAL] }
+[ORIGINAL] }
+
+--- VERSIÓN NUEVA ---
+[ORIGINAL] package mantenimiento.codecounter.models;
+[ORIGINAL] 
+[ORIGINAL] import static org.junit.jupiter.api.Assertions.assertEquals;
+[ORIGINAL] import static org.junit.jupiter.api.Assertions.assertNull;
+[ORIGINAL] import static org.junit.jupiter.api.Assertions.assertTrue;
+[ORIGINAL] 
+[ORIGINAL] import mantenimiento.codecounter.exceptions.InvalidFormatException;
+[ORIGINAL] import mantenimiento.codecounter.models.counters.StructCounter;
+[ORIGINAL] import org.junit.jupiter.api.BeforeEach;
+[ORIGINAL] import org.junit.jupiter.api.DisplayName;
+[ORIGINAL] import org.junit.jupiter.api.Test;
+[ORIGINAL] 
+[ORIGINAL] class CodeAnalyzerTest {
+[ORIGINAL] 
+[ORIGINAL] private StructCounter structCounter;
+[ORIGINAL] private CodeAnalyzer codeAnalyzer;
+[ORIGINAL] 
+[ORIGINAL] @BeforeEach
+[ORIGINAL] void setUp() {
+[ORIGINAL] structCounter = new StructCounter();
+[ORIGINAL] codeAnalyzer = new CodeAnalyzer(structCounter);
+[ORIGINAL] }
+[ORIGINAL] 
+[ORIGINAL] @Test
+[ORIGINAL] @DisplayName("Procesar línea: línea de comentario")
+[ORIGINAL] void testProcessLine_CommentLine() throws InvalidFormatException {
+[ORIGINAL] String line = "// Esto es un comentario";
+[ORIGINAL] 
+[ORIGINAL] codeAnalyzer.processLine(line);
+[ORIGINAL] 
+[ORIGINAL] assertTrue(structCounter.getClasses().isEmpty());
+[ORIGINAL] }
+[ORIGINAL] 
+[ORIGINAL] @Test
+[ORIGINAL] @DisplayName("Procesar línea: línea vacía")
+[ORIGINAL] void testProcessLine_EmptyLine() throws InvalidFormatException {
+[ORIGINAL] String line = "   ";
+[ORIGINAL] 
+[ORIGINAL] codeAnalyzer.processLine(line);
+[ORIGINAL] 
+[ORIGINAL] assertTrue(structCounter.getClasses().isEmpty());
+[ORIGINAL] }
+[ORIGINAL] 
+[ORIGINAL] @Test
+[ORIGINAL] @DisplayName("Preprocesar línea: ignorar línea de comentario")
+[ORIGINAL] void testPreprocessLine_IgnoreCommentLine() {
+[ORIGINAL] String commentLine = "// Esto es un comentario";
+[ORIGINAL] 
+[ORIGINAL] String result = codeAnalyzer.preprocessLine(commentLine);
+[ORIGINAL] 
+[ORIGINAL] assertNull(result);
+[ORIGINAL] }
+[ORIGINAL] 
+[ORIGINAL] @Test
+[ORIGINAL] @DisplayName("Preprocesar línea: ignorar línea vacía")
+[ORIGINAL] void testPreprocessLine_IgnoreEmptyLine() {
+[ORIGINAL] String emptyLine = "   ";
+[ORIGINAL] 
+[ORIGINAL] String result = codeAnalyzer.preprocessLine(emptyLine);
+[ORIGINAL] 
+[ORIGINAL] assertNull(result);
+[ORIGINAL] }
+[ORIGINAL] 
+[ORIGINAL] @Test
+[ORIGINAL] @DisplayName("Preprocesar línea: línea válida")
+[ORIGINAL] void testPreprocessLine_ValidLine() {
+[ORIGINAL] String validLine = "public class TestClass {";
+[ORIGINAL] 
+[ORIGINAL] String result = codeAnalyzer.preprocessLine(validLine);
+[ORIGINAL] 
+[ORIGINAL] assertEquals("public class TestClass {", result);
+[ORIGINAL] }
+[ORIGINAL] 
+[ORIGINAL] @Test
+[ORIGINAL] @DisplayName("Obtener contador")
+[ORIGINAL] void testGetCounter() {
+[ORIGINAL] assertEquals(structCounter, codeAnalyzer.getCounter());
+[ORIGINAL] }
+[ORIGINAL] 
+[ORIGINAL] @Test
+[ORIGINAL] @DisplayName("Contar las clases anidadas")
+[ORIGINAL] void testCountNestedClasses() throws InvalidFormatException {
+[ORIGINAL] String line1 = "public class OuterClass {";
+[ORIGINAL] String line2 = "public class InnerClass {";
+[ORIGINAL] String line3 = "public class InnerMostClass {";
+[ORIGINAL] 
+[ORIGINAL] codeAnalyzer.processLine(line1);
+[ORIGINAL] codeAnalyzer.processLine(line2);
+[ORIGINAL] codeAnalyzer.processLine(line3);
+[ORIGINAL] 
+[ORIGINAL] assertEquals(3, structCounter.getClassesCount());
+[ORIGINAL] }
+[ORIGINAL] 
+[ORIGINAL] @Test
+[ORIGINAL] @DisplayName("Contar métodos en una clase")
+[ORIGINAL] void testCountMethodsInClass() throws InvalidFormatException {
+[ORIGINAL] String line1 = "public class TestClass {";
+[ORIGINAL] String line2 = "public void testMethod() {";
+[ORIGINAL] String line3 = "return; } }";
+[ORIGINAL] 
+[ORIGINAL] codeAnalyzer.processLine(line1);
+[ORIGINAL] codeAnalyzer.processLine(line2);
+[ORIGINAL] codeAnalyzer.processLine(line3);
+[ORIGINAL] 
+[ORIGINAL] assertEquals(1, structCounter.getClasses().get(0).getMethodsAmount());
+[ORIGINAL] }
+[ORIGINAL] 
+[ORIGINAL] @Test
+[ORIGINAL] @DisplayName("Contar líneas de código en una clase")
+[ORIGINAL] void testCountLinesOfCodeInClass() throws InvalidFormatException {
+[ORIGINAL] String line1 = "public class TestClass {";
+[ORIGINAL] String line2 = "int a = 0;";
+[ORIGINAL] String line3 = "return; } }";
+[ORIGINAL] 
+[ORIGINAL] codeAnalyzer.processLine(line1);
+[ORIGINAL] codeAnalyzer.processLine(line2);
+[ORIGINAL] codeAnalyzer.processLine(line3);
+[ORIGINAL] 
+[ORIGINAL] assertEquals(3, structCounter.getClasses().get(0).getLinesOfCode());
+[ORIGINAL] }
+[ORIGINAL] }
+

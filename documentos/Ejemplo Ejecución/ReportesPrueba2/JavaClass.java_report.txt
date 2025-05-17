@@ -1,0 +1,140 @@
+=== COMPARACIÓN PARA JavaClass.java ===
+
+--- VERSIÓN ANTIGUA ---
+[ORIGINAL] package mantenimiento.codecounter.models;
+[ORIGINAL] 
+[SPLITED] /** Representa una clase Java individual con sus contadores de líneas y métodos.
+[ORIGINAL] */
+[ORIGINAL] public class JavaClass {
+[ORIGINAL] private int methodsAmount;
+[ORIGINAL] private int linesOfCode;
+[ORIGINAL] private String className;
+[ORIGINAL] 
+[ORIGINAL] public JavaClass(String className) {
+[ORIGINAL] if (className == null || className.trim().isEmpty()) {
+[SPLITED] throw new IllegalArgumentException("El nombre de la clase no puede ser nulo o
+[ORIGINAL] vacío.");
+[ORIGINAL] }
+[ORIGINAL] this.className = className;
+[ORIGINAL] this.methodsAmount = 0;
+[ORIGINAL] this.linesOfCode = 0;
+[ORIGINAL] }
+[ORIGINAL] 
+[ORIGINAL] /** Devolver el total de métodos encontrados en esta clase. */
+[ORIGINAL] public int getMethodsAmount() {
+[ORIGINAL] return methodsAmount;
+[ORIGINAL] }
+[ORIGINAL] 
+[ORIGINAL] /** Devolver el nombre de esta clase. */
+[ORIGINAL] public String getClassName() {
+[ORIGINAL] return className;
+[ORIGINAL] }
+[ORIGINAL] 
+[ORIGINAL] /** Incrementar en uno el contador de métodos para esta clase. */
+[ORIGINAL] public void incrementMethodsAmount() {
+[ORIGINAL] this.methodsAmount++;
+[ORIGINAL] }
+[ORIGINAL] 
+[SPLITED] /** Incrementar en uno el contador de líneas físicas de código para esta clase.
+[ORIGINAL] */
+[ORIGINAL] public void incrementLinesOfCode() {
+[ORIGINAL] this.linesOfCode++;
+[ORIGINAL] }
+[ORIGINAL] 
+[ORIGINAL] /** Devolver el total de líneas físicas de código contadas para esta clase. */
+[ORIGINAL] public int getLinesOfCode() {
+[ORIGINAL] return linesOfCode;
+[ORIGINAL] }
+[ORIGINAL] 
+[ORIGINAL] @Override
+[ORIGINAL] public String toString() {
+[ORIGINAL] // Útil para depuración
+[ORIGINAL] return "JavaClass{"
+[ORIGINAL] + "className='"
+[ORIGINAL] + className
+[ORIGINAL] + '\''
+[ORIGINAL] + ", linesOfCode="
+[ORIGINAL] + linesOfCode
+[ORIGINAL] + ", methodsAmount="
+[ORIGINAL] + methodsAmount
+[ORIGINAL] + '}';
+[ORIGINAL] }
+[ORIGINAL] 
+[ORIGINAL] @Override
+[ORIGINAL] public boolean equals(Object o) {
+[ORIGINAL] if (this == o) return true;
+[ORIGINAL] if (o == null || getClass() != o.getClass()) return false;
+[ORIGINAL] JavaClass javaClass = (JavaClass) o;
+[ORIGINAL] return className.equals(javaClass.className);
+[ORIGINAL] }
+[ORIGINAL] }
+
+--- VERSIÓN NUEVA ---
+[ORIGINAL] package mantenimiento.codecounter.models;
+[ORIGINAL] 
+[SPLITED] /** Representa una clase Java individual con sus contadores de líneas y métodos.
+[ORIGINAL] */
+[ORIGINAL] public class JavaClass {
+[ORIGINAL] private int methodsAmount;
+[ORIGINAL] private int linesOfCode;
+[ORIGINAL] private String className;
+[ORIGINAL] 
+[ORIGINAL] public JavaClass(String className) {
+[ORIGINAL] if (className == null || className.trim().isEmpty()) {
+[SPLITED] throw new IllegalArgumentException("El nombre de la clase no puede ser nulo o
+[ORIGINAL] vacío.");
+[ORIGINAL] }
+[ORIGINAL] this.className = className;
+[ORIGINAL] this.methodsAmount = 0;
+[ORIGINAL] this.linesOfCode = 0;
+[ORIGINAL] }
+[ORIGINAL] 
+[ORIGINAL] /** Devolver el total de métodos encontrados en esta clase. */
+[ORIGINAL] public int getMethodsAmount() {
+[ORIGINAL] return methodsAmount;
+[ORIGINAL] }
+[ORIGINAL] 
+[ORIGINAL] /** Devolver el nombre de esta clase. */
+[ORIGINAL] public String getClassName() {
+[ORIGINAL] return className;
+[ORIGINAL] }
+[ORIGINAL] 
+[ORIGINAL] /** Incrementar en uno el contador de métodos para esta clase. */
+[ORIGINAL] public void incrementMethodsAmount() {
+[ORIGINAL] this.methodsAmount++;
+[ORIGINAL] }
+[ORIGINAL] 
+[SPLITED] /** Incrementar en uno el contador de líneas físicas de código para esta clase.
+[ORIGINAL] */
+[ORIGINAL] public void incrementLinesOfCode() {
+[ORIGINAL] this.linesOfCode++;
+[ORIGINAL] }
+[ORIGINAL] 
+[ORIGINAL] /** Devolver el total de líneas físicas de código contadas para esta clase. */
+[ORIGINAL] public int getLinesOfCode() {
+[ORIGINAL] return linesOfCode;
+[ORIGINAL] }
+[ORIGINAL] 
+[ORIGINAL] @Override
+[ORIGINAL] public String toString() {
+[ORIGINAL] // Útil para depuración
+[ORIGINAL] return "JavaClass{"
+[ORIGINAL] + "className='"
+[ORIGINAL] + className
+[ORIGINAL] + '\''
+[ORIGINAL] + ", linesOfCode="
+[ORIGINAL] + linesOfCode
+[ORIGINAL] + ", methodsAmount="
+[ORIGINAL] + methodsAmount
+[ORIGINAL] + '}';
+[ORIGINAL] }
+[ORIGINAL] 
+[ORIGINAL] @Override
+[ORIGINAL] public boolean equals(Object o) {
+[ORIGINAL] if (this == o) return true;
+[ORIGINAL] if (o == null || getClass() != o.getClass()) return false;
+[ORIGINAL] JavaClass javaClass = (JavaClass) o;
+[ORIGINAL] return className.equals(javaClass.className);
+[ORIGINAL] }
+[ORIGINAL] }
+

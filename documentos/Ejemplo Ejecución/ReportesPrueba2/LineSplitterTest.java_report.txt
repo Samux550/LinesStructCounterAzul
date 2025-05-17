@@ -1,0 +1,46 @@
+=== ARCHIVO LineSplitterTest.java [Version: A] ===
+
+[DELETED] package mantenimiento.codecounter.utils;
+[DELETED] 
+[DELETED] import static org.junit.jupiter.api.Assertions.assertEquals;
+[DELETED] import static org.junit.jupiter.api.Assertions.assertTrue;
+[DELETED] 
+[DELETED] import java.util.List;
+[DELETED] 
+[DELETED] import org.junit.jupiter.api.Test;
+[DELETED] 
+[DELETED] import mantenimiento.codecounter.models.LineRecord;
+[DELETED] import mantenimiento.codecounter.models.comparators.Status;
+[DELETED] 
+[DELETED] public class LineSplitterTest {
+[DELETED] @Test
+[DELETED] public void testSplitLongLine_ShouldSplitAndPreserveLogicalLine() {
+[SPLITED] String longLine = "Esto es una línea muy larga que definitivamente excede los
+[SPLITED] ochenta caracteres, y debe ser dividida en múltiples partes para facilitar la
+[DELETED] lectura.";
+[DELETED] LineRecord original = new LineRecord(Status.ORIGINAL, longLine);
+[DELETED] 
+[DELETED] List<LineRecord> result = LineSplitter.splitLongLines(original);
+[DELETED] 
+[SPLITED] assertTrue(result.size() > 1, "La línea debería haber sido dividida en múltiples
+[DELETED] fragmentos");
+[DELETED] 
+[SPLITED] assertEquals(Status.SPLITED, result.get(0).status(), "El primer fragmento debe
+[DELETED] tener estado SPLITED");
+[DELETED] 
+[DELETED] for (int i = 1; i < result.size(); i++) {
+[SPLITED] assertEquals(Status.ORIGINAL, result.get(i).status(), "Los fragmentos siguientes
+[DELETED] deben mantener el estado ORIGINAL");
+[DELETED] }
+[DELETED] 
+[DELETED] StringBuilder reconstructed = new StringBuilder();
+[DELETED] for (LineRecord part : result) {
+[DELETED] reconstructed.append(part.content()).append(" ");
+[DELETED] }
+[SPLITED] String reconstructedLine = reconstructed.toString().trim().replaceAll("\\s+", "
+[DELETED] ");
+[DELETED] String originalNormalized = longLine.trim().replaceAll("\\s+", " ");
+[SPLITED] assertEquals(originalNormalized, reconstructedLine, "El contenido reconstruido
+[DELETED] debe ser igual al original");
+[DELETED] }
+[DELETED] }

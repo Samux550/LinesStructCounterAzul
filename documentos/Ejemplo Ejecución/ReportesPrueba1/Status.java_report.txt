@@ -1,0 +1,15 @@
+=== ARCHIVO Status.java [Version: B] ===
+
+[NEW] package mantenimiento.codecounter.models.comparators;
+[NEW] /**
+[SPLITED] * Nomenclatura que determina cada uno de los estados de las líneas de códgo
+[NEW] cuando al momento
+[NEW] * de compararse.
+[NEW] */
+[NEW] public enum Status {
+[NEW] NEW,
+[NEW] MODIFIED,
+[NEW] DELETED,
+[NEW] ORIGINAL,
+[NEW] SPLITED
+[NEW] }

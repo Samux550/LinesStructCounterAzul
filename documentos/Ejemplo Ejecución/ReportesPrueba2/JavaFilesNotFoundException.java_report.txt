@@ -1,0 +1,26 @@
+=== COMPARACIÓN PARA JavaFilesNotFoundException.java ===
+
+--- VERSIÓN ANTIGUA ---
+[ORIGINAL] package mantenimiento.codecounter.exceptions;
+[ORIGINAL] 
+[ORIGINAL] public class JavaFilesNotFoundException extends Exception {
+[ORIGINAL] private static final String ERROR_MESSAGE =
+[ORIGINAL] "No se ha encontrado archivos Java por analizar en la carpeta del proyecto";
+[ORIGINAL] 
+[ORIGINAL] public JavaFilesNotFoundException() {
+[ORIGINAL] super(ERROR_MESSAGE);
+[ORIGINAL] }
+[ORIGINAL] }
+
+--- VERSIÓN NUEVA ---
+[ORIGINAL] package mantenimiento.codecounter.exceptions;
+[ORIGINAL] 
+[ORIGINAL] public class JavaFilesNotFoundException extends Exception {
+[ORIGINAL] private static final String ERROR_MESSAGE =
+[ORIGINAL] "No se ha encontrado archivos Java por analizar en la carpeta del proyecto";
+[ORIGINAL] 
+[ORIGINAL] public JavaFilesNotFoundException() {
+[ORIGINAL] super(ERROR_MESSAGE);
+[ORIGINAL] }
+[ORIGINAL] }
+

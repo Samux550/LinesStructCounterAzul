@@ -1,0 +1,44 @@
+=== COMPARACIÓN PARA Reporter.java ===
+
+--- VERSIÓN ANTIGUA ---
+[ORIGINAL] package mantenimiento.codecounter.models.reporters;
+[ORIGINAL] 
+[ORIGINAL] import java.nio.file.Path;
+[ORIGINAL] import java.util.List;
+[ORIGINAL] import mantenimiento.codecounter.models.counters.StructCounter;
+[ORIGINAL] 
+[ORIGINAL] /** Clase abstracta que define el comportamiento de un generador de reportes */
+[ORIGINAL] public abstract class Reporter {
+[ORIGINAL] protected String programName;
+[ORIGINAL] protected List<StructCounter> lineCounters;
+[ORIGINAL] 
+[ORIGINAL] protected Reporter(Path filePath, List<StructCounter> lineCounters) {
+[ORIGINAL] this.programName = filePath.getFileName().toString();
+[ORIGINAL] this.lineCounters = lineCounters;
+[ORIGINAL] }
+[ORIGINAL] 
+[ORIGINAL] /** Genera un reporte con la información de los contadores de líneas */
+[ORIGINAL] public abstract void generateReport();
+[ORIGINAL] }
+
+--- VERSIÓN NUEVA ---
+[ORIGINAL] package mantenimiento.codecounter.models.reporters;
+[ORIGINAL] 
+[ORIGINAL] import java.nio.file.Path;
+[ORIGINAL] import java.util.List;
+[ORIGINAL] import mantenimiento.codecounter.models.counters.StructCounter;
+[ORIGINAL] 
+[ORIGINAL] /** Clase abstracta que define el comportamiento de un generador de reportes */
+[ORIGINAL] public abstract class Reporter {
+[ORIGINAL] protected String programName;
+[ORIGINAL] protected List<StructCounter> lineCounters;
+[ORIGINAL] 
+[ORIGINAL] protected Reporter(Path filePath, List<StructCounter> lineCounters) {
+[ORIGINAL] this.programName = filePath.getFileName().toString();
+[ORIGINAL] this.lineCounters = lineCounters;
+[ORIGINAL] }
+[ORIGINAL] 
+[ORIGINAL] /** Genera un reporte con la información de los contadores de líneas */
+[ORIGINAL] public abstract void generateReport();
+[ORIGINAL] }
+

@@ -1,0 +1,13 @@
+=== ARCHIVO LineRecord.java [Version: B] ===
+
+[NEW] package mantenimiento.codecounter.models;
+[NEW] 
+[NEW] import mantenimiento.codecounter.models.comparators.Status;
+[NEW] 
+[NEW] /**
+[SPLITED] * Representación de un registro de la línea de código posterior a una
+[NEW] comparación
+[NEW] * @param status estado de la línea posterior a la evaluación
+[NEW] * @param content contenido de la línea de código
+[NEW] */
+[NEW] public record LineRecord (Status status, String content) {}

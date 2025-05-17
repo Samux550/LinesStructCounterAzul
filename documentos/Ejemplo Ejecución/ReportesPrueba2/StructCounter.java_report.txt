@@ -1,0 +1,202 @@
+=== COMPARACIÓN PARA StructCounter.java ===
+
+--- VERSIÓN ANTIGUA ---
+[ORIGINAL] package mantenimiento.codecounter.models.counters;
+[ORIGINAL] 
+[ORIGINAL] import java.util.ArrayList;
+[ORIGINAL] import java.util.List;
+[ORIGINAL] import java.util.Optional;
+[ORIGINAL] import mantenimiento.codecounter.models.JavaClass;
+[ORIGINAL] 
+[ORIGINAL] /**
+[SPLITED] * Clase que representa un contador de estructuras: Clases y métodos. Mantiene
+[ORIGINAL] una lista de objetos
+[ORIGINAL] * JavaClass y proporciona métodos para incrementar sus contadores.
+[ORIGINAL] */
+[ORIGINAL] public class StructCounter {
+[ORIGINAL] private final List<JavaClass> javaClasses;
+[ORIGINAL] 
+[ORIGINAL] public StructCounter() {
+[ORIGINAL] this.javaClasses = new ArrayList<>();
+[ORIGINAL] }
+[ORIGINAL] 
+[ORIGINAL] /**
+[ORIGINAL] * Añade una nueva clase a la lista si no existe una con el mismo nombre.
+[ORIGINAL] *
+[ORIGINAL] * @param className El nombre de la clase a añadir.
+[ORIGINAL] */
+[ORIGINAL] public void addClass(String className) {
+[ORIGINAL] if (findClassByName(className).isEmpty()) {
+[ORIGINAL] javaClasses.add(new JavaClass(className));
+[ORIGINAL] }
+[ORIGINAL] }
+[ORIGINAL] 
+[ORIGINAL] /**
+[ORIGINAL] * Busca una clase en la lista por su nombre.
+[ORIGINAL] *
+[ORIGINAL] * @param className El nombre de la clase a buscar.
+[SPLITED] * @return Un Optional conteniendo la JavaClass si se encuentra, o un Optional
+[ORIGINAL] vacío si no.
+[ORIGINAL] */
+[ORIGINAL] private Optional<JavaClass> findClassByName(String className) {
+[ORIGINAL] if (className == null) return Optional.empty();
+[ORIGINAL] for (JavaClass jc : javaClasses) {
+[ORIGINAL] if (className.equals(jc.getClassName())) {
+[ORIGINAL] return Optional.of(jc);
+[ORIGINAL] }
+[ORIGINAL] }
+[ORIGINAL] return Optional.empty();
+[ORIGINAL] }
+[ORIGINAL] 
+[ORIGINAL] /** Añade un método a la última clase registrada en la lista. */
+[ORIGINAL] public void addMethodToLastClass() {
+[ORIGINAL] if (!javaClasses.isEmpty()) {
+[ORIGINAL] javaClasses.get(javaClasses.size() - 1).incrementMethodsAmount();
+[ORIGINAL] }
+[ORIGINAL] }
+[ORIGINAL] 
+[ORIGINAL] /**
+[ORIGINAL] * Añade una línea física de código a la clase especificada por su nombre.
+[ORIGINAL] *
+[ORIGINAL] * @param className El nombre de la clase a la que se debe añadir la línea.
+[ORIGINAL] */
+[ORIGINAL] public void addLineToClass(String className) {
+[ORIGINAL] Optional<JavaClass> targetClass = findClassByName(className);
+[ORIGINAL] if (targetClass.isPresent()) {
+[ORIGINAL] targetClass.get().incrementLinesOfCode();
+[ORIGINAL] } else {
+[SPLITED] throw new IllegalStateException("Clase no encontrada al intentar añadir línea: "
+[ORIGINAL] + className);
+[ORIGINAL] }
+[ORIGINAL] }
+[ORIGINAL] 
+[SPLITED] /** Devuelve el total de líneas de código sumando las de todas las clases
+[ORIGINAL] registradas. */
+[ORIGINAL] public int getTotalLinesOfCode() {
+[ORIGINAL] int totalLines = 0;
+[ORIGINAL] for (JavaClass javaClass : javaClasses) {
+[ORIGINAL] totalLines += javaClass.getLinesOfCode();
+[ORIGINAL] }
+[ORIGINAL] return totalLines;
+[ORIGINAL] }
+[ORIGINAL] 
+[ORIGINAL] /** Devolver el número total de clases registradas. */
+[ORIGINAL] public int getClassesCount() {
+[ORIGINAL] return javaClasses.size();
+[ORIGINAL] }
+[ORIGINAL] 
+[ORIGINAL] /** Devolver el total de métodos sumando los de todas las clases registradas. */
+[ORIGINAL] public int getTotalMethodsCount() {
+[ORIGINAL] int totalMethods = 0;
+[ORIGINAL] for (JavaClass javaClass : javaClasses) {
+[ORIGINAL] totalMethods += javaClass.getMethodsAmount();
+[ORIGINAL] }
+[ORIGINAL] return totalMethods;
+[ORIGINAL] }
+[ORIGINAL] 
+[ORIGINAL] /** Devuelve la lista completa de objetos JavaClass registrados. */
+[ORIGINAL] public List<JavaClass> getClasses() {
+[ORIGINAL] return new ArrayList<>(javaClasses);
+[ORIGINAL] }
+[ORIGINAL] }
+
+--- VERSIÓN NUEVA ---
+[ORIGINAL] package mantenimiento.codecounter.models.counters;
+[ORIGINAL] 
+[ORIGINAL] import java.util.ArrayList;
+[ORIGINAL] import java.util.List;
+[ORIGINAL] import java.util.Optional;
+[ORIGINAL] import mantenimiento.codecounter.models.JavaClass;
+[ORIGINAL] 
+[ORIGINAL] /**
+[SPLITED] * Clase que representa un contador de estructuras: Clases y métodos. Mantiene
+[ORIGINAL] una lista de objetos
+[ORIGINAL] * JavaClass y proporciona métodos para incrementar sus contadores.
+[ORIGINAL] */
+[ORIGINAL] public class StructCounter {
+[ORIGINAL] private final List<JavaClass> javaClasses;
+[ORIGINAL] 
+[ORIGINAL] public StructCounter() {
+[ORIGINAL] this.javaClasses = new ArrayList<>();
+[ORIGINAL] }
+[ORIGINAL] 
+[ORIGINAL] /**
+[ORIGINAL] * Añade una nueva clase a la lista si no existe una con el mismo nombre.
+[ORIGINAL] *
+[ORIGINAL] * @param className El nombre de la clase a añadir.
+[ORIGINAL] */
+[ORIGINAL] public void addClass(String className) {
+[ORIGINAL] if (findClassByName(className).isEmpty()) {
+[ORIGINAL] javaClasses.add(new JavaClass(className));
+[ORIGINAL] }
+[ORIGINAL] }
+[ORIGINAL] 
+[ORIGINAL] /**
+[ORIGINAL] * Busca una clase en la lista por su nombre.
+[ORIGINAL] *
+[ORIGINAL] * @param className El nombre de la clase a buscar.
+[SPLITED] * @return Un Optional conteniendo la JavaClass si se encuentra, o un Optional
+[ORIGINAL] vacío si no.
+[ORIGINAL] */
+[ORIGINAL] private Optional<JavaClass> findClassByName(String className) {
+[ORIGINAL] if (className == null) return Optional.empty();
+[ORIGINAL] for (JavaClass jc : javaClasses) {
+[ORIGINAL] if (className.equals(jc.getClassName())) {
+[ORIGINAL] return Optional.of(jc);
+[ORIGINAL] }
+[ORIGINAL] }
+[ORIGINAL] return Optional.empty();
+[ORIGINAL] }
+[ORIGINAL] 
+[ORIGINAL] /** Añade un método a la última clase registrada en la lista. */
+[ORIGINAL] public void addMethodToLastClass() {
+[ORIGINAL] if (!javaClasses.isEmpty()) {
+[ORIGINAL] javaClasses.get(javaClasses.size() - 1).incrementMethodsAmount();
+[ORIGINAL] }
+[ORIGINAL] }
+[ORIGINAL] 
+[ORIGINAL] /**
+[ORIGINAL] * Añade una línea física de código a la clase especificada por su nombre.
+[ORIGINAL] *
+[ORIGINAL] * @param className El nombre de la clase a la que se debe añadir la línea.
+[ORIGINAL] */
+[ORIGINAL] public void addLineToClass(String className) {
+[ORIGINAL] Optional<JavaClass> targetClass = findClassByName(className);
+[ORIGINAL] if (targetClass.isPresent()) {
+[ORIGINAL] targetClass.get().incrementLinesOfCode();
+[ORIGINAL] } else {
+[SPLITED] throw new IllegalStateException("Clase no encontrada al intentar añadir línea: "
+[ORIGINAL] + className);
+[ORIGINAL] }
+[ORIGINAL] }
+[ORIGINAL] 
+[SPLITED] /** Devuelve el total de líneas de código sumando las de todas las clases
+[ORIGINAL] registradas. */
+[ORIGINAL] public int getTotalLinesOfCode() {
+[ORIGINAL] int totalLines = 0;
+[ORIGINAL] for (JavaClass javaClass : javaClasses) {
+[ORIGINAL] totalLines += javaClass.getLinesOfCode();
+[ORIGINAL] }
+[ORIGINAL] return totalLines;
+[ORIGINAL] }
+[ORIGINAL] 
+[ORIGINAL] /** Devolver el número total de clases registradas. */
+[ORIGINAL] public int getClassesCount() {
+[ORIGINAL] return javaClasses.size();
+[ORIGINAL] }
+[ORIGINAL] 
+[ORIGINAL] /** Devolver el total de métodos sumando los de todas las clases registradas. */
+[ORIGINAL] public int getTotalMethodsCount() {
+[ORIGINAL] int totalMethods = 0;
+[ORIGINAL] for (JavaClass javaClass : javaClasses) {
+[ORIGINAL] totalMethods += javaClass.getMethodsAmount();
+[ORIGINAL] }
+[ORIGINAL] return totalMethods;
+[ORIGINAL] }
+[ORIGINAL] 
+[ORIGINAL] /** Devuelve la lista completa de objetos JavaClass registrados. */
+[ORIGINAL] public List<JavaClass> getClasses() {
+[ORIGINAL] return new ArrayList<>(javaClasses);
+[ORIGINAL] }
+[ORIGINAL] }
+

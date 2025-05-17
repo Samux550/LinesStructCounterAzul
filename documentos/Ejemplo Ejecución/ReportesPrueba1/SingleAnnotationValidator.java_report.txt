@@ -1,0 +1,136 @@
+=== COMPARACIÓN PARA SingleAnnotationValidator.java ===
+
+--- VERSIÓN ANTIGUA ---
+[ORIGINAL] package mantenimiento.codecounter.validators.format_validators;
+[ORIGINAL] 
+[SPLITED] import static
+[ORIGINAL] mantenimiento.codecounter.constants.JavaRegextConstants.ANNOTATION_REGEX;
+[SPLITED] import static
+[SPLITED] mantenimiento.codecounter.constants.ReasonInvalidFormat.INVALID_ANOTATION_STATEM
+[ORIGINAL] ENT;
+[ORIGINAL] 
+[ORIGINAL] import mantenimiento.codecounter.exceptions.InvalidFormatException;
+[ORIGINAL] import mantenimiento.codecounter.templates.FormatValidator;
+[ORIGINAL] 
+[ORIGINAL] /**
+[SPLITED] * Clase encargada de verificar si una línea contiene una anotación válida en el
+[ORIGINAL] formato correcto,
+[SPLITED] * Una anotación válida debe comenzar con '@', seguida de un nombre que cumpla
+[ORIGINAL] con las reglas de
+[ORIGINAL] * identificadores de Java
+[ORIGINAL] */
+[ORIGINAL] public class SingleAnnotationValidator extends FormatValidator {
+[ORIGINAL] 
+[ORIGINAL] /**
+[SPLITED] * Valida si la línea proporcionada contiene una anotación bien formada. Si la
+[ORIGINAL] línea comienza con
+[ORIGINAL] * '@', se verifica su formato; si está mal formada, lanza una excepción.
+[ORIGINAL] *
+[ORIGINAL] * @param lineOfFile Línea de código a validar.
+[ORIGINAL] * @return {@code true} si la línea es una anotación válida
+[SPLITED] * @throws InvalidFormatException Si la línea es una anotación pero está mal
+[ORIGINAL] formada.
+[ORIGINAL] */
+[ORIGINAL] @Override
+[ORIGINAL] public boolean isValid(String lineOfFile) throws InvalidFormatException {
+[ORIGINAL] if (isAnnotation(lineOfFile)) {
+[ORIGINAL] if (!isWellFormedAnnotation(lineOfFile)) {
+[ORIGINAL] throw new InvalidFormatException(INVALID_ANOTATION_STATEMENT, lineOfFile);
+[ORIGINAL] }
+[ORIGINAL] return true;
+[ORIGINAL] }
+[ORIGINAL] return validateNext(lineOfFile);
+[ORIGINAL] }
+[ORIGINAL] 
+[ORIGINAL] /**
+[SPLITED] * Determina si la línea corresponde a una anotación, verificando si comienza con
+[ORIGINAL] '@'.
+[ORIGINAL] *
+[ORIGINAL] * @param lineOfFile Línea de código a evaluar.
+[SPLITED] * @return {@code true} si la línea comienza con '@', {@code false} en caso
+[ORIGINAL] contrario.
+[ORIGINAL] */
+[ORIGINAL] private boolean isAnnotation(String lineOfFile) {
+[ORIGINAL] return lineOfFile.trim().startsWith("@");
+[ORIGINAL] }
+[ORIGINAL] 
+[ORIGINAL] /**
+[SPLITED] * Verifica si una anotación está bien formada según la expresión regular
+[ORIGINAL] definida en
+[ORIGINAL] *
+[ORIGINAL] * @param lineOfFile Línea de código a validar.
+[SPLITED] * @return {@code true} si la anotación cumple con el formato definido, {@code
+[ORIGINAL] false} si no.
+[ORIGINAL] */
+[ORIGINAL] private boolean isWellFormedAnnotation(String lineOfFile) {
+[ORIGINAL] return lineOfFile.matches(ANNOTATION_REGEX);
+[ORIGINAL] }
+[ORIGINAL] }
+
+--- VERSIÓN NUEVA ---
+[ORIGINAL] package mantenimiento.codecounter.validators.format_validators;
+[ORIGINAL] 
+[SPLITED] import static
+[ORIGINAL] mantenimiento.codecounter.constants.JavaRegextConstants.ANNOTATION_REGEX;
+[SPLITED] import static
+[SPLITED] mantenimiento.codecounter.constants.ReasonInvalidFormat.INVALID_ANOTATION_STATEM
+[ORIGINAL] ENT;
+[ORIGINAL] 
+[ORIGINAL] import mantenimiento.codecounter.exceptions.InvalidFormatException;
+[ORIGINAL] import mantenimiento.codecounter.templates.FormatValidator;
+[ORIGINAL] 
+[ORIGINAL] /**
+[SPLITED] * Clase encargada de verificar si una línea contiene una anotación válida en el
+[ORIGINAL] formato correcto,
+[SPLITED] * Una anotación válida debe comenzar con '@', seguida de un nombre que cumpla
+[ORIGINAL] con las reglas de
+[ORIGINAL] * identificadores de Java
+[ORIGINAL] */
+[ORIGINAL] public class SingleAnnotationValidator extends FormatValidator {
+[ORIGINAL] 
+[ORIGINAL] /**
+[SPLITED] * Valida si la línea proporcionada contiene una anotación bien formada. Si la
+[ORIGINAL] línea comienza con
+[ORIGINAL] * '@', se verifica su formato; si está mal formada, lanza una excepción.
+[ORIGINAL] *
+[ORIGINAL] * @param lineOfFile Línea de código a validar.
+[ORIGINAL] * @return {@code true} si la línea es una anotación válida
+[SPLITED] * @throws InvalidFormatException Si la línea es una anotación pero está mal
+[ORIGINAL] formada.
+[ORIGINAL] */
+[ORIGINAL] @Override
+[ORIGINAL] public boolean isValid(String lineOfFile) throws InvalidFormatException {
+[ORIGINAL] if (isAnnotation(lineOfFile)) {
+[ORIGINAL] if (!isWellFormedAnnotation(lineOfFile)) {
+[ORIGINAL] throw new InvalidFormatException(INVALID_ANOTATION_STATEMENT, lineOfFile);
+[ORIGINAL] }
+[ORIGINAL] return true;
+[ORIGINAL] }
+[ORIGINAL] return validateNext(lineOfFile);
+[ORIGINAL] }
+[ORIGINAL] 
+[ORIGINAL] /**
+[SPLITED] * Determina si la línea corresponde a una anotación, verificando si comienza con
+[ORIGINAL] '@'.
+[ORIGINAL] *
+[ORIGINAL] * @param lineOfFile Línea de código a evaluar.
+[SPLITED] * @return {@code true} si la línea comienza con '@', {@code false} en caso
+[ORIGINAL] contrario.
+[ORIGINAL] */
+[ORIGINAL] private boolean isAnnotation(String lineOfFile) {
+[ORIGINAL] return lineOfFile.trim().startsWith("@");
+[ORIGINAL] }
+[ORIGINAL] 
+[ORIGINAL] /**
+[SPLITED] * Verifica si una anotación está bien formada según la expresión regular
+[ORIGINAL] definida en
+[ORIGINAL] *
+[ORIGINAL] * @param lineOfFile Línea de código a validar.
+[SPLITED] * @return {@code true} si la anotación cumple con el formato definido, {@code
+[ORIGINAL] false} si no.
+[ORIGINAL] */
+[ORIGINAL] private boolean isWellFormedAnnotation(String lineOfFile) {
+[ORIGINAL] return lineOfFile.matches(ANNOTATION_REGEX);
+[ORIGINAL] }
+[ORIGINAL] }
+

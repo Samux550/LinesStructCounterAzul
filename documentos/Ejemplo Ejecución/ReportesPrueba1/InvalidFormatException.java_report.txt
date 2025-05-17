@@ -1,0 +1,52 @@
+=== COMPARACIÓN PARA InvalidFormatException.java ===
+
+--- VERSIÓN ANTIGUA ---
+[ORIGINAL] package mantenimiento.codecounter.exceptions;
+[ORIGINAL] 
+[ORIGINAL] import mantenimiento.codecounter.constants.ReasonInvalidFormat;
+[ORIGINAL] 
+[ORIGINAL] public class InvalidFormatException extends Exception {
+[ORIGINAL] private String fileName = "";
+[ORIGINAL] 
+[ORIGINAL] public InvalidFormatException(ReasonInvalidFormat error, String lineOfCode) {
+[ORIGINAL] super(error.toString() + "\nLinea: " + lineOfCode);
+[ORIGINAL] }
+[ORIGINAL] 
+[ORIGINAL] public InvalidFormatException(String message) {
+[ORIGINAL] super(message);
+[ORIGINAL] }
+[ORIGINAL] 
+[ORIGINAL] public void setFileName(String fileName) {
+[ORIGINAL] this.fileName = fileName;
+[ORIGINAL] }
+[ORIGINAL] 
+[ORIGINAL] public String getFileName() {
+[ORIGINAL] return this.fileName;
+[ORIGINAL] }
+[ORIGINAL] }
+
+--- VERSIÓN NUEVA ---
+[ORIGINAL] package mantenimiento.codecounter.exceptions;
+[ORIGINAL] 
+[ORIGINAL] import mantenimiento.codecounter.constants.ReasonInvalidFormat;
+[ORIGINAL] 
+[ORIGINAL] public class InvalidFormatException extends Exception {
+[ORIGINAL] private String fileName = "";
+[ORIGINAL] 
+[ORIGINAL] public InvalidFormatException(ReasonInvalidFormat error, String lineOfCode) {
+[ORIGINAL] super(error.toString() + "\nLinea: " + lineOfCode);
+[ORIGINAL] }
+[ORIGINAL] 
+[ORIGINAL] public InvalidFormatException(String message) {
+[ORIGINAL] super(message);
+[ORIGINAL] }
+[ORIGINAL] 
+[ORIGINAL] public void setFileName(String fileName) {
+[ORIGINAL] this.fileName = fileName;
+[ORIGINAL] }
+[ORIGINAL] 
+[ORIGINAL] public String getFileName() {
+[ORIGINAL] return this.fileName;
+[ORIGINAL] }
+[ORIGINAL] }
+

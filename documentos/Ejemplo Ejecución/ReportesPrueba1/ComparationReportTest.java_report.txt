@@ -1,0 +1,156 @@
+=== ARCHIVO ComparationReportTest.java [Version: B] ===
+
+[NEW] package mantenimiento.codecounter.models.reporters;
+[NEW] 
+[NEW] import mantenimiento.codecounter.models.LineRecord;
+[NEW] import mantenimiento.codecounter.models.comparators.Status;
+[NEW] import org.junit.jupiter.api.Test;
+[NEW] 
+[NEW] import java.io.IOException;
+[NEW] import java.nio.file.Files;
+[NEW] import java.nio.file.Path;
+[NEW] import java.util.Arrays;
+[NEW] import java.util.List;
+[NEW] import java.util.Map;
+[NEW] 
+[NEW] import static org.junit.jupiter.api.Assertions.*;
+[NEW] 
+[NEW] public class ComparationReportTest {
+[NEW] 
+[NEW] @Test
+[NEW] public void testMakeReportLine_Original() {
+[NEW] ComparationReport report = new ComparationReport();
+[NEW] 
+[SPLITED] report.makeReportLine(Status.ORIGINAL, "System.out.println(\"Hola\");",
+[NEW] "System.out.println(\"Hola\");");
+[NEW] 
+[NEW] List<LineRecord> current = report.getSourceContentReport();
+[NEW] List<LineRecord> compare = report.getTargetContentReport();
+[NEW] 
+[NEW] assertEquals(1, current.size());
+[NEW] assertEquals(Status.ORIGINAL, current.get(0).status());
+[NEW] assertEquals("System.out.println(\"Hola\");", current.get(0).content());
+[NEW] 
+[NEW] assertEquals(1, compare.size());
+[NEW] assertEquals(Status.ORIGINAL, compare.get(0).status());
+[NEW] }
+[NEW] 
+[NEW] @Test
+[NEW] public void testMakeReportLine_Modified() {
+[NEW] ComparationReport report = new ComparationReport();
+[NEW] 
+[NEW] report.makeReportLine(Status.MODIFIED, "int x = 1;", "int x = 2;");
+[NEW] 
+[NEW] List<LineRecord> current = report.getSourceContentReport();
+[NEW] List<LineRecord> compare = report.getTargetContentReport();
+[NEW] 
+[NEW] assertEquals(1, current.size());
+[NEW] assertEquals(Status.ORIGINAL, current.get(0).status());
+[NEW] 
+[NEW] assertEquals(1, compare.size());
+[NEW] assertEquals(Status.MODIFIED, compare.get(0).status());
+[NEW] }
+[NEW] 
+[NEW] @Test
+[NEW] public void testMakeReportLine_New() {
+[NEW] ComparationReport report = new ComparationReport();
+[NEW] 
+[NEW] report.makeReportLine(Status.NEW, "int z = 3;", "int z = 3;");
+[NEW] 
+[NEW] List<LineRecord> current = report.getSourceContentReport();
+[NEW] List<LineRecord> compare = report.getTargetContentReport();
+[NEW] 
+[NEW] assertEquals(1, current.size());
+[NEW] assertEquals(Status.DELETED, current.get(0).status());
+[NEW] 
+[NEW] assertEquals(1, compare.size());
+[NEW] assertEquals(Status.NEW, compare.get(0).status());
+[NEW] }
+[NEW] 
+[NEW] @Test
+[NEW] public void testUpdateReport_DeletedLines() {
+[NEW] ComparationReport report = new ComparationReport();
+[NEW] 
+[NEW] List<String> content = Arrays.asList("line1", "line2", "line3", "line4");
+[NEW] 
+[NEW] report.updateReport(content, 2);
+[NEW] 
+[NEW] List<LineRecord> current = report.getSourceContentReport();
+[NEW] 
+[NEW] assertEquals(2, current.size());
+[NEW] assertEquals("line3", current.get(0).content());
+[NEW] assertEquals(Status.DELETED, current.get(0).status());
+[NEW] 
+[NEW] assertEquals("line4", current.get(1).content());
+[NEW] assertEquals(Status.DELETED, current.get(1).status());
+[NEW] }
+[NEW] 
+[NEW] 
+[NEW] // @Test
+[NEW] // public void testUpdateReport_NewLines_Multiple() {
+[NEW] //     ComparationReport report = new ComparationReport();
+[NEW] 
+[NEW] //     List<String> content = Arrays.asList("a", "b");
+[NEW] //     List<String> contentToCompare = Arrays.asList("a", "b", "c", "d");
+[NEW] 
+[NEW] //     int difference = 2;
+[NEW] 
+[NEW] //     report.updateReport(content, contentToCompare, difference);
+[NEW] 
+[NEW] //     List<LineRecord> current = report.getSourceContentReport();
+[NEW] 
+[NEW] //     assertEquals(2, current.size());
+[NEW] //     assertEquals("c", current.get(0).content());
+[NEW] //     assertEquals(Status.NEW, current.get(0).status());
+[NEW] //     assertEquals("d", current.get(1).content());
+[NEW] //     assertEquals(Status.NEW, current.get(1).status());
+[NEW] // }
+[NEW] 
+[NEW] @Test
+[NEW] public void testLinesHaveCorrectTagsWithoutExporting() {
+[NEW] ComparationReport report = new ComparationReport();
+[NEW] 
+[NEW] report.makeReportLine(Status.ORIGINAL, "int x = 1;", "int x = 1;");
+[NEW] report.makeReportLine(Status.MODIFIED, "int y = 2;", "int y = 3;");
+[NEW] report.makeReportLine(Status.NEW, "", "int z = 4;");
+[NEW] report.makeReportLine(Status.DELETED, "int a = 5;", "");
+[NEW] 
+[NEW] List<LineRecord> target = report.getTargetContentReport();
+[NEW] List<LineRecord> source = report.getSourceContentReport();
+[NEW] 
+[NEW] assertEquals(Status.ORIGINAL, target.get(0).status());
+[NEW] assertEquals(Status.MODIFIED, target.get(1).status());
+[NEW] assertEquals(Status.NEW, target.get(2).status());
+[NEW] 
+[NEW] assertEquals(Status.ORIGINAL, source.get(0).status());
+[NEW] assertEquals(Status.ORIGINAL, source.get(1).status());
+[NEW] assertEquals(Status.DELETED, source.get(2).status());
+[NEW] }
+[NEW] 
+[NEW] @Test
+[NEW] public void testGlobalSummaryCountsWithoutExporting() {
+[NEW] ComparationReport report = new ComparationReport();
+[NEW] 
+[NEW] report.makeReportLine(Status.ORIGINAL, "a", "a");
+[NEW] report.makeReportLine(Status.MODIFIED, "b", "c");
+[NEW] report.makeReportLine(Status.NEW, "", "d");
+[NEW] report.makeReportLine(Status.NEW, "", "e");
+[NEW] report.makeReportLine(Status.DELETED, "f", "");
+[NEW] 
+[NEW] Map<Status, Long> counts = report.getTargetContentReport().stream()
+[SPLITED] .collect(java.util.stream.Collectors.groupingBy(LineRecord::status,
+[NEW] java.util.stream.Collectors.counting()));
+[NEW] 
+[NEW] assertEquals(1, counts.getOrDefault(Status.ORIGINAL, 0L));
+[NEW] assertEquals(1, counts.getOrDefault(Status.MODIFIED, 0L));
+[NEW] assertEquals(2, counts.getOrDefault(Status.NEW, 0L));
+[NEW] assertEquals(0, counts.getOrDefault(Status.DELETED, 0L));
+[NEW] 
+[NEW] long deletedCount = report.getSourceContentReport().stream()
+[NEW] .filter(lr -> lr.status() == Status.DELETED)
+[NEW] .count();
+[NEW] assertEquals(2, deletedCount);
+[NEW] }
+[NEW] 
+[NEW] 
+[NEW] }

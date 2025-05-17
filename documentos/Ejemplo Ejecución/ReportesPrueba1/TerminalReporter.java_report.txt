@@ -1,0 +1,137 @@
+=== COMPARACIÓN PARA TerminalReporter.java ===
+
+--- VERSIÓN ANTIGUA ---
+[ORIGINAL] package mantenimiento.codecounter.models.reporters;
+[ORIGINAL] 
+[ORIGINAL] import java.nio.file.Path;
+[ORIGINAL] import java.util.List;
+[ORIGINAL] import mantenimiento.codecounter.models.counters.StructCounter;
+[ORIGINAL] 
+[ORIGINAL] /** Clase que genera un reporte en la terminal */
+[ORIGINAL] public class TerminalReporter extends Reporter {
+[ORIGINAL] 
+[ORIGINAL] public TerminalReporter(Path filePath, List<StructCounter> lineCounter) {
+[ORIGINAL] super(filePath, lineCounter);
+[ORIGINAL] }
+[ORIGINAL] 
+[ORIGINAL] /** Genera un reporte con la información de los contadores de líneas */
+[ORIGINAL] @Override
+[ORIGINAL] public void generateReport() {
+[ORIGINAL] printHeader();
+[ORIGINAL] printBody();
+[ORIGINAL] }
+[ORIGINAL] 
+[ORIGINAL] /**
+[SPLITED] * Imprime el encabezado del reporte incluyengo: el nombre del programa y los
+[ORIGINAL] nombres de las
+[ORIGINAL] * columnas
+[ORIGINAL] */
+[ORIGINAL] private void printHeader() {
+[ORIGINAL] System.out.println(
+[SPLITED] "-------------------------------------------------------------------------------
+[DELETED] --");
+[DELETED] System.out.println("Programa: " + this.programName);
+[DELETED] System.out.println(
+[SPLITED] "-------------------------------------------------------------------------------
+[DELETED] --");
+[DELETED] System.out.printf(" %-40s  %-15s  %-15s %n", "Clases", "Métodos", "Lineas");
+[DELETED] System.out.println(
+[SPLITED] "-------------------------------------------------------------------------------
+[DELETED] --");
+[DELETED] }
+[DELETED] 
+[DELETED] /**
+[SPLITED] * Imprime el cuerpo del reporte incluyendo la información de los contadores de
+[DELETED] líneas por archivo
+[DELETED] * analizado
+[DELETED] */
+[DELETED] private void printBody() {
+[DELETED] for (StructCounter lineCounter : lineCounters) {
+[DELETED] lineCounter
+[DELETED] .getClasses()
+[DELETED] .forEach(
+[DELETED] javaClass ->
+[DELETED] System.out.printf(
+[DELETED] " %-40s  %-15d  %-15d %n",
+[DELETED] javaClass.getClassName(),
+[DELETED] javaClass.getMethodsAmount(),
+[DELETED] javaClass.getLinesOfCode()));
+[DELETED] }
+[DELETED] 
+[DELETED] System.out.println(
+[SPLITED] "-------------------------------------------------------------------------------
+[DELETED] --");
+[DELETED] int totalPhysicalLines =
+[DELETED] lineCounters.stream().mapToInt(StructCounter::getTotalLinesOfCode).sum();
+[DELETED] System.out.println("Total de líneas físicas de código: " + totalPhysicalLines);
+[DELETED] }
+[ORIGINAL] }
+
+--- VERSIÓN NUEVA ---
+[ORIGINAL] package mantenimiento.codecounter.models.reporters;
+[ORIGINAL] 
+[ORIGINAL] import java.nio.file.Path;
+[ORIGINAL] import java.util.List;
+[ORIGINAL] import mantenimiento.codecounter.models.counters.StructCounter;
+[ORIGINAL] 
+[ORIGINAL] /** Clase que genera un reporte en la terminal */
+[ORIGINAL] public class TerminalReporter extends Reporter {
+[ORIGINAL] 
+[ORIGINAL] public TerminalReporter(Path filePath, List<StructCounter> lineCounter) {
+[ORIGINAL] super(filePath, lineCounter);
+[ORIGINAL] }
+[ORIGINAL] 
+[ORIGINAL] /** Genera un reporte con la información de los contadores de líneas */
+[ORIGINAL] @Override
+[ORIGINAL] public void generateReport() {
+[ORIGINAL] printHeader();
+[ORIGINAL] printBody();
+[ORIGINAL] }
+[ORIGINAL] 
+[ORIGINAL] /**
+[SPLITED] * Imprime el encabezado del reporte incluyengo: el nombre del programa y los
+[ORIGINAL] nombres de las
+[ORIGINAL] * columnas
+[ORIGINAL] */
+[ORIGINAL] private void printHeader() {
+[MODIFIED] System.out.println();
+[NEW] System.out.println(
+[SPLITED] "-------------------------------------------------------------------------------
+[NEW] --");
+[NEW] System.out.println("Programa: " + this.programName);
+[NEW] System.out.println(
+[SPLITED] "-------------------------------------------------------------------------------
+[NEW] --");
+[NEW] System.out.printf(" %-40s  %-15s  %-15s %n", "Clases", "Métodos", "Lineas");
+[NEW] System.out.println(
+[SPLITED] "-------------------------------------------------------------------------------
+[NEW] --");
+[NEW] }
+[NEW] 
+[NEW] /**
+[SPLITED] * Imprime el cuerpo del reporte incluyendo la información de los contadores de
+[NEW] líneas por archivo
+[NEW] * analizado
+[NEW] */
+[NEW] private void printBody() {
+[NEW] for (StructCounter lineCounter : lineCounters) {
+[NEW] lineCounter
+[NEW] .getClasses()
+[NEW] .forEach(
+[NEW] javaClass ->
+[NEW] System.out.printf(
+[NEW] " %-40s  %-15d  %-15d %n",
+[NEW] javaClass.getClassName(),
+[NEW] javaClass.getMethodsAmount(),
+[NEW] javaClass.getLinesOfCode()));
+[NEW] }
+[NEW] 
+[NEW] System.out.println(
+[SPLITED] "-------------------------------------------------------------------------------
+[NEW] --");
+[NEW] int totalPhysicalLines =
+[NEW] lineCounters.stream().mapToInt(StructCounter::getTotalLinesOfCode).sum();
+[NEW] System.out.println("Total de líneas físicas de código: " + totalPhysicalLines);
+[ORIGINAL] }
+[NEW] }
+

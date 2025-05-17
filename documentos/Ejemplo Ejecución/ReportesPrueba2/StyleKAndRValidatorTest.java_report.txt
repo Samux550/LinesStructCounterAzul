@@ -1,0 +1,112 @@
+=== COMPARACIÓN PARA StyleKAndRValidatorTest.java ===
+
+--- VERSIÓN ANTIGUA ---
+[ORIGINAL] package mantenimiento.codecounter.validators.format_validators;
+[ORIGINAL] 
+[ORIGINAL] import static org.junit.jupiter.api.Assertions.assertThrows;
+[ORIGINAL] import static org.junit.jupiter.api.Assertions.assertTrue;
+[ORIGINAL] 
+[ORIGINAL] import mantenimiento.codecounter.exceptions.InvalidFormatException;
+[ORIGINAL] import org.junit.jupiter.api.DisplayName;
+[ORIGINAL] import org.junit.jupiter.api.Test;
+[ORIGINAL] 
+[ORIGINAL] class StyleKAndRValidatorTest {
+[ORIGINAL] 
+[ORIGINAL] private final StyleKAndRValidator validator = new StyleKAndRValidator();
+[ORIGINAL] 
+[ORIGINAL] @Test
+[ORIGINAL] @DisplayName(
+[SPLITED] "Debe lanzar InvalidFormatException si la línea tiene un corchete de apertura
+[ORIGINAL] inválido")
+[ORIGINAL] void testInvalidOpeningBracketThrowsException() {
+[ORIGINAL] String invalidLine = " {";
+[SPLITED] assertThrows(InvalidFormatException.class, () ->
+[ORIGINAL] validator.isValid(invalidLine));
+[ORIGINAL] }
+[ORIGINAL] 
+[ORIGINAL] @Test
+[ORIGINAL] @DisplayName(
+[SPLITED] "Debe lanzar InvalidFormatException si la línea tiene un corchete de cierre
+[ORIGINAL] inválido")
+[ORIGINAL] void testInvalidClosingBracketThrowsException() {
+[ORIGINAL] String invalidLine = "} if";
+[SPLITED] assertThrows(InvalidFormatException.class, () ->
+[ORIGINAL] validator.isValid(invalidLine));
+[ORIGINAL] }
+[ORIGINAL] 
+[ORIGINAL] @Test
+[SPLITED] @DisplayName("Debe lanzar InvalidFormatException si la línea contiene corchetes
+[ORIGINAL] vacíos")
+[ORIGINAL] void testEmptyBracketsThrowsException() {
+[ORIGINAL] String invalidLine = "{}";
+[SPLITED] assertThrows(InvalidFormatException.class, () ->
+[ORIGINAL] validator.isValid(invalidLine));
+[ORIGINAL] }
+[ORIGINAL] 
+[ORIGINAL] @Test
+[ORIGINAL] @DisplayName(
+[SPLITED] "Debe devolver lanzar InvalidFormatException si existen {} en una sola línea con
+[ORIGINAL] o sin"
+[ORIGINAL] + " contenido")
+[ORIGINAL] void testValidLineReturnsTrue() {
+[ORIGINAL] String validLine = "if (x > 0) { doSomething(); }";
+[SPLITED] assertThrows(InvalidFormatException.class, () ->
+[ORIGINAL] assertTrue(validator.isValid(validLine)));
+[ORIGINAL] }
+[ORIGINAL] }
+
+--- VERSIÓN NUEVA ---
+[ORIGINAL] package mantenimiento.codecounter.validators.format_validators;
+[ORIGINAL] 
+[ORIGINAL] import static org.junit.jupiter.api.Assertions.assertThrows;
+[ORIGINAL] import static org.junit.jupiter.api.Assertions.assertTrue;
+[ORIGINAL] 
+[ORIGINAL] import mantenimiento.codecounter.exceptions.InvalidFormatException;
+[ORIGINAL] import org.junit.jupiter.api.DisplayName;
+[ORIGINAL] import org.junit.jupiter.api.Test;
+[ORIGINAL] 
+[ORIGINAL] class StyleKAndRValidatorTest {
+[ORIGINAL] 
+[ORIGINAL] private final StyleKAndRValidator validator = new StyleKAndRValidator();
+[ORIGINAL] 
+[ORIGINAL] @Test
+[ORIGINAL] @DisplayName(
+[SPLITED] "Debe lanzar InvalidFormatException si la línea tiene un corchete de apertura
+[ORIGINAL] inválido")
+[ORIGINAL] void testInvalidOpeningBracketThrowsException() {
+[ORIGINAL] String invalidLine = " {";
+[SPLITED] assertThrows(InvalidFormatException.class, () ->
+[ORIGINAL] validator.isValid(invalidLine));
+[ORIGINAL] }
+[ORIGINAL] 
+[ORIGINAL] @Test
+[ORIGINAL] @DisplayName(
+[SPLITED] "Debe lanzar InvalidFormatException si la línea tiene un corchete de cierre
+[ORIGINAL] inválido")
+[ORIGINAL] void testInvalidClosingBracketThrowsException() {
+[ORIGINAL] String invalidLine = "} if";
+[SPLITED] assertThrows(InvalidFormatException.class, () ->
+[ORIGINAL] validator.isValid(invalidLine));
+[ORIGINAL] }
+[ORIGINAL] 
+[ORIGINAL] @Test
+[SPLITED] @DisplayName("Debe lanzar InvalidFormatException si la línea contiene corchetes
+[ORIGINAL] vacíos")
+[ORIGINAL] void testEmptyBracketsThrowsException() {
+[ORIGINAL] String invalidLine = "{}";
+[SPLITED] assertThrows(InvalidFormatException.class, () ->
+[ORIGINAL] validator.isValid(invalidLine));
+[ORIGINAL] }
+[ORIGINAL] 
+[ORIGINAL] @Test
+[ORIGINAL] @DisplayName(
+[SPLITED] "Debe devolver lanzar InvalidFormatException si existen {} en una sola línea con
+[ORIGINAL] o sin"
+[ORIGINAL] + " contenido")
+[ORIGINAL] void testValidLineReturnsTrue() {
+[ORIGINAL] String validLine = "if (x > 0) { doSomething(); }";
+[SPLITED] assertThrows(InvalidFormatException.class, () ->
+[ORIGINAL] assertTrue(validator.isValid(validLine)));
+[ORIGINAL] }
+[ORIGINAL] }
+

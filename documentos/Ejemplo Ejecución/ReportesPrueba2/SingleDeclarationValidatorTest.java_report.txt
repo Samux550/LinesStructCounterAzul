@@ -1,0 +1,98 @@
+=== COMPARACIÓN PARA SingleDeclarationValidatorTest.java ===
+
+--- VERSIÓN ANTIGUA ---
+[ORIGINAL] package mantenimiento.codecounter.validators.format_validators;
+[ORIGINAL] 
+[ORIGINAL] import static org.junit.jupiter.api.Assertions.assertThrows;
+[ORIGINAL] import static org.junit.jupiter.api.Assertions.assertTrue;
+[ORIGINAL] 
+[ORIGINAL] import mantenimiento.codecounter.exceptions.InvalidFormatException;
+[ORIGINAL] import org.junit.jupiter.api.DisplayName;
+[ORIGINAL] import org.junit.jupiter.api.Test;
+[ORIGINAL] 
+[ORIGINAL] class SingleDeclarationValidatorTest {
+[ORIGINAL] 
+[ORIGINAL] @Test
+[ORIGINAL] void testValidSingleDeclaration() throws InvalidFormatException {
+[ORIGINAL] SingleDeclarationValidator validator = new SingleDeclarationValidator();
+[ORIGINAL] assertTrue(validator.isValid("int x = 10;"));
+[ORIGINAL] }
+[ORIGINAL] 
+[ORIGINAL] @Test
+[SPLITED] @DisplayName("Debe de lanzar la excepion al detectar incialización de varias
+[ORIGINAL] variables")
+[ORIGINAL] void testInvalidMultipleDeclarationsWithSemicolon() {
+[ORIGINAL] SingleDeclarationValidator validator = new SingleDeclarationValidator();
+[ORIGINAL] assertThrows(
+[ORIGINAL] InvalidFormatException.class,
+[ORIGINAL] () -> {
+[ORIGINAL] validator.isValid("int value 1 = 10; double value2 = 12.8;");
+[ORIGINAL] });
+[ORIGINAL] assertThrows(
+[ORIGINAL] InvalidFormatException.class,
+[ORIGINAL] () -> {
+[ORIGINAL] validator.isValid("value; value;");
+[ORIGINAL] });
+[ORIGINAL] }
+[ORIGINAL] 
+[ORIGINAL] @Test
+[SPLITED] @DisplayName("Debe de lanzar la excepion al detectar incialización de varias
+[ORIGINAL] variables ")
+[ORIGINAL] void testInvalidMultipleDeclarationsWithCommas() {
+[ORIGINAL] SingleDeclarationValidator validator = new SingleDeclarationValidator();
+[ORIGINAL] assertThrows(
+[ORIGINAL] InvalidFormatException.class,
+[ORIGINAL] () -> {
+[ORIGINAL] validator.isValid("int value1, value2, value3;");
+[ORIGINAL] });
+[ORIGINAL] }
+[ORIGINAL] }
+
+--- VERSIÓN NUEVA ---
+[ORIGINAL] package mantenimiento.codecounter.validators.format_validators;
+[ORIGINAL] 
+[ORIGINAL] import static org.junit.jupiter.api.Assertions.assertThrows;
+[ORIGINAL] import static org.junit.jupiter.api.Assertions.assertTrue;
+[ORIGINAL] 
+[ORIGINAL] import mantenimiento.codecounter.exceptions.InvalidFormatException;
+[ORIGINAL] import org.junit.jupiter.api.DisplayName;
+[ORIGINAL] import org.junit.jupiter.api.Test;
+[ORIGINAL] 
+[ORIGINAL] class SingleDeclarationValidatorTest {
+[ORIGINAL] 
+[ORIGINAL] @Test
+[ORIGINAL] void testValidSingleDeclaration() throws InvalidFormatException {
+[ORIGINAL] SingleDeclarationValidator validator = new SingleDeclarationValidator();
+[ORIGINAL] assertTrue(validator.isValid("int x = 10;"));
+[ORIGINAL] }
+[ORIGINAL] 
+[ORIGINAL] @Test
+[SPLITED] @DisplayName("Debe de lanzar la excepion al detectar incialización de varias
+[ORIGINAL] variables")
+[ORIGINAL] void testInvalidMultipleDeclarationsWithSemicolon() {
+[ORIGINAL] SingleDeclarationValidator validator = new SingleDeclarationValidator();
+[ORIGINAL] assertThrows(
+[ORIGINAL] InvalidFormatException.class,
+[ORIGINAL] () -> {
+[ORIGINAL] validator.isValid("int value 1 = 10; double value2 = 12.8;");
+[ORIGINAL] });
+[ORIGINAL] assertThrows(
+[ORIGINAL] InvalidFormatException.class,
+[ORIGINAL] () -> {
+[ORIGINAL] validator.isValid("value; value;");
+[ORIGINAL] });
+[ORIGINAL] }
+[ORIGINAL] 
+[ORIGINAL] @Test
+[SPLITED] @DisplayName("Debe de lanzar la excepion al detectar incialización de varias
+[ORIGINAL] variables ")
+[ORIGINAL] void testInvalidMultipleDeclarationsWithCommas() {
+[ORIGINAL] SingleDeclarationValidator validator = new SingleDeclarationValidator();
+[ORIGINAL] assertThrows(
+[ORIGINAL] InvalidFormatException.class,
+[ORIGINAL] () -> {
+[ORIGINAL] validator.isValid("int value1, value2, value3;");
+[ORIGINAL] });
+[ORIGINAL] }
+[ORIGINAL] }
+

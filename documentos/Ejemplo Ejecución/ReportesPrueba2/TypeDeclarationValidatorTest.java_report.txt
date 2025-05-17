@@ -1,0 +1,158 @@
+=== COMPARACIÓN PARA TypeDeclarationValidatorTest.java ===
+
+--- VERSIÓN ANTIGUA ---
+[ORIGINAL] package mantenimiento.codecounter.validators.logical_validators;
+[ORIGINAL] 
+[ORIGINAL] import static org.junit.jupiter.api.Assertions.assertFalse;
+[ORIGINAL] import static org.junit.jupiter.api.Assertions.assertTrue;
+[ORIGINAL] 
+[ORIGINAL] import org.junit.jupiter.api.BeforeEach;
+[ORIGINAL] import org.junit.jupiter.api.DisplayName;
+[ORIGINAL] import org.junit.jupiter.api.Test;
+[ORIGINAL] 
+[ORIGINAL] class TypeDeclarationValidatorTest {
+[ORIGINAL] 
+[ORIGINAL] private TypeDeclarationValidator validator;
+[ORIGINAL] 
+[ORIGINAL] @BeforeEach
+[ORIGINAL] void setUp() {
+[ORIGINAL] validator = new TypeDeclarationValidator();
+[ORIGINAL] }
+[ORIGINAL] 
+[ORIGINAL] @Test
+[ORIGINAL] @DisplayName("Debe de validar correctamente una declaración de clase")
+[ORIGINAL] void testValidateTypeWithValidClassDeclaration() {
+[ORIGINAL] String validClassDeclaration = "public class MyClass {";
+[ORIGINAL] assertTrue(validator.validateType(validClassDeclaration));
+[ORIGINAL] }
+[ORIGINAL] 
+[ORIGINAL] @Test
+[ORIGINAL] @DisplayName("Debe de validar correctamente una declaración de interfaz")
+[ORIGINAL] void testValidateTypeWithValidInterfaceDeclaration() {
+[ORIGINAL] String validInterfaceDeclaration = "public interface MyInterface {";
+[ORIGINAL] assertTrue(validator.validateType(validInterfaceDeclaration));
+[ORIGINAL] }
+[ORIGINAL] 
+[ORIGINAL] @Test
+[ORIGINAL] @DisplayName("Debe de validar correctamente una declaración de enum")
+[ORIGINAL] void testValidateTypeWithValidEnumDeclaration() {
+[ORIGINAL] String validEnumDeclaration = "public enum MyEnum {";
+[ORIGINAL] assertTrue(validator.validateType(validEnumDeclaration));
+[ORIGINAL] }
+[ORIGINAL] 
+[ORIGINAL] @Test
+[ORIGINAL] @DisplayName("Debe de validar correctamente una declaración de método")
+[ORIGINAL] void testValidateTypeWithInvalidDeclaration() {
+[ORIGINAL] String invalidDeclaration = "public void myMethod() {";
+[ORIGINAL] assertFalse(validator.validateType(invalidDeclaration));
+[ORIGINAL] }
+[ORIGINAL] 
+[ORIGINAL] @Test
+[ORIGINAL] @DisplayName("Debe de validar correctamente una declaración con linea vacía")
+[ORIGINAL] void testValidateTypeWithEmptyLine() {
+[ORIGINAL] String emptyLine = "";
+[ORIGINAL] assertFalse(validator.validateType(emptyLine));
+[ORIGINAL] }
+[ORIGINAL] 
+[ORIGINAL] @Test
+[SPLITED] @DisplayName("Debe de validar correctamente una declaración con espacios en
+[ORIGINAL] blanco")
+[ORIGINAL] void testValidateTypeWithWhitespaceOnly() {
+[ORIGINAL] String whitespaceOnly = "    ";
+[ORIGINAL] assertFalse(validator.validateType(whitespaceOnly));
+[ORIGINAL] }
+[ORIGINAL] 
+[ORIGINAL] @Test
+[SPLITED] @DisplayName("Debe de validar correctamente una declaración con comentario de
+[ORIGINAL] bloque")
+[ORIGINAL] void testValidateTypeWithCommentLine() {
+[ORIGINAL] String commentLine = "// This is a comment";
+[ORIGINAL] assertFalse(validator.validateType(commentLine));
+[ORIGINAL] }
+[ORIGINAL] 
+[ORIGINAL] @Test
+[ORIGINAL] @DisplayName("Debe de validar correctamente una declaración parcial")
+[ORIGINAL] void testValidateTypeWithPartialDeclaration() {
+[ORIGINAL] String partialDeclaration = "class";
+[ORIGINAL] assertFalse(validator.validateType(partialDeclaration));
+[ORIGINAL] }
+[ORIGINAL] }
+
+--- VERSIÓN NUEVA ---
+[ORIGINAL] package mantenimiento.codecounter.validators.logical_validators;
+[ORIGINAL] 
+[ORIGINAL] import static org.junit.jupiter.api.Assertions.assertFalse;
+[ORIGINAL] import static org.junit.jupiter.api.Assertions.assertTrue;
+[ORIGINAL] 
+[ORIGINAL] import org.junit.jupiter.api.BeforeEach;
+[ORIGINAL] import org.junit.jupiter.api.DisplayName;
+[ORIGINAL] import org.junit.jupiter.api.Test;
+[ORIGINAL] 
+[ORIGINAL] class TypeDeclarationValidatorTest {
+[ORIGINAL] 
+[ORIGINAL] private TypeDeclarationValidator validator;
+[ORIGINAL] 
+[ORIGINAL] @BeforeEach
+[ORIGINAL] void setUp() {
+[ORIGINAL] validator = new TypeDeclarationValidator();
+[ORIGINAL] }
+[ORIGINAL] 
+[ORIGINAL] @Test
+[ORIGINAL] @DisplayName("Debe de validar correctamente una declaración de clase")
+[ORIGINAL] void testValidateTypeWithValidClassDeclaration() {
+[ORIGINAL] String validClassDeclaration = "public class MyClass {";
+[ORIGINAL] assertTrue(validator.validateType(validClassDeclaration));
+[ORIGINAL] }
+[ORIGINAL] 
+[ORIGINAL] @Test
+[ORIGINAL] @DisplayName("Debe de validar correctamente una declaración de interfaz")
+[ORIGINAL] void testValidateTypeWithValidInterfaceDeclaration() {
+[ORIGINAL] String validInterfaceDeclaration = "public interface MyInterface {";
+[ORIGINAL] assertTrue(validator.validateType(validInterfaceDeclaration));
+[ORIGINAL] }
+[ORIGINAL] 
+[ORIGINAL] @Test
+[ORIGINAL] @DisplayName("Debe de validar correctamente una declaración de enum")
+[ORIGINAL] void testValidateTypeWithValidEnumDeclaration() {
+[ORIGINAL] String validEnumDeclaration = "public enum MyEnum {";
+[ORIGINAL] assertTrue(validator.validateType(validEnumDeclaration));
+[ORIGINAL] }
+[ORIGINAL] 
+[ORIGINAL] @Test
+[ORIGINAL] @DisplayName("Debe de validar correctamente una declaración de método")
+[ORIGINAL] void testValidateTypeWithInvalidDeclaration() {
+[ORIGINAL] String invalidDeclaration = "public void myMethod() {";
+[ORIGINAL] assertFalse(validator.validateType(invalidDeclaration));
+[ORIGINAL] }
+[ORIGINAL] 
+[ORIGINAL] @Test
+[ORIGINAL] @DisplayName("Debe de validar correctamente una declaración con linea vacía")
+[ORIGINAL] void testValidateTypeWithEmptyLine() {
+[ORIGINAL] String emptyLine = "";
+[ORIGINAL] assertFalse(validator.validateType(emptyLine));
+[ORIGINAL] }
+[ORIGINAL] 
+[ORIGINAL] @Test
+[SPLITED] @DisplayName("Debe de validar correctamente una declaración con espacios en
+[ORIGINAL] blanco")
+[ORIGINAL] void testValidateTypeWithWhitespaceOnly() {
+[ORIGINAL] String whitespaceOnly = "    ";
+[ORIGINAL] assertFalse(validator.validateType(whitespaceOnly));
+[ORIGINAL] }
+[ORIGINAL] 
+[ORIGINAL] @Test
+[SPLITED] @DisplayName("Debe de validar correctamente una declaración con comentario de
+[ORIGINAL] bloque")
+[ORIGINAL] void testValidateTypeWithCommentLine() {
+[ORIGINAL] String commentLine = "// This is a comment";
+[ORIGINAL] assertFalse(validator.validateType(commentLine));
+[ORIGINAL] }
+[ORIGINAL] 
+[ORIGINAL] @Test
+[ORIGINAL] @DisplayName("Debe de validar correctamente una declaración parcial")
+[ORIGINAL] void testValidateTypeWithPartialDeclaration() {
+[ORIGINAL] String partialDeclaration = "class";
+[ORIGINAL] assertFalse(validator.validateType(partialDeclaration));
+[ORIGINAL] }
+[ORIGINAL] }
+

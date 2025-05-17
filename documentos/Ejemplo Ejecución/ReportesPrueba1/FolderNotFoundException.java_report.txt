@@ -1,0 +1,26 @@
+=== COMPARACIÓN PARA FolderNotFoundException.java ===
+
+--- VERSIÓN ANTIGUA ---
+[ORIGINAL] package mantenimiento.codecounter.exceptions;
+[ORIGINAL] 
+[ORIGINAL] public class FolderNotFoundException extends Exception {
+[ORIGINAL] private static final String ERROR_MESSAGE =
+[ORIGINAL] "No se ha encontrado la carpeta o la ruta no corresponde a una carpeta %s";
+[ORIGINAL] 
+[ORIGINAL] public FolderNotFoundException(String folderPath) {
+[ORIGINAL] super(String.format(ERROR_MESSAGE, folderPath));
+[ORIGINAL] }
+[ORIGINAL] }
+
+--- VERSIÓN NUEVA ---
+[ORIGINAL] package mantenimiento.codecounter.exceptions;
+[ORIGINAL] 
+[ORIGINAL] public class FolderNotFoundException extends Exception {
+[ORIGINAL] private static final String ERROR_MESSAGE =
+[ORIGINAL] "No se ha encontrado la carpeta o la ruta no corresponde a una carpeta %s";
+[ORIGINAL] 
+[ORIGINAL] public FolderNotFoundException(String folderPath) {
+[ORIGINAL] super(String.format(ERROR_MESSAGE, folderPath));
+[ORIGINAL] }
+[ORIGINAL] }
+

@@ -1,0 +1,81 @@
+=== ARCHIVO LineSplitter.java [Version: A] ===
+
+[DELETED] package mantenimiento.codecounter.utils;
+[DELETED] 
+[DELETED] import java.util.ArrayList;
+[DELETED] import java.util.List;
+[DELETED] 
+[DELETED] import mantenimiento.codecounter.models.LineRecord;
+[DELETED] import mantenimiento.codecounter.models.comparators.Status;
+[DELETED] 
+[DELETED] /**
+[SPLITED] * Clase utilitaria para dividir líneas de código que exceden un número máximo de
+[DELETED] caracteres.
+[SPLITED] * Facilita la visualización de líneas extensas al dividirlas de forma
+[DELETED] controlada.
+[DELETED] */
+[DELETED] public class LineSplitter {
+[DELETED] 
+[DELETED] /** Longitud máxima permitida para una línea antes de ser dividida. */
+[DELETED] private static final int MAX_LINE_LENGTH = 80;
+[DELETED] 
+[DELETED] /**
+[SPLITED] * Divide una línea larga en múltiples objetos {@link LineRecord} si excede la
+[DELETED] longitud máxima.
+[SPLITED] * El primer fragmento se marca como SPLITED y los siguientes conservan el estado
+[DELETED] original.
+[DELETED] *
+[DELETED] * @param originalRecord La línea original a dividir.
+[DELETED] * @return Lista de {@link LineRecord} resultantes de la división.
+[DELETED] */
+[DELETED] public static List<LineRecord> splitLongLines(LineRecord originalRecord) {
+[DELETED] List<LineRecord> result = new ArrayList<>();
+[DELETED] String lineContent = originalRecord.content();
+[DELETED] Status originalStatus = originalRecord.status();
+[DELETED] 
+[DELETED] if (lineContent.length() <= MAX_LINE_LENGTH) {
+[DELETED] result.add(originalRecord);
+[DELETED] return result;
+[DELETED] }
+[DELETED] 
+[DELETED] // Se determina el punto óptimo para dividir
+[DELETED] int splitPoint = findSplitPoint(lineContent);
+[DELETED] String firstPart = lineContent.substring(0, splitPoint).trim();
+[DELETED] String secondPart = lineContent.substring(splitPoint).trim();
+[DELETED] 
+[DELETED] // Se agrega la primera parte marcada como SPLITED
+[DELETED] result.add(new LineRecord(Status.SPLITED, firstPart));
+[DELETED] result.add(new LineRecord(originalStatus, secondPart));
+[DELETED] 
+[DELETED] // Si la segunda parte aún es muy larga, se divide recursivamente
+[DELETED] LineRecord secondRecord = new LineRecord(originalStatus, secondPart);
+[DELETED] if (secondPart.length() > MAX_LINE_LENGTH) {
+[DELETED] List<LineRecord> subSplits = splitLongLines(secondRecord);
+[DELETED] result.remove(result.size() - 1); // Remueve la línea larga sin dividir
+[DELETED] result.addAll(subSplits); // Agrega las divisiones más pequeñas
+[DELETED] }
+[DELETED] 
+[DELETED] return result;
+[DELETED] }
+[DELETED] 
+[DELETED] /**
+[DELETED] * Encuentra el punto más adecuado para dividir una línea larga,
+[DELETED] * intentando partir en un espacio antes del límite, si es posible.
+[DELETED] *
+[DELETED] * @param line La línea original.
+[DELETED] * @return Índice donde se debe dividir la línea.
+[DELETED] */
+[DELETED] private static int findSplitPoint(String line) {
+[DELETED] // Si justo en el límite hay un espacio, se divide en ese punto
+[SPLITED] if (line.length() > MAX_LINE_LENGTH &&
+[DELETED] Character.isWhitespace(line.charAt(MAX_LINE_LENGTH))) {
+[DELETED] return MAX_LINE_LENGTH;
+[DELETED] }
+[DELETED] 
+[DELETED] // Busca el último espacio antes del límite
+[DELETED] int lastSpaceBeforeMax = line.substring(0, MAX_LINE_LENGTH).lastIndexOf(' ');
+[DELETED] 
+[DELETED] // Si no hay espacio, parte en el límite directamente
+[DELETED] return lastSpaceBeforeMax > 0 ? lastSpaceBeforeMax : MAX_LINE_LENGTH;
+[DELETED] }
+[DELETED] }

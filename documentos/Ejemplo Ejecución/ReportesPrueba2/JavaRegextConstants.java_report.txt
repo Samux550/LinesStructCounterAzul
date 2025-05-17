@@ -1,0 +1,48 @@
+=== COMPARACIÓN PARA JavaRegextConstants.java ===
+
+--- VERSIÓN ANTIGUA ---
+[ORIGINAL] package mantenimiento.codecounter.constants;
+[ORIGINAL] 
+[ORIGINAL] /**
+[SPLITED] * Contiene constantes con expresiones regulares utilizadas para analizar
+[ORIGINAL] estructuras y sintaxis del
+[ORIGINAL] * lenguaje Java.
+[ORIGINAL] */
+[ORIGINAL] public class JavaRegextConstants {
+[SPLITED] public static final String ACCESS_MODIFIERS_REGEX =
+[ORIGINAL] "((public|private|protected)\\s+)?";
+[SPLITED] public static final String DATATYPE_DECLARATION_REGEX =
+[ORIGINAL] "(\\s*[a-zA-Z0-9]+(<[a-zA-Z0-9]+>)?\\s+)";
+[ORIGINAL] public static final String PARAMETERS_DECLARATION_REGEX = "(\\([^)]*\\)\\s*)";
+[ORIGINAL] public static final String IDENTIFIER_DECLARATION_REGEX = "\\w+\\s*";
+[ORIGINAL] public static final String TYPE_KEYS = "((class|enum|interface)\\s+)";
+[ORIGINAL] public static final String FINAL_OR_STATIC_REGEX =
+[ORIGINAL] "(?:(?:static\\s+)?(?:final\\s+)?|(?:final\\s+)?(?:static\\s+)?)?";
+[ORIGINAL] public static final String ANNOTATION_REGEX = "^@[A-Za-z_]\\w*(\\(.*\\))?\\s*$";
+[ORIGINAL] 
+[ORIGINAL] private JavaRegextConstants() {}
+[ORIGINAL] }
+
+--- VERSIÓN NUEVA ---
+[ORIGINAL] package mantenimiento.codecounter.constants;
+[ORIGINAL] 
+[ORIGINAL] /**
+[SPLITED] * Contiene constantes con expresiones regulares utilizadas para analizar
+[ORIGINAL] estructuras y sintaxis del
+[ORIGINAL] * lenguaje Java.
+[ORIGINAL] */
+[ORIGINAL] public class JavaRegextConstants {
+[SPLITED] public static final String ACCESS_MODIFIERS_REGEX =
+[ORIGINAL] "((public|private|protected)\\s+)?";
+[SPLITED] public static final String DATATYPE_DECLARATION_REGEX =
+[ORIGINAL] "(\\s*[a-zA-Z0-9]+(<[a-zA-Z0-9]+>)?\\s+)";
+[ORIGINAL] public static final String PARAMETERS_DECLARATION_REGEX = "(\\([^)]*\\)\\s*)";
+[ORIGINAL] public static final String IDENTIFIER_DECLARATION_REGEX = "\\w+\\s*";
+[ORIGINAL] public static final String TYPE_KEYS = "((class|enum|interface)\\s+)";
+[ORIGINAL] public static final String FINAL_OR_STATIC_REGEX =
+[ORIGINAL] "(?:(?:static\\s+)?(?:final\\s+)?|(?:final\\s+)?(?:static\\s+)?)?";
+[ORIGINAL] public static final String ANNOTATION_REGEX = "^@[A-Za-z_]\\w*(\\(.*\\))?\\s*$";
+[ORIGINAL] 
+[ORIGINAL] private JavaRegextConstants() {}
+[ORIGINAL] }
+

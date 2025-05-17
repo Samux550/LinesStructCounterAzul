@@ -1,0 +1,82 @@
+=== COMPARACIÓN PARA FormatValidator.java ===
+
+--- VERSIÓN ANTIGUA ---
+[ORIGINAL] package mantenimiento.codecounter.templates;
+[ORIGINAL] 
+[ORIGINAL] import mantenimiento.codecounter.exceptions.InvalidFormatException;
+[ORIGINAL] 
+[SPLITED] /** Proporciona una implementación base para la validación de formato del
+[ORIGINAL] código. */
+[ORIGINAL] public abstract class FormatValidator {
+[ORIGINAL] 
+[ORIGINAL] private FormatValidator nextValidator;
+[ORIGINAL] 
+[ORIGINAL] /**
+[ORIGINAL] * Establece el siguiente validador en la cadena de validación lógica.
+[ORIGINAL] *
+[ORIGINAL] * @param nextLogicalValidator Siguiente validador lógico en la cadena.
+[ORIGINAL] */
+[ORIGINAL] public void setNextValidator(FormatValidator nextFormatValidator) {
+[ORIGINAL] this.nextValidator = nextFormatValidator;
+[ORIGINAL] }
+[ORIGINAL] 
+[SPLITED] public abstract boolean isValid(String lineOfFile) throws
+[ORIGINAL] InvalidFormatException;
+[ORIGINAL] 
+[ORIGINAL] /**
+[ORIGINAL] * Valida la siguiente regla en la cadena de responsabilidad.
+[ORIGINAL] *
+[ORIGINAL] * @param linesOfFile Lista de líneas de código a validar.
+[SPLITED] * @return {@code true} si la validación es exitosa, {@code false} en caso
+[ORIGINAL] contrario.
+[ORIGINAL] */
+[SPLITED] protected boolean validateNext(String lineOfFile) throws InvalidFormatException
+[ORIGINAL] {
+[ORIGINAL] if (nextValidator != null) {
+[ORIGINAL] return nextValidator.isValid(lineOfFile);
+[ORIGINAL] }
+[ORIGINAL] 
+[ORIGINAL] return true;
+[ORIGINAL] }
+[ORIGINAL] }
+
+--- VERSIÓN NUEVA ---
+[ORIGINAL] package mantenimiento.codecounter.templates;
+[ORIGINAL] 
+[ORIGINAL] import mantenimiento.codecounter.exceptions.InvalidFormatException;
+[ORIGINAL] 
+[SPLITED] /** Proporciona una implementación base para la validación de formato del
+[ORIGINAL] código. */
+[ORIGINAL] public abstract class FormatValidator {
+[ORIGINAL] 
+[ORIGINAL] private FormatValidator nextValidator;
+[ORIGINAL] 
+[ORIGINAL] /**
+[ORIGINAL] * Establece el siguiente validador en la cadena de validación lógica.
+[ORIGINAL] *
+[ORIGINAL] * @param nextLogicalValidator Siguiente validador lógico en la cadena.
+[ORIGINAL] */
+[ORIGINAL] public void setNextValidator(FormatValidator nextFormatValidator) {
+[ORIGINAL] this.nextValidator = nextFormatValidator;
+[ORIGINAL] }
+[ORIGINAL] 
+[SPLITED] public abstract boolean isValid(String lineOfFile) throws
+[ORIGINAL] InvalidFormatException;
+[ORIGINAL] 
+[ORIGINAL] /**
+[ORIGINAL] * Valida la siguiente regla en la cadena de responsabilidad.
+[ORIGINAL] *
+[ORIGINAL] * @param linesOfFile Lista de líneas de código a validar.
+[SPLITED] * @return {@code true} si la validación es exitosa, {@code false} en caso
+[ORIGINAL] contrario.
+[ORIGINAL] */
+[SPLITED] protected boolean validateNext(String lineOfFile) throws InvalidFormatException
+[ORIGINAL] {
+[ORIGINAL] if (nextValidator != null) {
+[ORIGINAL] return nextValidator.isValid(lineOfFile);
+[ORIGINAL] }
+[ORIGINAL] 
+[ORIGINAL] return true;
+[ORIGINAL] }
+[ORIGINAL] }
+

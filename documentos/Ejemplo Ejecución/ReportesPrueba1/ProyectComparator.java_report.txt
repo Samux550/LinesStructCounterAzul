@@ -1,0 +1,159 @@
+=== ARCHIVO ProyectComparator.java [Version: B] ===
+
+[NEW] package mantenimiento.codecounter.models.comparators;
+[NEW] 
+[NEW] import java.io.BufferedWriter;
+[NEW] import java.util.ArrayList;
+[NEW] import java.util.HashMap;
+[NEW] import java.util.List;
+[NEW] import java.util.Map;
+[NEW] import java.util.Optional;
+[NEW] 
+[NEW] import mantenimiento.codecounter.models.JavaFile;
+[NEW] import mantenimiento.codecounter.models.LineRecord;
+[NEW] import mantenimiento.codecounter.models.Proyect;
+[NEW] import mantenimiento.codecounter.models.reporters.ComparationReport;
+[NEW] import mantenimiento.codecounter.models.reporters.TxtReporter;
+[NEW] 
+[NEW] /**
+[NEW] * Compara cada uno de los archivos javas que compartan el nombre de los dos
+[NEW] * proyecto provistos
+[NEW] */
+[NEW] public class ProyectComparator {
+[NEW] 
+[NEW] private Proyect targetProject;
+[NEW] 
+[NEW] private Proyect sourceProject;
+[NEW] 
+[NEW] private List<JavaFile> sourceProjectFiles;
+[NEW] 
+[NEW] private List<JavaFile> targetProjectFiles;
+[NEW] 
+[NEW] private Map<String, List<LineRecord>> generalReport = new HashMap<>();
+[NEW] 
+[NEW] /**
+[NEW] * Constructor
+[NEW] *
+[NEW] * @param sourceProject proyecto para comparar
+[NEW] * @param targetProject proyecto a comparar
+[NEW] */
+[NEW] public ProyectComparator(Proyect sourceProject, Proyect targetProject) {
+[NEW] this.sourceProject = sourceProject;
+[NEW] this.targetProject = targetProject;
+[NEW] this.sourceProjectFiles = sourceProject.getFiles();
+[NEW] this.targetProjectFiles = targetProject.getFiles();
+[NEW] }
+[NEW] 
+[NEW] /**
+[NEW] * Compara cada uno de los archivos con extensión .java de los proyectos
+[NEW] * provistos
+[NEW] * en el constructor. Si en la comparación existen archivos que no aparezcan en
+[NEW] * algún
+[NEW] * proyecto, su contenido será etiquetado como nuevo o eliminado según sea el
+[NEW] * caso.
+[NEW] */
+[NEW] public void compare() {
+[NEW] List<JavaFile> blackListOne = new ArrayList<>(this.sourceProject.getFiles());
+[NEW] List<JavaFile> blackListTwo = new ArrayList<>(this.targetProject.getFiles());
+[NEW] 
+[NEW] for (JavaFile javaFile : this.sourceProjectFiles) {
+[NEW] String name = javaFile.getFileName();
+[NEW] Optional<JavaFile> fileToComOptional = findFileTocompare(name);
+[NEW] 
+[NEW] if (fileToComOptional.isPresent()) {
+[NEW] JavaFile matchedFile = fileToComOptional.get();
+[NEW] compareFiles(javaFile, matchedFile);
+[NEW] blackListTwo.remove(matchedFile);
+[NEW] blackListOne.remove(javaFile);
+[NEW] }
+[NEW] }
+[NEW] 
+[SPLITED] blackListOne.forEach(s -> generateReportForSingleFile(Status.DELETED, s, "
+[NEW] [Version: A]"));
+[SPLITED] blackListTwo.forEach(s -> generateReportForSingleFile(Status.NEW, s, " [Version:
+[NEW] B]"));
+[NEW] }
+[NEW] 
+[NEW] /**
+[NEW] * Realiza una busqueda de un archivo dentro de un proyecto de acuerdo con el
+[NEW] * nombre del archivo
+[NEW] *
+[NEW] * @param fileName nombre del archivo a buscar
+[NEW] * @return estructura Optional de la instancia de la clase a buscar
+[NEW] */
+[NEW] private Optional<JavaFile> findFileTocompare(String fileName) {
+[NEW] return this.targetProjectFiles.stream()
+[NEW] .filter(s -> s.getFileName().equals(fileName))
+[NEW] .findAny();
+[NEW] }
+[NEW] 
+[NEW] /**
+[NEW] * Implementa la lógica para comparar el contenido de dos archivos con estensión
+[NEW] * .java.
+[NEW] * Posteriormente agrega una instancia al reporte final del proyecto
+[NEW] *
+[NEW] * @param sourceJavaFile
+[NEW] * @param targetJavaFile
+[NEW] */
+[NEW] private void compareFiles(JavaFile sourceJavaFile, JavaFile targetJavaFile) {
+[SPLITED] JavaFileComparator javaFileComparator = new
+[NEW] JavaFileComparator(sourceJavaFile.getContent(),
+[NEW] targetJavaFile.getContent());
+[NEW] 
+[NEW] javaFileComparator.compareContent();
+[NEW] 
+[NEW] ComparationReport comparationReport = javaFileComparator.getComparationReport();
+[NEW] List<LineRecord> contentReport = comparationReport.getSourceContentReport();
+[SPLITED] List<LineRecord> contentToCompareReport =
+[NEW] comparationReport.getTargetContentReport();
+[NEW] 
+[SPLITED] generalReport.put(sourceJavaFile.getFileName() + " [Version: A]",
+[NEW] contentReport);
+[SPLITED] generalReport.put(sourceJavaFile.getFileName() + " [Version: B]",
+[NEW] contentToCompareReport);
+[NEW] 
+[NEW] this.targetProjectFiles.remove(targetJavaFile);
+[NEW] }
+[NEW] 
+[NEW] /**
+[SPLITED] * Genera un reporte para un archivo que existe solo en una versión del proyecto
+[NEW] (A o B),
+[SPLITED] * agregando cada línea como un registro con el estado especificado (DELETED o
+[NEW] NEW).
+[SPLITED] * Las líneas se almacenan sin división para mantener el conteo preciso de líneas
+[NEW] físicas.
+[NEW] *
+[SPLITED] * @param status   Estado que se asignará a todas las líneas del archivo (DELETED
+[NEW] para versión A,
+[NEW] *                 NEW para versión B).
+[SPLITED] * @param javaFile Archivo Java a procesar, del cual se extraerá el contenido
+[NEW] línea por línea.
+[SPLITED] * @param mention  Sufijo identificador de versión (" [Version: A]" para archivos
+[NEW] eliminados,
+[NEW] *                 " [Version: B]" para archivos nuevos).
+[NEW] *
+[SPLITED] * @implNote Este método no divide líneas largas; la división se realiza
+[NEW] posteriormente
+[NEW] *           en {@link TxtReporter} para fines de visualización.
+[NEW] * @see TxtReporter#writeSingleFileReport(BufferedWriter, Map.Entry)
+[NEW] * @see LineRecord
+[NEW] */
+[SPLITED] private void generateReportForSingleFile(Status status, JavaFile javaFile,
+[NEW] String mention) {
+[NEW] List<LineRecord> report = new ArrayList<>();
+[NEW] 
+[NEW] javaFile.getContent().forEach(lineContent -> {
+[NEW] report.add(new LineRecord(status, lineContent));
+[NEW] });
+[NEW] generalReport.put(javaFile.getFileName() + mention, report);
+[NEW] }
+[NEW] 
+[NEW] /**
+[NEW] * Obtiene el reporte general de comparación entre ambos proyectos.
+[NEW] *
+[NEW] * @return mapa con los nombres de archivo y sus listas de diferencias
+[NEW] */
+[NEW] public Map<String, List<LineRecord>> getGeneralReport() {
+[NEW] return generalReport;
+[NEW] }
+[NEW] }

@@ -1,0 +1,120 @@
+=== COMPARACIÓN PARA MethodDeclarationValidator.java ===
+
+--- VERSIÓN ANTIGUA ---
+[ORIGINAL] package mantenimiento.codecounter.validators.logical_validators;
+[ORIGINAL] 
+[SPLITED] import static
+[ORIGINAL] mantenimiento.codecounter.constants.JavaRegextConstants.ACCESS_MODIFIERS_REGEX;
+[SPLITED] import static
+[SPLITED] mantenimiento.codecounter.constants.JavaRegextConstants.DATATYPE_DECLARATION_REG
+[ORIGINAL] EX;
+[SPLITED] import static
+[ORIGINAL] mantenimiento.codecounter.constants.JavaRegextConstants.FINAL_OR_STATIC_REGEX;
+[SPLITED] import static
+[SPLITED] mantenimiento.codecounter.constants.JavaRegextConstants.IDENTIFIER_DECLARATION_R
+[ORIGINAL] EGEX;
+[ORIGINAL] 
+[ORIGINAL] import mantenimiento.codecounter.templates.LogicalValidator;
+[ORIGINAL] 
+[ORIGINAL] /**
+[SPLITED] * Clase que verifica si existe una declaración de un método para poder
+[ORIGINAL] contabilizarlo como línea
+[ORIGINAL] * lógica
+[ORIGINAL] */
+[ORIGINAL] public class MethodDeclarationValidator implements LogicalValidator {
+[ORIGINAL] 
+[ORIGINAL] private static final String METHOD_DECLARATION =
+[ORIGINAL] "^(\\s*"
+[ORIGINAL] + ACCESS_MODIFIERS_REGEX
+[ORIGINAL] + FINAL_OR_STATIC_REGEX
+[ORIGINAL] + DATATYPE_DECLARATION_REGEX
+[ORIGINAL] + IDENTIFIER_DECLARATION_REGEX
+[ORIGINAL] + "\\(.*)";
+[ORIGINAL] 
+[ORIGINAL] /**
+[SPLITED] * Determina si una línea de código corresponde a una declaración de un método
+[ORIGINAL] para considerarla
+[ORIGINAL] * como línea lógica
+[ORIGINAL] *
+[ORIGINAL] * @param lineOfCode linea de código por analizar
+[SPLITED] * @return {@code true} si es declaración de método, {@code false} en caso
+[ORIGINAL] contrario
+[ORIGINAL] */
+[ORIGINAL] @Override
+[ORIGINAL] public boolean validateType(String lineOfCode) {
+[ORIGINAL] return isMethodDeclaration(lineOfCode);
+[ORIGINAL] }
+[ORIGINAL] 
+[ORIGINAL] /**
+[ORIGINAL] * Verifica si es una declaración de método
+[ORIGINAL] *
+[ORIGINAL] * @param lineOfCode linea de código por analizar
+[SPLITED] * @return {@code true} si es declaración de método, {@code false} en caso
+[ORIGINAL] contrario
+[ORIGINAL] */
+[ORIGINAL] private boolean isMethodDeclaration(String lineOfCode) {
+[ORIGINAL] return lineOfCode.matches(METHOD_DECLARATION)
+[ORIGINAL] && !lineOfCode.contains(";")
+[ORIGINAL] && !lineOfCode.contains("\"");
+[ORIGINAL] }
+[ORIGINAL] }
+
+--- VERSIÓN NUEVA ---
+[ORIGINAL] package mantenimiento.codecounter.validators.logical_validators;
+[ORIGINAL] 
+[SPLITED] import static
+[ORIGINAL] mantenimiento.codecounter.constants.JavaRegextConstants.ACCESS_MODIFIERS_REGEX;
+[SPLITED] import static
+[SPLITED] mantenimiento.codecounter.constants.JavaRegextConstants.DATATYPE_DECLARATION_REG
+[ORIGINAL] EX;
+[SPLITED] import static
+[ORIGINAL] mantenimiento.codecounter.constants.JavaRegextConstants.FINAL_OR_STATIC_REGEX;
+[SPLITED] import static
+[SPLITED] mantenimiento.codecounter.constants.JavaRegextConstants.IDENTIFIER_DECLARATION_R
+[ORIGINAL] EGEX;
+[ORIGINAL] 
+[ORIGINAL] import mantenimiento.codecounter.templates.LogicalValidator;
+[ORIGINAL] 
+[ORIGINAL] /**
+[SPLITED] * Clase que verifica si existe una declaración de un método para poder
+[ORIGINAL] contabilizarlo como línea
+[ORIGINAL] * lógica
+[ORIGINAL] */
+[ORIGINAL] public class MethodDeclarationValidator implements LogicalValidator {
+[ORIGINAL] 
+[ORIGINAL] private static final String METHOD_DECLARATION =
+[ORIGINAL] "^(\\s*"
+[ORIGINAL] + ACCESS_MODIFIERS_REGEX
+[ORIGINAL] + FINAL_OR_STATIC_REGEX
+[ORIGINAL] + DATATYPE_DECLARATION_REGEX
+[ORIGINAL] + IDENTIFIER_DECLARATION_REGEX
+[ORIGINAL] + "\\(.*)";
+[ORIGINAL] 
+[ORIGINAL] /**
+[SPLITED] * Determina si una línea de código corresponde a una declaración de un método
+[ORIGINAL] para considerarla
+[ORIGINAL] * como línea lógica
+[ORIGINAL] *
+[ORIGINAL] * @param lineOfCode linea de código por analizar
+[SPLITED] * @return {@code true} si es declaración de método, {@code false} en caso
+[ORIGINAL] contrario
+[ORIGINAL] */
+[ORIGINAL] @Override
+[ORIGINAL] public boolean validateType(String lineOfCode) {
+[ORIGINAL] return isMethodDeclaration(lineOfCode);
+[ORIGINAL] }
+[ORIGINAL] 
+[ORIGINAL] /**
+[ORIGINAL] * Verifica si es una declaración de método
+[ORIGINAL] *
+[ORIGINAL] * @param lineOfCode linea de código por analizar
+[SPLITED] * @return {@code true} si es declaración de método, {@code false} en caso
+[ORIGINAL] contrario
+[ORIGINAL] */
+[ORIGINAL] private boolean isMethodDeclaration(String lineOfCode) {
+[ORIGINAL] return lineOfCode.matches(METHOD_DECLARATION)
+[ORIGINAL] && !lineOfCode.contains(";")
+[ORIGINAL] && !lineOfCode.contains("\"");
+[ORIGINAL] }
+[ORIGINAL] }
+

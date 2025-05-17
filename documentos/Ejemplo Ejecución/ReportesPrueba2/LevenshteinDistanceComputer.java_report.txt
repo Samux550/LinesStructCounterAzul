@@ -1,0 +1,60 @@
+=== ARCHIVO LevenshteinDistanceComputer.java [Version: A] ===
+
+[DELETED] package mantenimiento.codecounter.utils;
+[DELETED] 
+[DELETED] import java.util.Arrays;
+[DELETED] 
+[DELETED] public class LevenshteinDistanceComputer {
+[DELETED] /**
+[DELETED] * Calcula la distancia de Levenshtein entre dos cadenas de caracteres.
+[DELETED] *
+[DELETED] * @param source la primera cadena
+[DELETED] * @param target la segunda cadena
+[DELETED] * @return el número mínimo de operaciones necesarias para transformar {@code x}
+[DELETED] *         en {@code y}
+[DELETED] */
+[DELETED] public static int calculate(String source, String target) {
+[DELETED] int[][] dp = new int[source.length() + 1][target.length() + 1];
+[DELETED] 
+[DELETED] for (int i = 0; i <= source.length(); i++) {
+[DELETED] for (int j = 0; j <= target.length(); j++) {
+[DELETED] if (i == 0) {
+[DELETED] dp[i][j] = j;
+[DELETED] } else if (j == 0) {
+[DELETED] dp[i][j] = i;
+[DELETED] } else {
+[DELETED] dp[i][j] = min(dp[i - 1][j - 1]
+[DELETED] + costOfSubstitution(source.charAt(i - 1), target.charAt(j - 1)),
+[DELETED] dp[i - 1][j] + 1,
+[DELETED] dp[i][j - 1] + 1);
+[DELETED] }
+[DELETED] }
+[DELETED] }
+[DELETED] 
+[DELETED] return dp[source.length()][target.length()];
+[DELETED] }
+[DELETED] 
+[DELETED] /**
+[DELETED] * Devuelve el costo de sustituir un carácter por otro.
+[SPLITED] * Si los caracteres son iguales, el costo es 0. Si son diferentes, el costo es
+[DELETED] 1.
+[DELETED] *
+[DELETED] * @param sourceChar el primer carácter
+[DELETED] * @param targetChar el segundo carácter
+[DELETED] * @return 0 si {@code a} y {@code b} son iguales, 1 en caso contrario
+[DELETED] */
+[DELETED] private static int costOfSubstitution(char sourceChar, char targetChar) {
+[DELETED] return sourceChar == targetChar ? 0 : 1;
+[DELETED] }
+[DELETED] 
+[DELETED] /**
+[DELETED] * Devuelve el valor mínimo entre un conjunto de enteros.
+[DELETED] *
+[DELETED] * @param numbers los números a comparar
+[DELETED] * @return el menor valor entre {@code numbers}
+[DELETED] */
+[DELETED] private static int min(int... numbers) {
+[DELETED] return Arrays.stream(numbers)
+[DELETED] .min().orElse(Integer.MAX_VALUE);
+[DELETED] }
+[DELETED] }

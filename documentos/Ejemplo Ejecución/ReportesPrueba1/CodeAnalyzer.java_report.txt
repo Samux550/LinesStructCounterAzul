@@ -1,0 +1,420 @@
+=== COMPARACIÓN PARA CodeAnalyzer.java ===
+
+--- VERSIÓN ANTIGUA ---
+[ORIGINAL] package mantenimiento.codecounter.models;
+[ORIGINAL] 
+[ORIGINAL] import java.util.ArrayDeque;
+[ORIGINAL] import java.util.Deque;
+[ORIGINAL] import mantenimiento.codecounter.exceptions.InvalidFormatException;
+[ORIGINAL] import mantenimiento.codecounter.models.counters.StructCounter;
+[ORIGINAL] import mantenimiento.codecounter.templates.LogicalValidator;
+[ORIGINAL] import mantenimiento.codecounter.validators.ValidatorManager;
+[SPLITED] import
+[SPLITED] mantenimiento.codecounter.validators.logical_validators.MethodDeclarationValidat
+[ORIGINAL] or;
+[SPLITED] import
+[SPLITED] mantenimiento.codecounter.validators.logical_validators.TypeDeclarationValidator
+[ORIGINAL] ;
+[ORIGINAL] 
+[ORIGINAL] /**
+[SPLITED] * Analiza líneas de código Java para contar clases (anidadas incluidas), métodos
+[ORIGINAL] y líneas físicas.
+[ORIGINAL] */
+[ORIGINAL] public class CodeAnalyzer {
+[ORIGINAL] 
+[ORIGINAL] private final StructCounter counter;
+[ORIGINAL] private final Deque<String> classContextStack;
+[ORIGINAL] private final Deque<Integer> classStartBraceLevelStack;
+[ORIGINAL] private int currentBraceLevel = 0;
+[ORIGINAL] 
+[ORIGINAL] /**
+[ORIGINAL] * Constructor.
+[ORIGINAL] *
+[SPLITED] * @param counter El contador donde se almacenarán los resultados. No puede ser
+[ORIGINAL] nulo.
+[ORIGINAL] */
+[ORIGINAL] public CodeAnalyzer(StructCounter counter) {
+[ORIGINAL] this.counter = counter;
+[ORIGINAL] this.classContextStack = new ArrayDeque<>();
+[ORIGINAL] this.classStartBraceLevelStack = new ArrayDeque<>();
+[ORIGINAL] }
+[ORIGINAL] 
+[ORIGINAL] /**
+[SPLITED] * Procesa una línea de código fuente. Hace el análisis llamando a métodos
+[ORIGINAL] auxiliares.
+[ORIGINAL] *
+[ORIGINAL] * @param line La línea de código a procesar.
+[SPLITED] * @throws InvalidFormatException Si los validadores detectan un formato
+[ORIGINAL] inválido.
+[ORIGINAL] */
+[ORIGINAL] public void processLine(String line) throws InvalidFormatException {
+[ORIGINAL] String trimmedLine = preprocessLine(line);
+[ORIGINAL] countLineForCurrentContext();
+[ORIGINAL] DeclarationInfo declInfo = detectDeclarations(trimmedLine);
+[ORIGINAL] processBracesAndUpdateContext(line, declInfo.potentialClassName());
+[ORIGINAL] countMethodIfDeclared(declInfo.isMethod());
+[ORIGINAL] }
+[ORIGINAL] 
+[ORIGINAL] /**
+[ORIGINAL] * Preprocesa la línea: recorta espacios y verifica si debe ignorarse.
+[ORIGINAL] *
+[ORIGINAL] * @param line Línea original.
+[ORIGINAL] * @return La línea recortada, o null si debe ignorarse.
+[ORIGINAL] */
+[ORIGINAL] String preprocessLine(String line) {
+[ORIGINAL] String trimmedLine = line.trim();
+[ORIGINAL] if (trimmedLine.isEmpty() || isCommentLine(trimmedLine)) {
+[ORIGINAL] return null;
+[ORIGINAL] }
+[ORIGINAL] return trimmedLine;
+[ORIGINAL] }
+[ORIGINAL] 
+[SPLITED] /** Llama a StructCounter para añadir una línea a todas las clases en el
+[ORIGINAL] contexto actual. */
+[ORIGINAL] private void countLineForCurrentContext() {
+[ORIGINAL] if (!classContextStack.isEmpty()) {
+[ORIGINAL] for (String classNameInStack : classContextStack) {
+[ORIGINAL] counter.addLineToClass(classNameInStack);
+[ORIGINAL] }
+[ORIGINAL] }
+[ORIGINAL] }
+[ORIGINAL] 
+[SPLITED] private record DeclarationInfo(boolean isType, boolean isMethod, String
+[ORIGINAL] potentialClassName) {}
+[ORIGINAL] 
+[ORIGINAL] /**
+[ORIGINAL] * Determina si la línea contiene una declaración de tipo o método.
+[ORIGINAL] *
+[ORIGINAL] * @param trimmedLine La línea de código recortada.
+[ORIGINAL] * @return Un objeto DeclarationInfo con los resultados.
+[ORIGINAL] * @throws InvalidFormatException Si los validadores lanzan la excepción.
+[ORIGINAL] */
+[ORIGINAL] private DeclarationInfo detectDeclarations(String trimmedLine) {
+[ORIGINAL] LogicalValidator validator = ValidatorManager.getLogicalValidators(trimmedLine);
+[ORIGINAL] boolean isType = validator instanceof TypeDeclarationValidator;
+[ORIGINAL] boolean isMethod = validator instanceof MethodDeclarationValidator;
+[ORIGINAL] String className = null;
+[ORIGINAL] 
+[ORIGINAL] if (isType) {
+[ORIGINAL] className = ((TypeDeclarationValidator) validator).getTypeName(trimmedLine);
+[ORIGINAL] if (className == null || className.trim().isEmpty()) {
+[ORIGINAL] isType = false;
+[ORIGINAL] className = null;
+[ORIGINAL] }
+[ORIGINAL] }
+[ORIGINAL] return new DeclarationInfo(isType, isMethod, className);
+[ORIGINAL] }
+[ORIGINAL] 
+[ORIGINAL] /**
+[SPLITED] * Itera sobre los caracteres de la línea, actualiza el nivel de llaves, y llama
+[ORIGINAL] a push/pop del
+[ORIGINAL] * contexto de clase cuando corresponde.
+[ORIGINAL] *
+[ORIGINAL] * @param line La línea de código original (para iterar caracteres).
+[SPLITED] * @param potentialClassNameForLine El nombre de la clase declarada en ESTA línea
+[ORIGINAL] (si aplica),
+[ORIGINAL] *     null si no.
+[ORIGINAL] */
+[SPLITED] private void processBracesAndUpdateContext(String line, String
+[ORIGINAL] potentialClassNameForLine) {
+[ORIGINAL] int levelBeforeProcessingLine = currentBraceLevel;
+[ORIGINAL] boolean classAddedOnThisLine = false;
+[ORIGINAL] 
+[ORIGINAL] for (char c : line.toCharArray()) {
+[ORIGINAL] if (c == '{') {
+[ORIGINAL] if (potentialClassNameForLine != null && !classAddedOnThisLine) {
+[ORIGINAL] pushClassContext(potentialClassNameForLine, levelBeforeProcessingLine);
+[ORIGINAL] classAddedOnThisLine = true;
+[ORIGINAL] }
+[ORIGINAL] currentBraceLevel++;
+[ORIGINAL] } else if (c == '}') {
+[ORIGINAL] tryPopClassContext();
+[ORIGINAL] if (currentBraceLevel > 0) {
+[ORIGINAL] currentBraceLevel--;
+[ORIGINAL] }
+[ORIGINAL] }
+[ORIGINAL] }
+[ORIGINAL] if (potentialClassNameForLine != null && !classAddedOnThisLine) {
+[ORIGINAL] pushClassContext(potentialClassNameForLine, currentBraceLevel);
+[ORIGINAL] }
+[ORIGINAL] }
+[ORIGINAL] 
+[ORIGINAL] /**
+[SPLITED] * Intenta sacar una clase del contexto si el nivel de llaves actual coincide con
+[ORIGINAL] el cierre
+[ORIGINAL] * esperado de la clase más interna.
+[ORIGINAL] */
+[ORIGINAL] private void tryPopClassContext() {
+[ORIGINAL] if (!classContextStack.isEmpty()
+[ORIGINAL] && !classStartBraceLevelStack.isEmpty()
+[ORIGINAL] && currentBraceLevel == classStartBraceLevelStack.peek() + 1) {
+[ORIGINAL] popClassContext();
+[ORIGINAL] }
+[ORIGINAL] }
+[ORIGINAL] 
+[ORIGINAL] /**
+[ORIGINAL] * Añade una clase al contexto y actualiza los contadores.
+[ORIGINAL] *
+[ORIGINAL] * @param className Nombre de la clase.
+[ORIGINAL] * @param braceLevel Nivel de llaves antes de la apertura de esta clase.
+[ORIGINAL] */
+[ORIGINAL] private void pushClassContext(String className, int braceLevel) {
+[SPLITED] if (classContextStack.isEmpty() || !classContextStack.peek().equals(className))
+[ORIGINAL] {
+[ORIGINAL] classContextStack.push(className);
+[ORIGINAL] classStartBraceLevelStack.push(braceLevel);
+[ORIGINAL] counter.addClass(className);
+[ORIGINAL] counter.addLineToClass(className);
+[ORIGINAL] }
+[ORIGINAL] }
+[ORIGINAL] 
+[ORIGINAL] /** Saca la clase más interna del contexto (de ambas pilas). */
+[ORIGINAL] private void popClassContext() {
+[ORIGINAL] if (!classContextStack.isEmpty()) {
+[ORIGINAL] classContextStack.pop();
+[ORIGINAL] }
+[ORIGINAL] if (!classStartBraceLevelStack.isEmpty()) {
+[ORIGINAL] classStartBraceLevelStack.pop();
+[ORIGINAL] }
+[ORIGINAL] }
+[ORIGINAL] 
+[ORIGINAL] /**
+[ORIGINAL] * Llama al contador para incrementar el número de métodos si aplica.
+[ORIGINAL] *
+[ORIGINAL] * @param isMethodDeclaration true si la línea actual declaró un método.
+[ORIGINAL] */
+[ORIGINAL] private void countMethodIfDeclared(boolean isMethodDeclaration) {
+[ORIGINAL] if (!classContextStack.isEmpty() && isMethodDeclaration) {
+[ORIGINAL] counter.addMethodToLastClass();
+[ORIGINAL] }
+[ORIGINAL] }
+[ORIGINAL] 
+[ORIGINAL] /**
+[ORIGINAL] * Verifica si la línea es un comentario simple de una línea.
+[ORIGINAL] *
+[ORIGINAL] * @param trimmedLine Línea recortada.
+[ORIGINAL] * @return true si es comentario, false si no.
+[ORIGINAL] */
+[ORIGINAL] private boolean isCommentLine(String trimmedLine) {
+[ORIGINAL] return trimmedLine.startsWith("//");
+[ORIGINAL] }
+[ORIGINAL] 
+[ORIGINAL] /**
+[ORIGINAL] * Devuelve el contador asociado a este analizador.
+[ORIGINAL] *
+[ORIGINAL] * @return El objeto StructCounter.
+[ORIGINAL] */
+[ORIGINAL] public StructCounter getCounter() {
+[ORIGINAL] return counter;
+[ORIGINAL] }
+[ORIGINAL] }
+
+--- VERSIÓN NUEVA ---
+[ORIGINAL] package mantenimiento.codecounter.models;
+[ORIGINAL] 
+[ORIGINAL] import java.util.ArrayDeque;
+[ORIGINAL] import java.util.Deque;
+[ORIGINAL] import mantenimiento.codecounter.exceptions.InvalidFormatException;
+[ORIGINAL] import mantenimiento.codecounter.models.counters.StructCounter;
+[ORIGINAL] import mantenimiento.codecounter.templates.LogicalValidator;
+[ORIGINAL] import mantenimiento.codecounter.validators.ValidatorManager;
+[SPLITED] import
+[SPLITED] mantenimiento.codecounter.validators.logical_validators.MethodDeclarationValidat
+[ORIGINAL] or;
+[SPLITED] import
+[SPLITED] mantenimiento.codecounter.validators.logical_validators.TypeDeclarationValidator
+[ORIGINAL] ;
+[ORIGINAL] 
+[ORIGINAL] /**
+[SPLITED] * Analiza líneas de código Java para contar clases (anidadas incluidas), métodos
+[ORIGINAL] y líneas físicas.
+[ORIGINAL] */
+[ORIGINAL] public class CodeAnalyzer {
+[ORIGINAL] 
+[ORIGINAL] private final StructCounter counter;
+[ORIGINAL] private final Deque<String> classContextStack;
+[ORIGINAL] private final Deque<Integer> classStartBraceLevelStack;
+[ORIGINAL] private int currentBraceLevel = 0;
+[ORIGINAL] 
+[ORIGINAL] /**
+[ORIGINAL] * Constructor.
+[ORIGINAL] *
+[SPLITED] * @param counter El contador donde se almacenarán los resultados. No puede ser
+[ORIGINAL] nulo.
+[ORIGINAL] */
+[ORIGINAL] public CodeAnalyzer(StructCounter counter) {
+[ORIGINAL] this.counter = counter;
+[ORIGINAL] this.classContextStack = new ArrayDeque<>();
+[ORIGINAL] this.classStartBraceLevelStack = new ArrayDeque<>();
+[ORIGINAL] }
+[ORIGINAL] 
+[ORIGINAL] /**
+[SPLITED] * Procesa una línea de código fuente. Hace el análisis llamando a métodos
+[ORIGINAL] auxiliares.
+[ORIGINAL] *
+[ORIGINAL] * @param line La línea de código a procesar.
+[SPLITED] * @throws InvalidFormatException Si los validadores detectan un formato
+[ORIGINAL] inválido.
+[ORIGINAL] */
+[ORIGINAL] public void processLine(String line) throws InvalidFormatException {
+[ORIGINAL] String trimmedLine = preprocessLine(line);
+[ORIGINAL] countLineForCurrentContext();
+[ORIGINAL] DeclarationInfo declInfo = detectDeclarations(trimmedLine);
+[ORIGINAL] processBracesAndUpdateContext(line, declInfo.potentialClassName());
+[ORIGINAL] countMethodIfDeclared(declInfo.isMethod());
+[ORIGINAL] }
+[ORIGINAL] 
+[ORIGINAL] /**
+[ORIGINAL] * Preprocesa la línea: recorta espacios y verifica si debe ignorarse.
+[ORIGINAL] *
+[ORIGINAL] * @param line Línea original.
+[ORIGINAL] * @return La línea recortada, o null si debe ignorarse.
+[ORIGINAL] */
+[ORIGINAL] String preprocessLine(String line) {
+[ORIGINAL] String trimmedLine = line.trim();
+[ORIGINAL] if (trimmedLine.isEmpty() || isCommentLine(trimmedLine)) {
+[ORIGINAL] return null;
+[ORIGINAL] }
+[ORIGINAL] return trimmedLine;
+[ORIGINAL] }
+[ORIGINAL] 
+[SPLITED] /** Llama a StructCounter para añadir una línea a todas las clases en el
+[ORIGINAL] contexto actual. */
+[ORIGINAL] private void countLineForCurrentContext() {
+[ORIGINAL] if (!classContextStack.isEmpty()) {
+[ORIGINAL] for (String classNameInStack : classContextStack) {
+[ORIGINAL] counter.addLineToClass(classNameInStack);
+[ORIGINAL] }
+[ORIGINAL] }
+[ORIGINAL] }
+[ORIGINAL] 
+[SPLITED] private record DeclarationInfo(boolean isType, boolean isMethod, String
+[ORIGINAL] potentialClassName) {}
+[ORIGINAL] 
+[ORIGINAL] /**
+[ORIGINAL] * Determina si la línea contiene una declaración de tipo o método.
+[ORIGINAL] *
+[ORIGINAL] * @param trimmedLine La línea de código recortada.
+[ORIGINAL] * @return Un objeto DeclarationInfo con los resultados.
+[ORIGINAL] * @throws InvalidFormatException Si los validadores lanzan la excepción.
+[ORIGINAL] */
+[ORIGINAL] private DeclarationInfo detectDeclarations(String trimmedLine) {
+[ORIGINAL] LogicalValidator validator = ValidatorManager.getLogicalValidators(trimmedLine);
+[ORIGINAL] boolean isType = validator instanceof TypeDeclarationValidator;
+[ORIGINAL] boolean isMethod = validator instanceof MethodDeclarationValidator;
+[ORIGINAL] String className = null;
+[ORIGINAL] 
+[ORIGINAL] if (isType) {
+[ORIGINAL] className = ((TypeDeclarationValidator) validator).getTypeName(trimmedLine);
+[ORIGINAL] if (className == null || className.trim().isEmpty()) {
+[ORIGINAL] isType = false;
+[ORIGINAL] className = null;
+[ORIGINAL] }
+[ORIGINAL] }
+[ORIGINAL] return new DeclarationInfo(isType, isMethod, className);
+[ORIGINAL] }
+[ORIGINAL] 
+[ORIGINAL] /**
+[SPLITED] * Itera sobre los caracteres de la línea, actualiza el nivel de llaves, y llama
+[ORIGINAL] a push/pop del
+[ORIGINAL] * contexto de clase cuando corresponde.
+[ORIGINAL] *
+[ORIGINAL] * @param line La línea de código original (para iterar caracteres).
+[SPLITED] * @param potentialClassNameForLine El nombre de la clase declarada en ESTA línea
+[ORIGINAL] (si aplica),
+[ORIGINAL] *     null si no.
+[ORIGINAL] */
+[SPLITED] private void processBracesAndUpdateContext(String line, String
+[ORIGINAL] potentialClassNameForLine) {
+[ORIGINAL] int levelBeforeProcessingLine = currentBraceLevel;
+[ORIGINAL] boolean classAddedOnThisLine = false;
+[ORIGINAL] 
+[ORIGINAL] for (char c : line.toCharArray()) {
+[ORIGINAL] if (c == '{') {
+[ORIGINAL] if (potentialClassNameForLine != null && !classAddedOnThisLine) {
+[ORIGINAL] pushClassContext(potentialClassNameForLine, levelBeforeProcessingLine);
+[ORIGINAL] classAddedOnThisLine = true;
+[ORIGINAL] }
+[ORIGINAL] currentBraceLevel++;
+[ORIGINAL] } else if (c == '}') {
+[ORIGINAL] tryPopClassContext();
+[ORIGINAL] if (currentBraceLevel > 0) {
+[ORIGINAL] currentBraceLevel--;
+[ORIGINAL] }
+[ORIGINAL] }
+[ORIGINAL] }
+[ORIGINAL] if (potentialClassNameForLine != null && !classAddedOnThisLine) {
+[ORIGINAL] pushClassContext(potentialClassNameForLine, currentBraceLevel);
+[ORIGINAL] }
+[ORIGINAL] }
+[ORIGINAL] 
+[ORIGINAL] /**
+[SPLITED] * Intenta sacar una clase del contexto si el nivel de llaves actual coincide con
+[ORIGINAL] el cierre
+[ORIGINAL] * esperado de la clase más interna.
+[ORIGINAL] */
+[ORIGINAL] private void tryPopClassContext() {
+[ORIGINAL] if (!classContextStack.isEmpty()
+[ORIGINAL] && !classStartBraceLevelStack.isEmpty()
+[ORIGINAL] && currentBraceLevel == classStartBraceLevelStack.peek() + 1) {
+[ORIGINAL] popClassContext();
+[ORIGINAL] }
+[ORIGINAL] }
+[ORIGINAL] 
+[ORIGINAL] /**
+[ORIGINAL] * Añade una clase al contexto y actualiza los contadores.
+[ORIGINAL] *
+[ORIGINAL] * @param className Nombre de la clase.
+[ORIGINAL] * @param braceLevel Nivel de llaves antes de la apertura de esta clase.
+[ORIGINAL] */
+[ORIGINAL] private void pushClassContext(String className, int braceLevel) {
+[SPLITED] if (classContextStack.isEmpty() || !classContextStack.peek().equals(className))
+[ORIGINAL] {
+[ORIGINAL] classContextStack.push(className);
+[ORIGINAL] classStartBraceLevelStack.push(braceLevel);
+[ORIGINAL] counter.addClass(className);
+[ORIGINAL] counter.addLineToClass(className);
+[ORIGINAL] }
+[ORIGINAL] }
+[ORIGINAL] 
+[ORIGINAL] /** Saca la clase más interna del contexto (de ambas pilas). */
+[ORIGINAL] private void popClassContext() {
+[ORIGINAL] if (!classContextStack.isEmpty()) {
+[ORIGINAL] classContextStack.pop();
+[ORIGINAL] }
+[ORIGINAL] if (!classStartBraceLevelStack.isEmpty()) {
+[ORIGINAL] classStartBraceLevelStack.pop();
+[ORIGINAL] }
+[ORIGINAL] }
+[ORIGINAL] 
+[ORIGINAL] /**
+[ORIGINAL] * Llama al contador para incrementar el número de métodos si aplica.
+[ORIGINAL] *
+[ORIGINAL] * @param isMethodDeclaration true si la línea actual declaró un método.
+[ORIGINAL] */
+[ORIGINAL] private void countMethodIfDeclared(boolean isMethodDeclaration) {
+[ORIGINAL] if (!classContextStack.isEmpty() && isMethodDeclaration) {
+[ORIGINAL] counter.addMethodToLastClass();
+[ORIGINAL] }
+[ORIGINAL] }
+[ORIGINAL] 
+[ORIGINAL] /**
+[ORIGINAL] * Verifica si la línea es un comentario simple de una línea.
+[ORIGINAL] *
+[ORIGINAL] * @param trimmedLine Línea recortada.
+[ORIGINAL] * @return true si es comentario, false si no.
+[ORIGINAL] */
+[ORIGINAL] private boolean isCommentLine(String trimmedLine) {
+[ORIGINAL] return trimmedLine.startsWith("//");
+[ORIGINAL] }
+[ORIGINAL] 
+[ORIGINAL] /**
+[ORIGINAL] * Devuelve el contador asociado a este analizador.
+[ORIGINAL] *
+[ORIGINAL] * @return El objeto StructCounter.
+[ORIGINAL] */
+[ORIGINAL] public StructCounter getCounter() {
+[ORIGINAL] return counter;
+[ORIGINAL] }
+[ORIGINAL] }
+

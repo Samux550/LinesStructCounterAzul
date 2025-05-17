@@ -1,0 +1,78 @@
+=== COMPARACIÓN PARA ImportValidatorTest.java ===
+
+--- VERSIÓN ANTIGUA ---
+[ORIGINAL] package mantenimiento.codecounter.validators.format_validators;
+[ORIGINAL] 
+[ORIGINAL] import static org.junit.jupiter.api.Assertions.assertThrows;
+[ORIGINAL] import static org.junit.jupiter.api.Assertions.assertTrue;
+[ORIGINAL] 
+[ORIGINAL] import mantenimiento.codecounter.exceptions.InvalidFormatException;
+[ORIGINAL] import org.junit.jupiter.api.DisplayName;
+[ORIGINAL] import org.junit.jupiter.api.Test;
+[ORIGINAL] 
+[ORIGINAL] class ImportValidatorTest {
+[ORIGINAL] 
+[ORIGINAL] @Test
+[ORIGINAL] @DisplayName("Debe de aceptar la declaracion de import")
+[ORIGINAL] void testValidImport() throws InvalidFormatException {
+[ORIGINAL] ImportValidator validator = new ImportValidator();
+[ORIGINAL] assertTrue(validator.isValid("import java.util.List;"));
+[ORIGINAL] assertTrue(validator.isValid("import static java.util.List;"));
+[ORIGINAL] }
+[ORIGINAL] 
+[ORIGINAL] @Test
+[ORIGINAL] @DisplayName("Debe de lanzar la excepion al detectar comodin en import")
+[ORIGINAL] void importWithWildcardThrowsException() {
+[ORIGINAL] ImportValidator validator = new ImportValidator();
+[SPLITED] assertThrows(InvalidFormatException.class, () -> validator.isValid("import
+[ORIGINAL] java.util.*;"));
+[ORIGINAL] }
+[ORIGINAL] 
+[ORIGINAL] @Test
+[ORIGINAL] @DisplayName("Debe de lanzar la excepion al detectar comodin en import static")
+[ORIGINAL] void testStaticImportWithWildcardThrowsException() {
+[ORIGINAL] ImportValidator validator = new ImportValidator();
+[ORIGINAL] assertThrows(
+[SPLITED] InvalidFormatException.class, () -> validator.isValid("import static
+[ORIGINAL] java.lang.Math.*;"));
+[ORIGINAL] }
+[ORIGINAL] }
+
+--- VERSIÓN NUEVA ---
+[ORIGINAL] package mantenimiento.codecounter.validators.format_validators;
+[ORIGINAL] 
+[ORIGINAL] import static org.junit.jupiter.api.Assertions.assertThrows;
+[ORIGINAL] import static org.junit.jupiter.api.Assertions.assertTrue;
+[ORIGINAL] 
+[ORIGINAL] import mantenimiento.codecounter.exceptions.InvalidFormatException;
+[ORIGINAL] import org.junit.jupiter.api.DisplayName;
+[ORIGINAL] import org.junit.jupiter.api.Test;
+[ORIGINAL] 
+[ORIGINAL] class ImportValidatorTest {
+[ORIGINAL] 
+[ORIGINAL] @Test
+[ORIGINAL] @DisplayName("Debe de aceptar la declaracion de import")
+[ORIGINAL] void testValidImport() throws InvalidFormatException {
+[ORIGINAL] ImportValidator validator = new ImportValidator();
+[ORIGINAL] assertTrue(validator.isValid("import java.util.List;"));
+[ORIGINAL] assertTrue(validator.isValid("import static java.util.List;"));
+[ORIGINAL] }
+[ORIGINAL] 
+[ORIGINAL] @Test
+[ORIGINAL] @DisplayName("Debe de lanzar la excepion al detectar comodin en import")
+[ORIGINAL] void importWithWildcardThrowsException() {
+[ORIGINAL] ImportValidator validator = new ImportValidator();
+[SPLITED] assertThrows(InvalidFormatException.class, () -> validator.isValid("import
+[ORIGINAL] java.util.*;"));
+[ORIGINAL] }
+[ORIGINAL] 
+[ORIGINAL] @Test
+[ORIGINAL] @DisplayName("Debe de lanzar la excepion al detectar comodin en import static")
+[ORIGINAL] void testStaticImportWithWildcardThrowsException() {
+[ORIGINAL] ImportValidator validator = new ImportValidator();
+[ORIGINAL] assertThrows(
+[SPLITED] InvalidFormatException.class, () -> validator.isValid("import static
+[ORIGINAL] java.lang.Math.*;"));
+[ORIGINAL] }
+[ORIGINAL] }
+

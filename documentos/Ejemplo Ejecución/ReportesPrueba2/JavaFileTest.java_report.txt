@@ -1,0 +1,198 @@
+=== COMPARACIÓN PARA JavaFileTest.java ===
+
+--- VERSIÓN ANTIGUA ---
+[ORIGINAL] package mantenimiento.codecounter.models;
+[ORIGINAL] 
+[ORIGINAL] import static org.junit.jupiter.api.Assertions.assertEquals;
+[ORIGINAL] import static org.junit.jupiter.api.Assertions.assertFalse;
+[ORIGINAL] import static org.junit.jupiter.api.Assertions.assertNotNull;
+[ORIGINAL] 
+[ORIGINAL] import java.io.IOException;
+[ORIGINAL] import java.nio.file.Files;
+[ORIGINAL] import java.nio.file.Path;
+[ORIGINAL] import java.nio.file.Paths;
+[ORIGINAL] import java.util.ArrayList;
+[ORIGINAL] import java.util.List;
+[ORIGINAL] import mantenimiento.codecounter.exceptions.FileNotFoundException;
+[ORIGINAL] import org.junit.jupiter.api.AfterEach;
+[ORIGINAL] import org.junit.jupiter.api.BeforeEach;
+[ORIGINAL] import org.junit.jupiter.api.DisplayName;
+[ORIGINAL] import org.junit.jupiter.api.Test;
+[ORIGINAL] 
+[ORIGINAL] class JavaFileTest {
+[ORIGINAL] 
+[ORIGINAL] private Path tempFile;
+[ORIGINAL] 
+[ORIGINAL] @BeforeEach
+[ORIGINAL] void setUp() throws IOException {
+[ORIGINAL] tempFile = Paths.get("testFile.java");
+[ORIGINAL] Files.write(
+[ORIGINAL] tempFile,
+[ORIGINAL] new ArrayList<String>(
+[ORIGINAL] List.of(
+[ORIGINAL] "public class Test {",
+[ORIGINAL] "    // Esto es un comentario en línea",
+[ORIGINAL] "    /** ",
+[ORIGINAL] "     *",
+[ORIGINAL] "     * que ocupa varias líneas",
+[ORIGINAL] "     */",
+[ORIGINAL] "    public void method() {",
+[ORIGINAL] "                             ",
+[ORIGINAL] "        System.out.println(\"Hello World\");",
+[ORIGINAL] "    }",
+[ORIGINAL] "                             ",
+[ORIGINAL] "}")));
+[ORIGINAL] }
+[ORIGINAL] 
+[ORIGINAL] @AfterEach
+[ORIGINAL] void tearDown() throws IOException {
+[ORIGINAL] Files.deleteIfExists(tempFile);
+[ORIGINAL] }
+[ORIGINAL] 
+[ORIGINAL] @Test
+[ORIGINAL] @DisplayName("Debe de cargar el contenido correctamente")
+[ORIGINAL] void testLoadFileContent() throws FileNotFoundException {
+[ORIGINAL] JavaFile javaFile = new JavaFile(tempFile);
+[ORIGINAL] List<String> content = javaFile.getContent();
+[ORIGINAL] 
+[ORIGINAL] assertNotNull(content);
+[ORIGINAL] assertFalse(content.isEmpty());
+[ORIGINAL] assertEquals(12, content.size());
+[ORIGINAL] }
+[ORIGINAL] 
+[ORIGINAL] @Test
+[ORIGINAL] @DisplayName("Debe de eliminar comentarios en bloque y de linea correctamente")
+[ORIGINAL] void testRemoveComments() throws FileNotFoundException {
+[ORIGINAL] JavaFile javaFile = new JavaFile(this.tempFile).removeComments();
+[ORIGINAL] List<String> content = javaFile.getContent();
+[ORIGINAL] 
+[ORIGINAL] assertFalse(content.contains("// Esto es un comentario en línea"));
+[ORIGINAL] assertFalse(content.contains("/**"));
+[ORIGINAL] assertFalse(content.contains("*"));
+[ORIGINAL] assertFalse(content.contains("* Comentario de bloque"));
+[ORIGINAL] assertFalse(content.contains("* que ocupa varias líneas"));
+[ORIGINAL] assertFalse(content.contains("*/"));
+[ORIGINAL] }
+[ORIGINAL] 
+[ORIGINAL] @Test
+[ORIGINAL] @DisplayName("Debe de eliminar lineas en blanco correctamente")
+[ORIGINAL] void testRemoveBlankLines() throws FileNotFoundException {
+[ORIGINAL] JavaFile javaFile = new JavaFile(this.tempFile).removeBlankLines();
+[ORIGINAL] List<String> content = javaFile.getContent();
+[ORIGINAL] 
+[ORIGINAL] assertFalse(content.contains(""));
+[ORIGINAL] }
+[ORIGINAL] 
+[ORIGINAL] @Test
+[ORIGINAL] @DisplayName("Debe de remover lineas en blanco y comentarios")
+[ORIGINAL] void testRemoveCommentsAndBlankLines() throws FileNotFoundException {
+[ORIGINAL] JavaFile javaFile = new JavaFile(tempFile).removeComments().removeBlankLines();
+[ORIGINAL] List<String> content = javaFile.getContent();
+[ORIGINAL] 
+[ORIGINAL] assertFalse(content.contains("// Esto es un comentario en línea"));
+[ORIGINAL] assertFalse(content.contains("/* Comentario de bloque"));
+[ORIGINAL] assertFalse(content.contains("que ocupa varias líneas */"));
+[ORIGINAL] assertFalse(content.contains(""));
+[ORIGINAL] 
+[ORIGINAL] assertEquals(5, content.size());
+[ORIGINAL] }
+[ORIGINAL] }
+
+--- VERSIÓN NUEVA ---
+[ORIGINAL] package mantenimiento.codecounter.models;
+[ORIGINAL] 
+[ORIGINAL] import static org.junit.jupiter.api.Assertions.assertEquals;
+[ORIGINAL] import static org.junit.jupiter.api.Assertions.assertFalse;
+[ORIGINAL] import static org.junit.jupiter.api.Assertions.assertNotNull;
+[ORIGINAL] 
+[ORIGINAL] import java.io.IOException;
+[ORIGINAL] import java.nio.file.Files;
+[ORIGINAL] import java.nio.file.Path;
+[ORIGINAL] import java.nio.file.Paths;
+[ORIGINAL] import java.util.ArrayList;
+[ORIGINAL] import java.util.List;
+[ORIGINAL] import mantenimiento.codecounter.exceptions.FileNotFoundException;
+[ORIGINAL] import org.junit.jupiter.api.AfterEach;
+[ORIGINAL] import org.junit.jupiter.api.BeforeEach;
+[ORIGINAL] import org.junit.jupiter.api.DisplayName;
+[ORIGINAL] import org.junit.jupiter.api.Test;
+[ORIGINAL] 
+[ORIGINAL] class JavaFileTest {
+[ORIGINAL] 
+[ORIGINAL] private Path tempFile;
+[ORIGINAL] 
+[ORIGINAL] @BeforeEach
+[ORIGINAL] void setUp() throws IOException {
+[ORIGINAL] tempFile = Paths.get("testFile.java");
+[ORIGINAL] Files.write(
+[ORIGINAL] tempFile,
+[ORIGINAL] new ArrayList<String>(
+[ORIGINAL] List.of(
+[ORIGINAL] "public class Test {",
+[ORIGINAL] "    // Esto es un comentario en línea",
+[ORIGINAL] "    /** ",
+[ORIGINAL] "     *",
+[ORIGINAL] "     * que ocupa varias líneas",
+[ORIGINAL] "     */",
+[ORIGINAL] "    public void method() {",
+[ORIGINAL] "                             ",
+[ORIGINAL] "        System.out.println(\"Hello World\");",
+[ORIGINAL] "    }",
+[ORIGINAL] "                             ",
+[ORIGINAL] "}")));
+[ORIGINAL] }
+[ORIGINAL] 
+[ORIGINAL] @AfterEach
+[ORIGINAL] void tearDown() throws IOException {
+[ORIGINAL] Files.deleteIfExists(tempFile);
+[ORIGINAL] }
+[ORIGINAL] 
+[ORIGINAL] @Test
+[ORIGINAL] @DisplayName("Debe de cargar el contenido correctamente")
+[ORIGINAL] void testLoadFileContent() throws FileNotFoundException {
+[ORIGINAL] JavaFile javaFile = new JavaFile(tempFile);
+[ORIGINAL] List<String> content = javaFile.getContent();
+[ORIGINAL] 
+[ORIGINAL] assertNotNull(content);
+[ORIGINAL] assertFalse(content.isEmpty());
+[ORIGINAL] assertEquals(12, content.size());
+[ORIGINAL] }
+[ORIGINAL] 
+[ORIGINAL] @Test
+[ORIGINAL] @DisplayName("Debe de eliminar comentarios en bloque y de linea correctamente")
+[ORIGINAL] void testRemoveComments() throws FileNotFoundException {
+[ORIGINAL] JavaFile javaFile = new JavaFile(this.tempFile).removeComments();
+[ORIGINAL] List<String> content = javaFile.getContent();
+[ORIGINAL] 
+[ORIGINAL] assertFalse(content.contains("// Esto es un comentario en línea"));
+[ORIGINAL] assertFalse(content.contains("/**"));
+[ORIGINAL] assertFalse(content.contains("*"));
+[ORIGINAL] assertFalse(content.contains("* Comentario de bloque"));
+[ORIGINAL] assertFalse(content.contains("* que ocupa varias líneas"));
+[ORIGINAL] assertFalse(content.contains("*/"));
+[ORIGINAL] }
+[ORIGINAL] 
+[ORIGINAL] @Test
+[ORIGINAL] @DisplayName("Debe de eliminar lineas en blanco correctamente")
+[ORIGINAL] void testRemoveBlankLines() throws FileNotFoundException {
+[ORIGINAL] JavaFile javaFile = new JavaFile(this.tempFile).removeBlankLines();
+[ORIGINAL] List<String> content = javaFile.getContent();
+[ORIGINAL] 
+[ORIGINAL] assertFalse(content.contains(""));
+[ORIGINAL] }
+[ORIGINAL] 
+[ORIGINAL] @Test
+[ORIGINAL] @DisplayName("Debe de remover lineas en blanco y comentarios")
+[ORIGINAL] void testRemoveCommentsAndBlankLines() throws FileNotFoundException {
+[ORIGINAL] JavaFile javaFile = new JavaFile(tempFile).removeComments().removeBlankLines();
+[ORIGINAL] List<String> content = javaFile.getContent();
+[ORIGINAL] 
+[ORIGINAL] assertFalse(content.contains("// Esto es un comentario en línea"));
+[ORIGINAL] assertFalse(content.contains("/* Comentario de bloque"));
+[ORIGINAL] assertFalse(content.contains("que ocupa varias líneas */"));
+[ORIGINAL] assertFalse(content.contains(""));
+[ORIGINAL] 
+[ORIGINAL] assertEquals(5, content.size());
+[ORIGINAL] }
+[ORIGINAL] }
+

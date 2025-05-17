@@ -1,0 +1,223 @@
+=== ARCHIVO TxtReporter.java [Version: A] ===
+
+[DELETED] package mantenimiento.codecounter.models.reporters;
+[DELETED] 
+[DELETED] import java.io.BufferedWriter;
+[DELETED] import java.io.FileWriter;
+[DELETED] import java.io.IOException;
+[DELETED] import java.nio.file.Files;
+[DELETED] import java.nio.file.Path;
+[DELETED] import java.nio.file.Paths;
+[DELETED] import java.util.HashMap;
+[DELETED] import java.util.List;
+[DELETED] import java.util.Map;
+[DELETED] import java.util.Scanner;
+[DELETED] import java.util.stream.Collectors;
+[DELETED] import static mantenimiento.codecounter.models.comparators.Status.*;
+[DELETED] 
+[DELETED] import mantenimiento.codecounter.models.LineRecord;
+[DELETED] import mantenimiento.codecounter.models.comparators.Status;
+[DELETED] import mantenimiento.codecounter.utils.LineSplitter;
+[DELETED] 
+[DELETED] /**
+[SPLITED] * Genera reportes en formato TXT con los resultados de la comparación de
+[DELETED] archivos Java.
+[SPLITED] * Crea un archivo por cada clase analizada y proporciona estadísticas globales
+[DELETED] de cambios.
+[DELETED] */
+[DELETED] public class TxtReporter {
+[DELETED] private Map<String, List<LineRecord>> report;
+[DELETED] private Path outputDirectory;
+[DELETED] private Map<Status, Integer> globalChangeCounts;
+[DELETED] 
+[DELETED] /**
+[DELETED] * Constructor que inicializa el generador de reportes.
+[SPLITED] * @param report Mapa con los datos de comparación de archivos (nombre → lista de
+[DELETED] cambios)
+[DELETED] */
+[DELETED] public TxtReporter(Map<String, List<LineRecord>> report) {
+[DELETED] this.report = report;
+[DELETED] this.outputDirectory = requestOutputDirectory();
+[DELETED] this.globalChangeCounts = initializeChangeCounts();
+[DELETED] }
+[DELETED] 
+[DELETED] /**
+[SPLITED] * Inicializa el contador de cambios con valores en cero para cada tipo de
+[DELETED] estado.
+[DELETED] * @return Mapa con los contadores inicializados
+[DELETED] */
+[DELETED] private Map<Status, Integer> initializeChangeCounts() {
+[DELETED] Map<Status, Integer> counts = new HashMap<>();
+[DELETED] for (Status status : values()) {
+[DELETED] counts.put(status, 0);
+[DELETED] }
+[DELETED] return counts;
+[DELETED] }
+[DELETED] 
+[DELETED] /**
+[DELETED] * Solicita al usuario el directorio donde se guardarán los reportes.
+[DELETED] * Crea el directorio si no existe.
+[DELETED] * @return Ruta absoluta del directorio de salida
+[DELETED] */
+[DELETED] private Path requestOutputDirectory() {
+[DELETED] try (Scanner scanner = new Scanner(System.in)) {
+[DELETED] while (true) {
+[SPLITED] System.out.println("\nIngrese la ruta del directorio para guardar los
+[DELETED] reportes:");
+[DELETED] String dirPath = scanner.nextLine().trim();
+[DELETED] System.out.println();
+[DELETED] 
+[DELETED] try {
+[DELETED] Path dir = Paths.get(dirPath);
+[DELETED] if (!Files.exists(dir)) {
+[DELETED] Files.createDirectories(dir);
+[DELETED] }
+[DELETED] return dir.toAbsolutePath();
+[DELETED] } catch (IOException e) {
+[DELETED] System.err.println("Error al acceder al directorio: " + e.getMessage());
+[DELETED] System.err.println("Por favor, ingrese una ruta válida.");
+[DELETED] }
+[DELETED] }
+[DELETED] }
+[DELETED] }
+[DELETED] 
+[DELETED] /**
+[DELETED] * Genera los reportes en formato TXT para todos los archivos analizados.
+[DELETED] * Crea un archivo por cada clase y muestra estadísticas globales al finalizar.
+[DELETED] */
+[DELETED] public void generateTxtReports() {
+[SPLITED] Map<String, List<Map.Entry<String, List<LineRecord>>>> groupedFiles =
+[DELETED] groupFilesByName();
+[DELETED] 
+[SPLITED] for (Map.Entry<String, List<Map.Entry<String, List<LineRecord>>>> group :
+[DELETED] groupedFiles.entrySet()) {
+[DELETED] String baseFileName = group.getKey();
+[DELETED] List<Map.Entry<String, List<LineRecord>>> versions = group.getValue();
+[DELETED] 
+[DELETED] Path outputFile = outputDirectory.resolve(baseFileName + "_report.txt");
+[DELETED] 
+[SPLITED] try (BufferedWriter writer = new BufferedWriter(new
+[DELETED] FileWriter(outputFile.toFile()))) {
+[DELETED] if (versions.size() == 1) {
+[DELETED] writeSingleFileReport(writer, versions.get(0));
+[DELETED] countChanges(versions.get(0).getValue());
+[DELETED] } else {
+[DELETED] writeComparisonReport(writer, versions);
+[DELETED] versions.forEach(version -> countChanges(version.getValue()));
+[DELETED] }
+[DELETED] System.out.println("Reporte generado: " + outputFile);
+[DELETED] } catch (IOException e) {
+[SPLITED] System.err.println("Error al escribir reporte para " + baseFileName + ": " +
+[DELETED] e.getMessage());
+[DELETED] }
+[DELETED] }
+[DELETED] 
+[DELETED] printGlobalChangeSummary();
+[DELETED] }
+[DELETED] 
+[DELETED] /**
+[DELETED] * Actualiza los contadores globales de cambios con las líneas procesadas.
+[DELETED] * @param records Lista de registros de líneas a contar
+[DELETED] */
+[DELETED] private void countChanges(List<LineRecord> records) {
+[DELETED] records.forEach(record -> {
+[DELETED] globalChangeCounts.compute(record.status(), (k, v) -> v + 1);
+[DELETED] });
+[DELETED] }
+[DELETED] 
+[DELETED] /**
+[DELETED] * Imprime en consola un resumen con las estadísticas globales de cambios.
+[DELETED] */
+[DELETED] private void printGlobalChangeSummary() {
+[DELETED] System.out.println("\n=== RESUMEN GLOBAL DE CAMBIOS ===");
+[DELETED] System.out.println("Total de cambios en todo el proyecto:");
+[DELETED] 
+[SPLITED] System.out.printf("Líneas nuevas (NEW): %d%n",
+[DELETED] globalChangeCounts.getOrDefault(NEW, 0));
+[SPLITED] System.out.printf("Líneas modificadas (MODIFIED): %d%n",
+[DELETED] globalChangeCounts.getOrDefault(MODIFIED, 0));
+[SPLITED] System.out.printf("Líneas eliminadas (DELETED): %d%n",
+[DELETED] globalChangeCounts.getOrDefault(DELETED, 0));
+[SPLITED] System.out.printf("Líneas sin cambios (ORIGINAL): %d%n",
+[DELETED] globalChangeCounts.getOrDefault(ORIGINAL, 0));
+[DELETED] 
+[SPLITED] long totalChanges =
+[DELETED] globalChangeCounts.values().stream().mapToLong(Integer::longValue).sum();
+[DELETED] System.out.printf("\nTotal de líneas procesadas: %d%n", totalChanges);
+[DELETED] System.out.println();
+[DELETED] }
+[DELETED] 
+[DELETED] /**
+[DELETED] * Agrupa los archivos por su nombre base (eliminando indicadores de versión).
+[DELETED] * @return Mapa con los archivos agrupados por nombre
+[DELETED] */
+[SPLITED] private Map<String, List<Map.Entry<String, List<LineRecord>>>>
+[DELETED] groupFilesByName() {
+[DELETED] return report.entrySet().stream()
+[DELETED] .collect(Collectors.groupingBy(entry -> {
+[DELETED] String fileName = entry.getKey();
+[DELETED] return fileName.replaceAll(" \\[Version: [AB]\\]", "");
+[DELETED] }));
+[DELETED] }
+[DELETED] 
+[DELETED] /**
+[DELETED] * Genera el reporte para un archivo único (sin versión comparada).
+[DELETED] * @param writer BufferedWriter para escribir el archivo
+[DELETED] * @param fileEntry Entrada con los datos del archivo
+[DELETED] * @throws IOException Si ocurre un error al escribir el archivo
+[DELETED] */
+[DELETED] private void writeSingleFileReport(BufferedWriter writer,
+[DELETED] Map.Entry<String, List<LineRecord>> fileEntry) throws IOException {
+[DELETED] String fileName = fileEntry.getKey();
+[DELETED] List<LineRecord> records = fileEntry.getValue();
+[DELETED] 
+[DELETED] writer.write("=== ARCHIVO " + fileName + " ===");
+[DELETED] writer.newLine();
+[DELETED] writer.newLine();
+[DELETED] 
+[DELETED] for (LineRecord record : records) {
+[DELETED] 
+[DELETED] List<LineRecord> displayLines = LineSplitter.splitLongLines(record);
+[DELETED] for (LineRecord displayLine : displayLines) {
+[SPLITED] writer.write(String.format("[%s] %s", displayLine.status(),
+[DELETED] displayLine.content()));
+[DELETED] writer.newLine();
+[DELETED] }
+[DELETED] }
+[DELETED] }
+[DELETED] 
+[DELETED] /**
+[DELETED] * Genera un reporte comparativo entre dos versiones del mismo archivo.
+[DELETED] * @param writer BufferedWriter para escribir el archivo
+[DELETED] * @param versions Lista con ambas versiones del archivo
+[DELETED] * @throws IOException Si ocurre un error al escribir el archivo
+[DELETED] */
+[DELETED] private void writeComparisonReport(BufferedWriter writer,
+[DELETED] List<Map.Entry<String, List<LineRecord>>> versions) throws IOException {
+[DELETED] versions.sort((a, b) -> a.getKey().contains("Version: A") ? -1 : 1);
+[SPLITED] String baseName = versions.get(0).getKey().replaceAll(" \\[Version: [AB]\\]",
+[DELETED] "");
+[DELETED] 
+[DELETED] writer.write("=== COMPARACIÓN PARA " + baseName + " ===");
+[DELETED] writer.newLine();
+[DELETED] writer.newLine();
+[DELETED] 
+[DELETED] for (Map.Entry<String, List<LineRecord>> version : versions) {
+[SPLITED] String versionLabel = version.getKey().contains("Version: A") ? "VERSIÓN
+[DELETED] ANTIGUA" : "VERSIÓN NUEVA";
+[DELETED] writer.write("--- " + versionLabel + " ---");
+[DELETED] writer.newLine();
+[DELETED] 
+[DELETED] for (LineRecord record : version.getValue()) {
+[DELETED] 
+[DELETED] List<LineRecord> displayLines = LineSplitter.splitLongLines(record);
+[DELETED] for (LineRecord displayLine : displayLines) {
+[SPLITED] writer.write(String.format("[%s] %s", displayLine.status(),
+[DELETED] displayLine.content()));
+[DELETED] writer.newLine();
+[DELETED] }
+[DELETED] }
+[DELETED] writer.newLine();
+[DELETED] }
+[DELETED] }
+[DELETED] }

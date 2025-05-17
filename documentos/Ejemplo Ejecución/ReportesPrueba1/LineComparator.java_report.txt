@@ -1,0 +1,80 @@
+=== ARCHIVO LineComparator.java [Version: B] ===
+
+[NEW] package mantenimiento.codecounter.models.comparators;
+[NEW] 
+[NEW] import mantenimiento.codecounter.utils.LevenshteinDistanceComputer;
+[NEW] 
+[NEW] /*
+[SPLITED] * Compara dos líneas de código por medio de la similitud la formula de similitud
+[NEW] de
+[SPLITED] * LevenshtinDistance. Para que una línea se considere como modificada la
+[NEW] similitud
+[NEW] * debe de ser superior a .80.
+[NEW] */
+[NEW] public class LineComparator {
+[NEW] 
+[NEW] private final double threshold = .80;
+[NEW] 
+[NEW] private String sourceLine;
+[NEW] 
+[NEW] private String targetLine;
+[NEW] 
+[NEW] /**
+[NEW] * Constructor
+[NEW] *
+[NEW] * @param sourceLine    linea de código
+[NEW] * @param targetLine línea de código con la cual se quiere comparar
+[NEW] */
+[NEW] public LineComparator(String sourceLine, String targetLine) {
+[NEW] this.sourceLine = sourceLine;
+[NEW] this.targetLine = targetLine;
+[NEW] }
+[NEW] 
+[NEW] /**
+[NEW] * Calcula la distancia Levenshtein de las dos líneas de código
+[NEW] *
+[NEW] * @return la distancia Levenshtein para las dos líneas de código
+[NEW] */
+[NEW] private int computeDistance() {
+[NEW] return LevenshteinDistanceComputer.calculate(targetLine, sourceLine);
+[NEW] }
+[NEW] 
+[NEW] /**
+[NEW] * Calcula la similaridad entre dos líneas de código
+[NEW] * utilizando la distancia Levenshtein
+[NEW] *
+[NEW] * @return el valor de similaridad que tienen las palabras
+[NEW] */
+[NEW] private double computeSimilarity() {
+[NEW] int distance = computeDistance();
+[NEW] int length = Math.max(this.sourceLine.length(), this.targetLine.length());
+[NEW] return 1 - ((double) distance / length);
+[NEW] }
+[NEW] 
+[NEW] /**
+[NEW] * Determina si dos líneas de código son lo suficientemente
+[NEW] * similares como para considerarse como modificadas.
+[NEW] *
+[NEW] * @return true si la similaridad entre dos palabras supera .80
+[NEW] */
+[NEW] private boolean isModified() {
+[NEW] return computeSimilarity() > this.threshold;
+[NEW] }
+[NEW] 
+[NEW] /**
+[NEW] * Compara las líneas de código determinando si son iguales, modificadas
+[NEW] * o completamente nuevas.
+[NEW] *
+[NEW] * @return el estatus de la línea de código
+[NEW] */
+[NEW] public Status compare() {
+[NEW] if (sourceLine.equals(targetLine)) {
+[NEW] return Status.ORIGINAL;
+[NEW] } else if (isModified()) {
+[NEW] return Status.MODIFIED;
+[NEW] } else {
+[NEW] return Status.NEW;
+[NEW] }
+[NEW] }
+[NEW] 
+[NEW] }

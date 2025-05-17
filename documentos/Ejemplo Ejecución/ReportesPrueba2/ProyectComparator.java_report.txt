@@ -1,0 +1,159 @@
+=== ARCHIVO ProyectComparator.java [Version: A] ===
+
+[DELETED] package mantenimiento.codecounter.models.comparators;
+[DELETED] 
+[DELETED] import java.io.BufferedWriter;
+[DELETED] import java.util.ArrayList;
+[DELETED] import java.util.HashMap;
+[DELETED] import java.util.List;
+[DELETED] import java.util.Map;
+[DELETED] import java.util.Optional;
+[DELETED] 
+[DELETED] import mantenimiento.codecounter.models.JavaFile;
+[DELETED] import mantenimiento.codecounter.models.LineRecord;
+[DELETED] import mantenimiento.codecounter.models.Proyect;
+[DELETED] import mantenimiento.codecounter.models.reporters.ComparationReport;
+[DELETED] import mantenimiento.codecounter.models.reporters.TxtReporter;
+[DELETED] 
+[DELETED] /**
+[DELETED] * Compara cada uno de los archivos javas que compartan el nombre de los dos
+[DELETED] * proyecto provistos
+[DELETED] */
+[DELETED] public class ProyectComparator {
+[DELETED] 
+[DELETED] private Proyect targetProject;
+[DELETED] 
+[DELETED] private Proyect sourceProject;
+[DELETED] 
+[DELETED] private List<JavaFile> sourceProjectFiles;
+[DELETED] 
+[DELETED] private List<JavaFile> targetProjectFiles;
+[DELETED] 
+[DELETED] private Map<String, List<LineRecord>> generalReport = new HashMap<>();
+[DELETED] 
+[DELETED] /**
+[DELETED] * Constructor
+[DELETED] *
+[DELETED] * @param sourceProject proyecto para comparar
+[DELETED] * @param targetProject proyecto a comparar
+[DELETED] */
+[DELETED] public ProyectComparator(Proyect sourceProject, Proyect targetProject) {
+[DELETED] this.sourceProject = sourceProject;
+[DELETED] this.targetProject = targetProject;
+[DELETED] this.sourceProjectFiles = sourceProject.getFiles();
+[DELETED] this.targetProjectFiles = targetProject.getFiles();
+[DELETED] }
+[DELETED] 
+[DELETED] /**
+[DELETED] * Compara cada uno de los archivos con extensión .java de los proyectos
+[DELETED] * provistos
+[DELETED] * en el constructor. Si en la comparación existen archivos que no aparezcan en
+[DELETED] * algún
+[DELETED] * proyecto, su contenido será etiquetado como nuevo o eliminado según sea el
+[DELETED] * caso.
+[DELETED] */
+[DELETED] public void compare() {
+[DELETED] List<JavaFile> blackListOne = new ArrayList<>(this.sourceProject.getFiles());
+[DELETED] List<JavaFile> blackListTwo = new ArrayList<>(this.targetProject.getFiles());
+[DELETED] 
+[DELETED] for (JavaFile javaFile : this.sourceProjectFiles) {
+[DELETED] String name = javaFile.getFileName();
+[DELETED] Optional<JavaFile> fileToComOptional = findFileTocompare(name);
+[DELETED] 
+[DELETED] if (fileToComOptional.isPresent()) {
+[DELETED] JavaFile matchedFile = fileToComOptional.get();
+[DELETED] compareFiles(javaFile, matchedFile);
+[DELETED] blackListTwo.remove(matchedFile);
+[DELETED] blackListOne.remove(javaFile);
+[DELETED] }
+[DELETED] }
+[DELETED] 
+[SPLITED] blackListOne.forEach(s -> generateReportForSingleFile(Status.DELETED, s, "
+[DELETED] [Version: A]"));
+[SPLITED] blackListTwo.forEach(s -> generateReportForSingleFile(Status.NEW, s, " [Version:
+[DELETED] B]"));
+[DELETED] }
+[DELETED] 
+[DELETED] /**
+[DELETED] * Realiza una busqueda de un archivo dentro de un proyecto de acuerdo con el
+[DELETED] * nombre del archivo
+[DELETED] *
+[DELETED] * @param fileName nombre del archivo a buscar
+[DELETED] * @return estructura Optional de la instancia de la clase a buscar
+[DELETED] */
+[DELETED] private Optional<JavaFile> findFileTocompare(String fileName) {
+[DELETED] return this.targetProjectFiles.stream()
+[DELETED] .filter(s -> s.getFileName().equals(fileName))
+[DELETED] .findAny();
+[DELETED] }
+[DELETED] 
+[DELETED] /**
+[DELETED] * Implementa la lógica para comparar el contenido de dos archivos con estensión
+[DELETED] * .java.
+[DELETED] * Posteriormente agrega una instancia al reporte final del proyecto
+[DELETED] *
+[DELETED] * @param sourceJavaFile
+[DELETED] * @param targetJavaFile
+[DELETED] */
+[DELETED] private void compareFiles(JavaFile sourceJavaFile, JavaFile targetJavaFile) {
+[SPLITED] JavaFileComparator javaFileComparator = new
+[DELETED] JavaFileComparator(sourceJavaFile.getContent(),
+[DELETED] targetJavaFile.getContent());
+[DELETED] 
+[DELETED] javaFileComparator.compareContent();
+[DELETED] 
+[DELETED] ComparationReport comparationReport = javaFileComparator.getComparationReport();
+[DELETED] List<LineRecord> contentReport = comparationReport.getSourceContentReport();
+[SPLITED] List<LineRecord> contentToCompareReport =
+[DELETED] comparationReport.getTargetContentReport();
+[DELETED] 
+[SPLITED] generalReport.put(sourceJavaFile.getFileName() + " [Version: A]",
+[DELETED] contentReport);
+[SPLITED] generalReport.put(sourceJavaFile.getFileName() + " [Version: B]",
+[DELETED] contentToCompareReport);
+[DELETED] 
+[DELETED] this.targetProjectFiles.remove(targetJavaFile);
+[DELETED] }
+[DELETED] 
+[DELETED] /**
+[SPLITED] * Genera un reporte para un archivo que existe solo en una versión del proyecto
+[DELETED] (A o B),
+[SPLITED] * agregando cada línea como un registro con el estado especificado (DELETED o
+[DELETED] NEW).
+[SPLITED] * Las líneas se almacenan sin división para mantener el conteo preciso de líneas
+[DELETED] físicas.
+[DELETED] *
+[SPLITED] * @param status   Estado que se asignará a todas las líneas del archivo (DELETED
+[DELETED] para versión A,
+[DELETED] *                 NEW para versión B).
+[SPLITED] * @param javaFile Archivo Java a procesar, del cual se extraerá el contenido
+[DELETED] línea por línea.
+[SPLITED] * @param mention  Sufijo identificador de versión (" [Version: A]" para archivos
+[DELETED] eliminados,
+[DELETED] *                 " [Version: B]" para archivos nuevos).
+[DELETED] *
+[SPLITED] * @implNote Este método no divide líneas largas; la división se realiza
+[DELETED] posteriormente
+[DELETED] *           en {@link TxtReporter} para fines de visualización.
+[DELETED] * @see TxtReporter#writeSingleFileReport(BufferedWriter, Map.Entry)
+[DELETED] * @see LineRecord
+[DELETED] */
+[SPLITED] private void generateReportForSingleFile(Status status, JavaFile javaFile,
+[DELETED] String mention) {
+[DELETED] List<LineRecord> report = new ArrayList<>();
+[DELETED] 
+[DELETED] javaFile.getContent().forEach(lineContent -> {
+[DELETED] report.add(new LineRecord(status, lineContent));
+[DELETED] });
+[DELETED] generalReport.put(javaFile.getFileName() + mention, report);
+[DELETED] }
+[DELETED] 
+[DELETED] /**
+[DELETED] * Obtiene el reporte general de comparación entre ambos proyectos.
+[DELETED] *
+[DELETED] * @return mapa con los nombres de archivo y sus listas de diferencias
+[DELETED] */
+[DELETED] public Map<String, List<LineRecord>> getGeneralReport() {
+[DELETED] return generalReport;
+[DELETED] }
+[DELETED] }

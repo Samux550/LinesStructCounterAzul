@@ -1,0 +1,46 @@
+=== ARCHIVO LineSplitterTest.java [Version: B] ===
+
+[NEW] package mantenimiento.codecounter.utils;
+[NEW] 
+[NEW] import static org.junit.jupiter.api.Assertions.assertEquals;
+[NEW] import static org.junit.jupiter.api.Assertions.assertTrue;
+[NEW] 
+[NEW] import java.util.List;
+[NEW] 
+[NEW] import org.junit.jupiter.api.Test;
+[NEW] 
+[NEW] import mantenimiento.codecounter.models.LineRecord;
+[NEW] import mantenimiento.codecounter.models.comparators.Status;
+[NEW] 
+[NEW] public class LineSplitterTest {
+[NEW] @Test
+[NEW] public void testSplitLongLine_ShouldSplitAndPreserveLogicalLine() {
+[SPLITED] String longLine = "Esto es una línea muy larga que definitivamente excede los
+[SPLITED] ochenta caracteres, y debe ser dividida en múltiples partes para facilitar la
+[NEW] lectura.";
+[NEW] LineRecord original = new LineRecord(Status.ORIGINAL, longLine);
+[NEW] 
+[NEW] List<LineRecord> result = LineSplitter.splitLongLines(original);
+[NEW] 
+[SPLITED] assertTrue(result.size() > 1, "La línea debería haber sido dividida en múltiples
+[NEW] fragmentos");
+[NEW] 
+[SPLITED] assertEquals(Status.SPLITED, result.get(0).status(), "El primer fragmento debe
+[NEW] tener estado SPLITED");
+[NEW] 
+[NEW] for (int i = 1; i < result.size(); i++) {
+[SPLITED] assertEquals(Status.ORIGINAL, result.get(i).status(), "Los fragmentos siguientes
+[NEW] deben mantener el estado ORIGINAL");
+[NEW] }
+[NEW] 
+[NEW] StringBuilder reconstructed = new StringBuilder();
+[NEW] for (LineRecord part : result) {
+[NEW] reconstructed.append(part.content()).append(" ");
+[NEW] }
+[SPLITED] String reconstructedLine = reconstructed.toString().trim().replaceAll("\\s+", "
+[NEW] ");
+[NEW] String originalNormalized = longLine.trim().replaceAll("\\s+", " ");
+[SPLITED] assertEquals(originalNormalized, reconstructedLine, "El contenido reconstruido
+[NEW] debe ser igual al original");
+[NEW] }
+[NEW] }

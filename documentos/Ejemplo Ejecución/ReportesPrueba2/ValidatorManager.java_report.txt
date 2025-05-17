@@ -1,0 +1,144 @@
+=== COMPARACIÓN PARA ValidatorManager.java ===
+
+--- VERSIÓN ANTIGUA ---
+[ORIGINAL] package mantenimiento.codecounter.validators;
+[ORIGINAL] 
+[ORIGINAL] import java.util.List;
+[ORIGINAL] import mantenimiento.codecounter.templates.FormatValidator;
+[ORIGINAL] import mantenimiento.codecounter.templates.LogicalValidator;
+[ORIGINAL] import mantenimiento.codecounter.validators.format_validators.ImportValidator;
+[SPLITED] import
+[SPLITED] mantenimiento.codecounter.validators.format_validators.SingleAnnotationValidator
+[ORIGINAL] ;
+[SPLITED] import
+[SPLITED] mantenimiento.codecounter.validators.format_validators.SingleDeclarationValidato
+[ORIGINAL] r;
+[SPLITED] import
+[ORIGINAL] mantenimiento.codecounter.validators.format_validators.StyleKAndRValidator;
+[SPLITED] import
+[SPLITED] mantenimiento.codecounter.validators.logical_validators.MethodDeclarationValidat
+[ORIGINAL] or;
+[SPLITED] import
+[SPLITED] mantenimiento.codecounter.validators.logical_validators.TypeDeclarationValidator
+[ORIGINAL] ;
+[ORIGINAL] 
+[ORIGINAL] /** Brinda el acceso a los validadores de formato o de líneas lógicas */
+[ORIGINAL] public class ValidatorManager {
+[ORIGINAL] private static FormatValidator formatValidator = null;
+[ORIGINAL] 
+[ORIGINAL] /**
+[ORIGINAL] * Genera la secuencia de validaciones de formato
+[ORIGINAL] *
+[ORIGINAL] * @return Encadenamiento de validadores de format
+[ORIGINAL] */
+[ORIGINAL] public static FormatValidator getFormatValidator() {
+[ORIGINAL] 
+[ORIGINAL] if (formatValidator != null) {
+[ORIGINAL] return formatValidator;
+[ORIGINAL] }
+[ORIGINAL] 
+[ORIGINAL] FormatValidator importValidator = new ImportValidator();
+[ORIGINAL] FormatValidator styleKAndRValidator = new StyleKAndRValidator();
+[ORIGINAL] FormatValidator singleAnnotationValidator = new SingleAnnotationValidator();
+[ORIGINAL] FormatValidator singleDeclarationValidator = new SingleDeclarationValidator();
+[ORIGINAL] 
+[ORIGINAL] importValidator.setNextValidator(styleKAndRValidator);
+[ORIGINAL] styleKAndRValidator.setNextValidator(singleAnnotationValidator);
+[ORIGINAL] singleAnnotationValidator.setNextValidator(singleDeclarationValidator);
+[ORIGINAL] formatValidator = importValidator;
+[ORIGINAL] 
+[ORIGINAL] return formatValidator;
+[ORIGINAL] }
+[ORIGINAL] 
+[ORIGINAL] /**
+[ORIGINAL] * Genera la secuencia de validaciones de líneas lógicas
+[ORIGINAL] *
+[ORIGINAL] * @return Lista de validadores lógicos
+[ORIGINAL] */
+[ORIGINAL] public static LogicalValidator getLogicalValidators(String lineOfCode) {
+[ORIGINAL] 
+[ORIGINAL] final List<LogicalValidator> logicalValidators =
+[ORIGINAL] List.of(new MethodDeclarationValidator(), new TypeDeclarationValidator());
+[ORIGINAL] if (lineOfCode == null || lineOfCode.isBlank()) {
+[ORIGINAL] return null;
+[ORIGINAL] }
+[ORIGINAL] return logicalValidators.stream()
+[ORIGINAL] .filter(e -> e.validateType(lineOfCode))
+[ORIGINAL] .findFirst()
+[ORIGINAL] .orElse(null);
+[ORIGINAL] }
+[ORIGINAL] 
+[ORIGINAL] private ValidatorManager() {}
+[ORIGINAL] }
+
+--- VERSIÓN NUEVA ---
+[ORIGINAL] package mantenimiento.codecounter.validators;
+[ORIGINAL] 
+[ORIGINAL] import java.util.List;
+[ORIGINAL] import mantenimiento.codecounter.templates.FormatValidator;
+[ORIGINAL] import mantenimiento.codecounter.templates.LogicalValidator;
+[ORIGINAL] import mantenimiento.codecounter.validators.format_validators.ImportValidator;
+[SPLITED] import
+[SPLITED] mantenimiento.codecounter.validators.format_validators.SingleAnnotationValidator
+[ORIGINAL] ;
+[SPLITED] import
+[SPLITED] mantenimiento.codecounter.validators.format_validators.SingleDeclarationValidato
+[ORIGINAL] r;
+[SPLITED] import
+[ORIGINAL] mantenimiento.codecounter.validators.format_validators.StyleKAndRValidator;
+[SPLITED] import
+[SPLITED] mantenimiento.codecounter.validators.logical_validators.MethodDeclarationValidat
+[ORIGINAL] or;
+[SPLITED] import
+[SPLITED] mantenimiento.codecounter.validators.logical_validators.TypeDeclarationValidator
+[ORIGINAL] ;
+[ORIGINAL] 
+[ORIGINAL] /** Brinda el acceso a los validadores de formato o de líneas lógicas */
+[ORIGINAL] public class ValidatorManager {
+[ORIGINAL] private static FormatValidator formatValidator = null;
+[ORIGINAL] 
+[ORIGINAL] /**
+[ORIGINAL] * Genera la secuencia de validaciones de formato
+[ORIGINAL] *
+[ORIGINAL] * @return Encadenamiento de validadores de format
+[ORIGINAL] */
+[ORIGINAL] public static FormatValidator getFormatValidator() {
+[ORIGINAL] 
+[ORIGINAL] if (formatValidator != null) {
+[ORIGINAL] return formatValidator;
+[ORIGINAL] }
+[ORIGINAL] 
+[ORIGINAL] FormatValidator importValidator = new ImportValidator();
+[ORIGINAL] FormatValidator styleKAndRValidator = new StyleKAndRValidator();
+[ORIGINAL] FormatValidator singleAnnotationValidator = new SingleAnnotationValidator();
+[ORIGINAL] FormatValidator singleDeclarationValidator = new SingleDeclarationValidator();
+[ORIGINAL] 
+[ORIGINAL] importValidator.setNextValidator(styleKAndRValidator);
+[ORIGINAL] styleKAndRValidator.setNextValidator(singleAnnotationValidator);
+[ORIGINAL] singleAnnotationValidator.setNextValidator(singleDeclarationValidator);
+[ORIGINAL] formatValidator = importValidator;
+[ORIGINAL] 
+[ORIGINAL] return formatValidator;
+[ORIGINAL] }
+[ORIGINAL] 
+[ORIGINAL] /**
+[ORIGINAL] * Genera la secuencia de validaciones de líneas lógicas
+[ORIGINAL] *
+[ORIGINAL] * @return Lista de validadores lógicos
+[ORIGINAL] */
+[ORIGINAL] public static LogicalValidator getLogicalValidators(String lineOfCode) {
+[ORIGINAL] 
+[ORIGINAL] final List<LogicalValidator> logicalValidators =
+[ORIGINAL] List.of(new MethodDeclarationValidator(), new TypeDeclarationValidator());
+[ORIGINAL] if (lineOfCode == null || lineOfCode.isBlank()) {
+[ORIGINAL] return null;
+[ORIGINAL] }
+[ORIGINAL] return logicalValidators.stream()
+[ORIGINAL] .filter(e -> e.validateType(lineOfCode))
+[ORIGINAL] .findFirst()
+[ORIGINAL] .orElse(null);
+[ORIGINAL] }
+[ORIGINAL] 
+[ORIGINAL] private ValidatorManager() {}
+[ORIGINAL] }
+

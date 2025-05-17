@@ -1,0 +1,93 @@
+=== ARCHIVO Proyect.java [Version: A] ===
+
+[DELETED] package mantenimiento.codecounter.models;
+[DELETED] 
+[DELETED] import java.nio.file.Path;
+[DELETED] import java.util.ArrayList;
+[DELETED] import java.util.List;
+[DELETED] 
+[DELETED] import mantenimiento.codecounter.exceptions.FileNotFoundException;
+[DELETED] 
+[DELETED] /**
+[DELETED] * Representa un proyecto de código fuente Java, incluyendo su ruta de origen
+[DELETED] * y los archivos Java contenidos dentro de él.
+[DELETED] */
+[DELETED] public class Proyect {
+[DELETED] 
+[DELETED] /** Ruta del proyecto. */
+[DELETED] private String path;
+[DELETED] 
+[DELETED] /** Lista de rutas a archivos Java dentro del proyecto. */
+[DELETED] private List<Path> pathFiles;
+[DELETED] 
+[DELETED] /** Lista de objetos JavaFile representando cada archivo Java del proyecto. */
+[DELETED] private List<JavaFile> files;
+[DELETED] 
+[DELETED] /**
+[SPLITED] * Crea una nueva instancia de {@code Proyect} con la ruta y los archivos
+[DELETED] especificados.
+[DELETED] * Convierte las rutas a objetos {@link JavaFile}.
+[DELETED] *
+[DELETED] * @param path       Ruta del proyecto.
+[DELETED] * @param pathFiles  Lista de rutas a archivos Java dentro del proyecto.
+[DELETED] */
+[DELETED] public Proyect(String path, List<Path> pathFiles) {
+[DELETED] this.path = path;
+[DELETED] this.pathFiles = pathFiles;
+[DELETED] this.files = new ArrayList<>();
+[DELETED] makeFiles();
+[DELETED] }
+[DELETED] 
+[DELETED] /**
+[DELETED] * Obtiene la ruta del proyecto.
+[DELETED] *
+[DELETED] * @return Ruta como cadena.
+[DELETED] */
+[DELETED] public String getPath() {
+[DELETED] return path;
+[DELETED] }
+[DELETED] 
+[DELETED] /**
+[DELETED] * Establece una nueva ruta para el proyecto.
+[DELETED] *
+[DELETED] * @param path Nueva ruta.
+[DELETED] */
+[DELETED] public void setPath(String path) {
+[DELETED] this.path = path;
+[DELETED] }
+[DELETED] 
+[DELETED] /**
+[DELETED] * Devuelve la lista de archivos Java procesados del proyecto.
+[DELETED] *
+[DELETED] * @return Lista de {@link JavaFile}.
+[DELETED] */
+[DELETED] public List<JavaFile> getFiles() {
+[DELETED] return files;
+[DELETED] }
+[DELETED] 
+[DELETED] /**
+[DELETED] * Reemplaza la lista de archivos Java del proyecto.
+[DELETED] *
+[DELETED] * @param files Nueva lista de objetos {@link JavaFile}.
+[DELETED] */
+[DELETED] public void setFiles(List<JavaFile> files) {
+[DELETED] this.files = files;
+[DELETED] }
+[DELETED] 
+[DELETED] /**
+[DELETED] * Crea objetos {@link JavaFile} a partir de las rutas especificadas
+[DELETED] * en {@code pathFiles} y los agrega a la lista {@code files}.
+[DELETED] * Si algún archivo no se encuentra, imprime el error.
+[DELETED] */
+[DELETED] private void makeFiles() {
+[DELETED] for (Path path : pathFiles) {
+[DELETED] try {
+[DELETED] this.files.add(new JavaFile(path));
+[DELETED] } catch (FileNotFoundException e) {
+[DELETED] e.printStackTrace();
+[DELETED] }
+[DELETED] }
+[DELETED] }
+[DELETED] 
+[DELETED] }
+[DELETED] 

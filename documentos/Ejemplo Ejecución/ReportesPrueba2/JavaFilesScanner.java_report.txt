@@ -1,0 +1,110 @@
+=== COMPARACIÓN PARA JavaFilesScanner.java ===
+
+--- VERSIÓN ANTIGUA ---
+[ORIGINAL] package mantenimiento.codecounter.utils;
+[ORIGINAL] 
+[ORIGINAL] import java.io.IOException;
+[ORIGINAL] import java.nio.file.Files;
+[ORIGINAL] import java.nio.file.Path;
+[ORIGINAL] import java.nio.file.Paths;
+[ORIGINAL] import java.util.List;
+[ORIGINAL] import java.util.function.Predicate;
+[ORIGINAL] import java.util.stream.Stream;
+[ORIGINAL] import mantenimiento.codecounter.exceptions.FolderNotFoundException;
+[ORIGINAL] import mantenimiento.codecounter.exceptions.JavaFilesNotFoundException;
+[ORIGINAL] 
+[ORIGINAL] public class JavaFilesScanner {
+[ORIGINAL] /**
+[SPLITED] * Método para obtener los archivos .java dentro de un directorio y sus
+[ORIGINAL] subdirectorios.
+[ORIGINAL] *
+[ORIGINAL] * @param folderPath Ruta del directorio raíz.
+[ORIGINAL] * @return Lista de rutas de archivos .java encontrados.
+[ORIGINAL] * @throws FolderNotFoundException Si la carpeta no existe o no es válida.
+[SPLITED] * @throws NoJavaFilesFoundException Si no se encuentran archivos .java en la
+[ORIGINAL] carpeta.
+[ORIGINAL] */
+[ORIGINAL] public static List<Path> getJavaFiles(String folderPath)
+[ORIGINAL] throws FolderNotFoundException, JavaFilesNotFoundException {
+[ORIGINAL] Path path = Paths.get(folderPath);
+[ORIGINAL] try (Stream<Path> stream = Files.walk(path)) {
+[SPLITED] List<Path> javaFiles =
+[ORIGINAL] stream.filter(Files::isRegularFile).filter(isJavaFile()).toList();
+[ORIGINAL] 
+[ORIGINAL] if (javaFiles.isEmpty()) {
+[ORIGINAL] throw new JavaFilesNotFoundException();
+[ORIGINAL] }
+[ORIGINAL] 
+[ORIGINAL] return javaFiles;
+[ORIGINAL] 
+[ORIGINAL] } catch (IOException e) {
+[ORIGINAL] throw new FolderNotFoundException(folderPath);
+[ORIGINAL] }
+[ORIGINAL] }
+[ORIGINAL] 
+[ORIGINAL] /**
+[ORIGINAL] * Método para verificar si un archivo es un archivo .java.
+[ORIGINAL] *
+[ORIGINAL] * @return Predicate que verifica si el archivo termina en ".java".
+[ORIGINAL] */
+[ORIGINAL] private static Predicate<Path> isJavaFile() {
+[ORIGINAL] return fileName -> fileName.toString().endsWith(".java");
+[ORIGINAL] }
+[ORIGINAL] 
+[ORIGINAL] private JavaFilesScanner() {}
+[ORIGINAL] }
+
+--- VERSIÓN NUEVA ---
+[ORIGINAL] package mantenimiento.codecounter.utils;
+[ORIGINAL] 
+[ORIGINAL] import java.io.IOException;
+[ORIGINAL] import java.nio.file.Files;
+[ORIGINAL] import java.nio.file.Path;
+[ORIGINAL] import java.nio.file.Paths;
+[ORIGINAL] import java.util.List;
+[ORIGINAL] import java.util.function.Predicate;
+[ORIGINAL] import java.util.stream.Stream;
+[ORIGINAL] import mantenimiento.codecounter.exceptions.FolderNotFoundException;
+[ORIGINAL] import mantenimiento.codecounter.exceptions.JavaFilesNotFoundException;
+[ORIGINAL] 
+[ORIGINAL] public class JavaFilesScanner {
+[ORIGINAL] /**
+[SPLITED] * Método para obtener los archivos .java dentro de un directorio y sus
+[ORIGINAL] subdirectorios.
+[ORIGINAL] *
+[ORIGINAL] * @param folderPath Ruta del directorio raíz.
+[ORIGINAL] * @return Lista de rutas de archivos .java encontrados.
+[ORIGINAL] * @throws FolderNotFoundException Si la carpeta no existe o no es válida.
+[SPLITED] * @throws NoJavaFilesFoundException Si no se encuentran archivos .java en la
+[ORIGINAL] carpeta.
+[ORIGINAL] */
+[ORIGINAL] public static List<Path> getJavaFiles(String folderPath)
+[ORIGINAL] throws FolderNotFoundException, JavaFilesNotFoundException {
+[ORIGINAL] Path path = Paths.get(folderPath);
+[ORIGINAL] try (Stream<Path> stream = Files.walk(path)) {
+[SPLITED] List<Path> javaFiles =
+[ORIGINAL] stream.filter(Files::isRegularFile).filter(isJavaFile()).toList();
+[ORIGINAL] 
+[ORIGINAL] if (javaFiles.isEmpty()) {
+[ORIGINAL] throw new JavaFilesNotFoundException();
+[ORIGINAL] }
+[ORIGINAL] 
+[ORIGINAL] return javaFiles;
+[ORIGINAL] 
+[ORIGINAL] } catch (IOException e) {
+[ORIGINAL] throw new FolderNotFoundException(folderPath);
+[ORIGINAL] }
+[ORIGINAL] }
+[ORIGINAL] 
+[ORIGINAL] /**
+[ORIGINAL] * Método para verificar si un archivo es un archivo .java.
+[ORIGINAL] *
+[ORIGINAL] * @return Predicate que verifica si el archivo termina en ".java".
+[ORIGINAL] */
+[ORIGINAL] private static Predicate<Path> isJavaFile() {
+[ORIGINAL] return fileName -> fileName.toString().endsWith(".java");
+[ORIGINAL] }
+[ORIGINAL] 
+[ORIGINAL] private JavaFilesScanner() {}
+[ORIGINAL] }
+

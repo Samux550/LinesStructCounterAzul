@@ -1,0 +1,65 @@
+=== ARCHIVO TxtReporterIntegrationTest.java [Version: B] ===
+
+[NEW] // package mantenimiento.codecounter.models.reporters;
+[NEW] 
+[NEW] // import mantenimiento.codecounter.models.LineRecord;
+[NEW] // import mantenimiento.codecounter.models.comparators.Status;
+[NEW] // import org.junit.jupiter.api.Test;
+[NEW] 
+[NEW] // import java.io.BufferedWriter;
+[NEW] // import java.io.IOException;
+[NEW] // import java.io.StringWriter;
+[NEW] // import java.nio.file.Path;
+[NEW] // import java.util.*;
+[NEW] 
+[NEW] // import static org.junit.jupiter.api.Assertions.*;
+[NEW] 
+[NEW] // public class TxtReporterIntegrationTest {
+[NEW] 
+[NEW] //     @Test
+[SPLITED] //     public void testLongLineIsSplitInReportButCountedOnce() throws
+[NEW] IOException {
+[NEW] //         // Línea de 160 caracteres
+[SPLITED] //         String longLine = "Esta es una línea extremadamente larga que supera
+[SPLITED] ampliamente los ochenta caracteres, y debería ser dividida en múltiples líneas
+[NEW] visuales para el reporte.";
+[NEW] 
+[NEW] //         LineRecord record = new LineRecord(Status.NEW, longLine);
+[NEW] //         List<LineRecord> records = Collections.singletonList(record);
+[NEW] //         Map<String, List<LineRecord>> report = new HashMap<>();
+[NEW] //         report.put("ClasePrueba.java", records);
+[NEW] 
+[NEW] //         // Subclase anónima para evitar I/O real
+[NEW] //         TxtReporter reporter = new TxtReporter(report) {
+[NEW] //             protected Path requestOutputDirectory() {
+[NEW] //                 return Path.of("."); // Devuelve un path dummy
+[NEW] //             }
+[NEW] 
+[NEW] //             @Override
+[NEW] //             public void generateTxtReports() {
+[NEW] //                 try {
+[NEW] //                     StringWriter sw = new StringWriter();
+[NEW] //                     BufferedWriter writer = new BufferedWriter(sw);
+[SPLITED] //                     Map.Entry<String, List<LineRecord>> fileEntry =
+[NEW] report.entrySet().iterator().next();
+[NEW] //                     writeSingleFileReport(writer, fileEntry);
+[NEW] //                     writer.flush();
+[NEW] 
+[NEW] //                     String output = sw.toString();
+[SPLITED] //                     // Aseguramos que se haya dividido (por lo menos dos
+[NEW] líneas con el mismo estado)
+[SPLITED] //                     long countNewLines = output.lines().filter(line ->
+[NEW] line.contains("[NEW]")).count();
+[SPLITED] //                     assertTrue(countNewLines >= 2, "La línea larga debe
+[NEW] haberse dividido en varias líneas [NEW]");
+[NEW] 
+[NEW] //                 } catch (IOException e) {
+[NEW] //                     fail("No se esperaba IOException durante la prueba");
+[NEW] //                 }
+[NEW] //             }
+[NEW] //         };
+[NEW] 
+[NEW] //         // Ejecuta el test
+[NEW] //         reporter.generateTxtReports();
+[NEW] //     }
+[NEW] // }

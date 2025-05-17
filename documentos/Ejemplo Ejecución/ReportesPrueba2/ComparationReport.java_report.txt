@@ -1,0 +1,118 @@
+=== ARCHIVO ComparationReport.java [Version: A] ===
+
+[DELETED] package mantenimiento.codecounter.models.reporters;
+[DELETED] 
+[DELETED] import java.util.ArrayList;
+[DELETED] import java.util.List;
+[DELETED] 
+[DELETED] import mantenimiento.codecounter.models.LineRecord;
+[DELETED] import mantenimiento.codecounter.models.comparators.Status;
+[DELETED] 
+[DELETED] /**
+[DELETED] * Clase encargada de construir un reporte de comparación línea por línea
+[DELETED] * entre dos archivos de código fuente.
+[DELETED] */
+[DELETED] public class ComparationReport {
+[DELETED] 
+[DELETED] private List<LineRecord> sourceContentReport;
+[DELETED] 
+[DELETED] private List<LineRecord> targetContentReport;
+[DELETED] 
+[DELETED] /**
+[DELETED] * Constructor que inicializa ambos reportes como listas vacías.
+[DELETED] */
+[DELETED] public ComparationReport() {
+[DELETED] this.sourceContentReport = new ArrayList<>();
+[DELETED] this.targetContentReport = new ArrayList<>();
+[DELETED] }
+[DELETED] 
+[DELETED] /**
+[SPLITED] * Realiza una instancia en el reporte de acruedo al estatus de la línea a
+[DELETED] comparar
+[DELETED] * @param status estado de la línea de código a comparar
+[DELETED] * @param sourceLine linea de código a comparar
+[DELETED] * @param targetLine línea de código para comparar
+[DELETED] */
+[SPLITED] public void makeReportLine(Status status, String sourceLine, String targetLine)
+[DELETED] {
+[DELETED] switch (status) {
+[DELETED] case ORIGINAL:
+[DELETED] sourceContentReport.add(new LineRecord(Status.ORIGINAL, sourceLine));
+[DELETED] targetContentReport.add(new LineRecord(Status.ORIGINAL, targetLine));
+[DELETED] break;
+[DELETED] case MODIFIED:
+[DELETED] sourceContentReport.add(new LineRecord(Status.ORIGINAL, sourceLine));
+[DELETED] targetContentReport.add(new LineRecord(Status.MODIFIED, targetLine));
+[DELETED] break;
+[DELETED] case NEW:
+[DELETED] sourceContentReport.add(new LineRecord(Status.DELETED, sourceLine));
+[DELETED] targetContentReport.add(new LineRecord(Status.NEW, targetLine));
+[DELETED] break;
+[DELETED] default:
+[DELETED] break;
+[DELETED] }
+[DELETED] }
+[DELETED] 
+[DELETED] /**
+[DELETED] * Agrega al reporte las líneas faltantes al final del contenido original,
+[DELETED] * marcándolas como eliminadas.
+[DELETED] *
+[DELETED] * @param content    Lista de líneas del contenido original.
+[SPLITED] * @param difference Número de líneas de diferencia respecto al contenido
+[DELETED] comparado.
+[DELETED] */
+[DELETED] public void updateReport(List<String> content, int difference) {
+[DELETED] int indexToCheck = content.size() - difference;
+[DELETED] if (indexToCheck < 0) {
+[DELETED] indexToCheck = 0;
+[DELETED] }
+[DELETED] for (int i = indexToCheck; i < content.size(); i++) {
+[DELETED] this.sourceContentReport.add(new LineRecord(Status.DELETED, content.get(i)));
+[DELETED] }
+[DELETED] }
+[DELETED] 
+[DELETED] /**
+[DELETED] * Agrega al reporte las líneas faltantes al final del contenido nuevo,
+[DELETED] * marcándolas como nuevas.
+[DELETED] *
+[DELETED] * @param content           Lista de líneas del contenido nuevo.
+[DELETED] * @param contentToCompare  Lista de líneas del contenido original.
+[SPLITED] * @param difference        Número de líneas de diferencia respecto al contenido
+[DELETED] original.
+[DELETED] */
+[SPLITED] public void updateReport(List<String> content, List<String> contentToCompare,
+[DELETED] int difference) {
+[DELETED] int indexToCheck = contentToCompare.size() - difference;
+[DELETED] if (indexToCheck < 0) {
+[DELETED] indexToCheck = 0;
+[DELETED] }
+[DELETED] for (int i = indexToCheck; i < contentToCompare.size(); i++) {
+[SPLITED] this.targetContentReport.add(new LineRecord(Status.NEW,
+[DELETED] contentToCompare.get(i)));
+[DELETED] }
+[DELETED] }
+[DELETED] 
+[DELETED] /**
+[DELETED] *
+[DELETED] * @return retorna el reporte del contenido a comparar
+[DELETED] */
+[DELETED] public List<LineRecord> getSourceContentReport() {
+[DELETED] return sourceContentReport;
+[DELETED] }
+[DELETED] 
+[DELETED] /**
+[DELETED] *
+[DELETED] * @return retorna el reporte del contenido para comparar
+[DELETED] */
+[DELETED] public List<LineRecord> getTargetContentReport() {
+[DELETED] return targetContentReport;
+[DELETED] }
+[DELETED] 
+[DELETED] /**
+[DELETED] * Método reservado para generar el reporte de una clase individual.
+[DELETED] * Actualmente no implementado.
+[DELETED] */
+[DELETED] public void makeReportSingleClass() {
+[DELETED] // Método aún no implementado
+[DELETED] }
+[DELETED] }

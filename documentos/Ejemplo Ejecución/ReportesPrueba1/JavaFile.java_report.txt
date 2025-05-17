@@ -1,0 +1,146 @@
+=== COMPARACIÓN PARA JavaFile.java ===
+
+--- VERSIÓN ANTIGUA ---
+[ORIGINAL] package mantenimiento.codecounter.models;
+[ORIGINAL] 
+[ORIGINAL] import java.nio.file.Files;
+[ORIGINAL] import java.nio.file.Path;
+[ORIGINAL] import java.util.ArrayList;
+[ORIGINAL] import java.util.List;
+[ORIGINAL] import mantenimiento.codecounter.exceptions.FileNotFoundException;
+[ORIGINAL] 
+[ORIGINAL] /**
+[SPLITED] * Representacion de un archivo Java que provee metodos de acceso para su
+[ORIGINAL] contenido y eliminar
+[ORIGINAL] * informacion innecesaria para el conteno de lineas logicas y fisicas
+[ORIGINAL] */
+[ORIGINAL] public class JavaFile {
+[ORIGINAL] private List<String> content;
+[ORIGINAL] private String fileName;
+[ORIGINAL] 
+[ORIGINAL] /**
+[ORIGINAL] * @param filePath Ruta del archivo
+[ORIGINAL] * @throws FileNotFoundException Si la ruta es invalida
+[ORIGINAL] */
+[ORIGINAL] public JavaFile(Path filePath) throws FileNotFoundException {
+[ORIGINAL] try {
+[ORIGINAL] this.content = Files.readAllLines(filePath);
+[ORIGINAL] this.fileName = filePath.getFileName().toString();
+[ORIGINAL] } catch (Exception e) {
+[ORIGINAL] throw new FileNotFoundException(filePath.toString());
+[ORIGINAL] }
+[ORIGINAL] }
+[ORIGINAL] 
+[ORIGINAL] /**
+[ORIGINAL] * Remueve comentarios en linea y de bloque
+[ORIGINAL] *
+[ORIGINAL] * @return Devuelve la instancia misma del objeto
+[ORIGINAL] */
+[ORIGINAL] public JavaFile removeComments() {
+[ORIGINAL] String commentRegext = "(?s)/\\*.*?\\*/|//[^\n]*";
+[ORIGINAL] 
+[ORIGINAL] String fileContent = String.join("\n", this.content);
+[ORIGINAL] String codeWithOutComments = fileContent.replaceAll(commentRegext, "");
+[ORIGINAL] 
+[ORIGINAL] this.content = new ArrayList<>(List.of(codeWithOutComments.split("\n")));
+[ORIGINAL] 
+[ORIGINAL] return this;
+[ORIGINAL] }
+[ORIGINAL] 
+[ORIGINAL] /**
+[ORIGINAL] * Remueve lineas en blanco
+[ORIGINAL] *
+[ORIGINAL] * @return Devuelve la instancia misma del objeto
+[ORIGINAL] */
+[ORIGINAL] public JavaFile removeBlankLines() {
+[ORIGINAL] this.content.removeIf(String::isBlank);
+[ORIGINAL] return this;
+[ORIGINAL] }
+[ORIGINAL] 
+[ORIGINAL] /**
+[ORIGINAL] * @return Contenido del archivo java
+[ORIGINAL] */
+[ORIGINAL] public List<String> getContent() {
+[ORIGINAL] return this.content.stream().map(String::trim).toList();
+[ORIGINAL] }
+[ORIGINAL] 
+[ORIGINAL] /**
+[ORIGINAL] * @return Nombre del archivo
+[ORIGINAL] */
+[ORIGINAL] public String getFileName() {
+[ORIGINAL] return this.fileName;
+[ORIGINAL] }
+[ORIGINAL] }
+
+--- VERSIÓN NUEVA ---
+[ORIGINAL] package mantenimiento.codecounter.models;
+[ORIGINAL] 
+[ORIGINAL] import java.nio.file.Files;
+[ORIGINAL] import java.nio.file.Path;
+[ORIGINAL] import java.util.ArrayList;
+[ORIGINAL] import java.util.List;
+[ORIGINAL] import mantenimiento.codecounter.exceptions.FileNotFoundException;
+[ORIGINAL] 
+[ORIGINAL] /**
+[SPLITED] * Representacion de un archivo Java que provee metodos de acceso para su
+[ORIGINAL] contenido y eliminar
+[ORIGINAL] * informacion innecesaria para el conteno de lineas logicas y fisicas
+[ORIGINAL] */
+[ORIGINAL] public class JavaFile {
+[ORIGINAL] private List<String> content;
+[ORIGINAL] private String fileName;
+[ORIGINAL] 
+[ORIGINAL] /**
+[ORIGINAL] * @param filePath Ruta del archivo
+[ORIGINAL] * @throws FileNotFoundException Si la ruta es invalida
+[ORIGINAL] */
+[ORIGINAL] public JavaFile(Path filePath) throws FileNotFoundException {
+[ORIGINAL] try {
+[ORIGINAL] this.content = Files.readAllLines(filePath);
+[ORIGINAL] this.fileName = filePath.getFileName().toString();
+[ORIGINAL] } catch (Exception e) {
+[ORIGINAL] throw new FileNotFoundException(filePath.toString());
+[ORIGINAL] }
+[ORIGINAL] }
+[ORIGINAL] 
+[ORIGINAL] /**
+[ORIGINAL] * Remueve comentarios en linea y de bloque
+[ORIGINAL] *
+[ORIGINAL] * @return Devuelve la instancia misma del objeto
+[ORIGINAL] */
+[ORIGINAL] public JavaFile removeComments() {
+[ORIGINAL] String commentRegext = "(?s)/\\*.*?\\*/|//[^\n]*";
+[ORIGINAL] 
+[ORIGINAL] String fileContent = String.join("\n", this.content);
+[ORIGINAL] String codeWithOutComments = fileContent.replaceAll(commentRegext, "");
+[ORIGINAL] 
+[ORIGINAL] this.content = new ArrayList<>(List.of(codeWithOutComments.split("\n")));
+[ORIGINAL] 
+[ORIGINAL] return this;
+[ORIGINAL] }
+[ORIGINAL] 
+[ORIGINAL] /**
+[ORIGINAL] * Remueve lineas en blanco
+[ORIGINAL] *
+[ORIGINAL] * @return Devuelve la instancia misma del objeto
+[ORIGINAL] */
+[ORIGINAL] public JavaFile removeBlankLines() {
+[ORIGINAL] this.content.removeIf(String::isBlank);
+[ORIGINAL] return this;
+[ORIGINAL] }
+[ORIGINAL] 
+[ORIGINAL] /**
+[ORIGINAL] * @return Contenido del archivo java
+[ORIGINAL] */
+[ORIGINAL] public List<String> getContent() {
+[ORIGINAL] return this.content.stream().map(String::trim).toList();
+[ORIGINAL] }
+[ORIGINAL] 
+[ORIGINAL] /**
+[ORIGINAL] * @return Nombre del archivo
+[ORIGINAL] */
+[ORIGINAL] public String getFileName() {
+[ORIGINAL] return this.fileName;
+[ORIGINAL] }
+[ORIGINAL] }
+

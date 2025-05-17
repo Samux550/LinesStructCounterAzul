@@ -1,0 +1,128 @@
+=== COMPARACIÓN PARA TypeDeclarationValidator.java ===
+
+--- VERSIÓN ANTIGUA ---
+[ORIGINAL] package mantenimiento.codecounter.validators.logical_validators;
+[ORIGINAL] 
+[SPLITED] import static
+[ORIGINAL] mantenimiento.codecounter.constants.JavaRegextConstants.ACCESS_MODIFIERS_REGEX;
+[ORIGINAL] import static mantenimiento.codecounter.constants.JavaRegextConstants.TYPE_KEYS;
+[ORIGINAL] 
+[ORIGINAL] import mantenimiento.codecounter.templates.LogicalValidator;
+[ORIGINAL] 
+[ORIGINAL] /**
+[SPLITED] * Clase que verifica si existe una declaración de tipo (class, interface, enum)
+[ORIGINAL] para poder
+[ORIGINAL] * contabilizarlo como línea lógica
+[ORIGINAL] */
+[ORIGINAL] public class TypeDeclarationValidator implements LogicalValidator {
+[ORIGINAL] 
+[ORIGINAL] private static final String TYPE_DECLARATION =
+[ORIGINAL] "^(\\s*" + ACCESS_MODIFIERS_REGEX + ".*\\s*" + TYPE_KEYS + ".*)";
+[ORIGINAL] 
+[ORIGINAL] /**
+[SPLITED] * Determina si una línea de código corresponde a una declaración de tipo para
+[ORIGINAL] considerarla como
+[ORIGINAL] * línea lógica
+[ORIGINAL] *
+[ORIGINAL] * @param linesOfCode
+[SPLITED] * @return {@code true} si la corresponde a una declaración de tipo, {@code
+[ORIGINAL] false} en caso
+[ORIGINAL] *     contrario
+[ORIGINAL] */
+[ORIGINAL] @Override
+[ORIGINAL] public boolean validateType(String linesOfCode) {
+[ORIGINAL] return isTypeDeclaration(linesOfCode);
+[ORIGINAL] }
+[ORIGINAL] 
+[ORIGINAL] /**
+[ORIGINAL] * Verifica si la sentencia es una declaración de tipo
+[ORIGINAL] *
+[ORIGINAL] * @param lineOfCode sentencia de codigo por analizar
+[SPLITED] * @return {@code true} si coincide con la declaracion, {@code false} en caso
+[ORIGINAL] contrario
+[ORIGINAL] */
+[ORIGINAL] private boolean isTypeDeclaration(String line) {
+[ORIGINAL] return line.matches(TYPE_DECLARATION) && !line.contains("\"");
+[ORIGINAL] }
+[ORIGINAL] 
+[ORIGINAL] /*
+[ORIGINAL] * Obtiene el nombre del tipo declarado en la línea de código
+[ORIGINAL] */
+[ORIGINAL] 
+[ORIGINAL] public String getTypeName(String line) {
+[ORIGINAL] if (line.contains("\"")) return null;
+[ORIGINAL] 
+[ORIGINAL] String[] tokens = line.trim().split("\\s+");
+[ORIGINAL] for (int i = 0; i < tokens.length - 1; i++) {
+[SPLITED] if (tokens[i].equals("class") || tokens[i].equals("interface") ||
+[ORIGINAL] tokens[i].equals("enum")) {
+[ORIGINAL] return tokens[i + 1];
+[ORIGINAL] }
+[ORIGINAL] }
+[ORIGINAL] return null;
+[ORIGINAL] }
+[ORIGINAL] }
+
+--- VERSIÓN NUEVA ---
+[ORIGINAL] package mantenimiento.codecounter.validators.logical_validators;
+[ORIGINAL] 
+[SPLITED] import static
+[ORIGINAL] mantenimiento.codecounter.constants.JavaRegextConstants.ACCESS_MODIFIERS_REGEX;
+[ORIGINAL] import static mantenimiento.codecounter.constants.JavaRegextConstants.TYPE_KEYS;
+[ORIGINAL] 
+[ORIGINAL] import mantenimiento.codecounter.templates.LogicalValidator;
+[ORIGINAL] 
+[ORIGINAL] /**
+[SPLITED] * Clase que verifica si existe una declaración de tipo (class, interface, enum)
+[ORIGINAL] para poder
+[ORIGINAL] * contabilizarlo como línea lógica
+[ORIGINAL] */
+[ORIGINAL] public class TypeDeclarationValidator implements LogicalValidator {
+[ORIGINAL] 
+[ORIGINAL] private static final String TYPE_DECLARATION =
+[ORIGINAL] "^(\\s*" + ACCESS_MODIFIERS_REGEX + ".*\\s*" + TYPE_KEYS + ".*)";
+[ORIGINAL] 
+[ORIGINAL] /**
+[SPLITED] * Determina si una línea de código corresponde a una declaración de tipo para
+[ORIGINAL] considerarla como
+[ORIGINAL] * línea lógica
+[ORIGINAL] *
+[ORIGINAL] * @param linesOfCode
+[SPLITED] * @return {@code true} si la corresponde a una declaración de tipo, {@code
+[ORIGINAL] false} en caso
+[ORIGINAL] *     contrario
+[ORIGINAL] */
+[ORIGINAL] @Override
+[ORIGINAL] public boolean validateType(String linesOfCode) {
+[ORIGINAL] return isTypeDeclaration(linesOfCode);
+[ORIGINAL] }
+[ORIGINAL] 
+[ORIGINAL] /**
+[ORIGINAL] * Verifica si la sentencia es una declaración de tipo
+[ORIGINAL] *
+[ORIGINAL] * @param lineOfCode sentencia de codigo por analizar
+[SPLITED] * @return {@code true} si coincide con la declaracion, {@code false} en caso
+[ORIGINAL] contrario
+[ORIGINAL] */
+[ORIGINAL] private boolean isTypeDeclaration(String line) {
+[ORIGINAL] return line.matches(TYPE_DECLARATION) && !line.contains("\"");
+[ORIGINAL] }
+[ORIGINAL] 
+[ORIGINAL] /*
+[ORIGINAL] * Obtiene el nombre del tipo declarado en la línea de código
+[ORIGINAL] */
+[ORIGINAL] 
+[ORIGINAL] public String getTypeName(String line) {
+[ORIGINAL] if (line.contains("\"")) return null;
+[ORIGINAL] 
+[ORIGINAL] String[] tokens = line.trim().split("\\s+");
+[ORIGINAL] for (int i = 0; i < tokens.length - 1; i++) {
+[SPLITED] if (tokens[i].equals("class") || tokens[i].equals("interface") ||
+[ORIGINAL] tokens[i].equals("enum")) {
+[ORIGINAL] return tokens[i + 1];
+[ORIGINAL] }
+[ORIGINAL] }
+[ORIGINAL] return null;
+[ORIGINAL] }
+[ORIGINAL] }
+

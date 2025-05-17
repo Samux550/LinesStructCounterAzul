@@ -1,0 +1,60 @@
+=== ARCHIVO LevenshteinDistanceComputer.java [Version: B] ===
+
+[NEW] package mantenimiento.codecounter.utils;
+[NEW] 
+[NEW] import java.util.Arrays;
+[NEW] 
+[NEW] public class LevenshteinDistanceComputer {
+[NEW] /**
+[NEW] * Calcula la distancia de Levenshtein entre dos cadenas de caracteres.
+[NEW] *
+[NEW] * @param source la primera cadena
+[NEW] * @param target la segunda cadena
+[NEW] * @return el número mínimo de operaciones necesarias para transformar {@code x}
+[NEW] *         en {@code y}
+[NEW] */
+[NEW] public static int calculate(String source, String target) {
+[NEW] int[][] dp = new int[source.length() + 1][target.length() + 1];
+[NEW] 
+[NEW] for (int i = 0; i <= source.length(); i++) {
+[NEW] for (int j = 0; j <= target.length(); j++) {
+[NEW] if (i == 0) {
+[NEW] dp[i][j] = j;
+[NEW] } else if (j == 0) {
+[NEW] dp[i][j] = i;
+[NEW] } else {
+[NEW] dp[i][j] = min(dp[i - 1][j - 1]
+[NEW] + costOfSubstitution(source.charAt(i - 1), target.charAt(j - 1)),
+[NEW] dp[i - 1][j] + 1,
+[NEW] dp[i][j - 1] + 1);
+[NEW] }
+[NEW] }
+[NEW] }
+[NEW] 
+[NEW] return dp[source.length()][target.length()];
+[NEW] }
+[NEW] 
+[NEW] /**
+[NEW] * Devuelve el costo de sustituir un carácter por otro.
+[SPLITED] * Si los caracteres son iguales, el costo es 0. Si son diferentes, el costo es
+[NEW] 1.
+[NEW] *
+[NEW] * @param sourceChar el primer carácter
+[NEW] * @param targetChar el segundo carácter
+[NEW] * @return 0 si {@code a} y {@code b} son iguales, 1 en caso contrario
+[NEW] */
+[NEW] private static int costOfSubstitution(char sourceChar, char targetChar) {
+[NEW] return sourceChar == targetChar ? 0 : 1;
+[NEW] }
+[NEW] 
+[NEW] /**
+[NEW] * Devuelve el valor mínimo entre un conjunto de enteros.
+[NEW] *
+[NEW] * @param numbers los números a comparar
+[NEW] * @return el menor valor entre {@code numbers}
+[NEW] */
+[NEW] private static int min(int... numbers) {
+[NEW] return Arrays.stream(numbers)
+[NEW] .min().orElse(Integer.MAX_VALUE);
+[NEW] }
+[NEW] }

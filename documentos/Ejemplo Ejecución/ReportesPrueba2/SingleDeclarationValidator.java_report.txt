@@ -1,0 +1,104 @@
+=== COMPARACIÓN PARA SingleDeclarationValidator.java ===
+
+--- VERSIÓN ANTIGUA ---
+[ORIGINAL] package mantenimiento.codecounter.validators.format_validators;
+[ORIGINAL] 
+[SPLITED] import static
+[SPLITED] mantenimiento.codecounter.constants.ReasonInvalidFormat.INVALID_SINGLE_DECLARATI
+[ORIGINAL] ON_STATEMENT;
+[ORIGINAL] 
+[ORIGINAL] import mantenimiento.codecounter.exceptions.InvalidFormatException;
+[ORIGINAL] import mantenimiento.codecounter.templates.FormatValidator;
+[ORIGINAL] 
+[SPLITED] /** Clase que valida si existe una sola variable declarada por línea ejemplo:
+[ORIGINAL] int value = 10; */
+[ORIGINAL] public class SingleDeclarationValidator extends FormatValidator {
+[ORIGINAL] private static final String MULTIPLE_DECLARATIONS_REGEX =
+[ORIGINAL] "^\\s*\\w+[\\s.=*&%+\\-/^\\w]*[;,][\\s.=*&%+\\-/^\\w]*[;,].*$";
+[ORIGINAL] 
+[ORIGINAL] /**
+[SPLITED] * Realiza la validacion del formato verificando si existe una sola declaración
+[ORIGINAL] por línea
+[ORIGINAL] *
+[ORIGINAL] * @param lineOfFile linea de texto (sentencia de codigo) a validar
+[SPLITED] * @return {@code true} si la línea cuenta con una sola declaración, {@code
+[ORIGINAL] false} en caso
+[ORIGINAL] *     contrario
+[ORIGINAL] * @throws InvalidFormatException si existen más variables declaradas
+[ORIGINAL] */
+[ORIGINAL] @Override
+[ORIGINAL] public boolean isValid(String lineOfFile) throws InvalidFormatException {
+[ORIGINAL] if (hasMultipleDeclarations(lineOfFile)) {
+[SPLITED] throw new InvalidFormatException(INVALID_SINGLE_DECLARATION_STATEMENT,
+[ORIGINAL] lineOfFile);
+[ORIGINAL] }
+[ORIGINAL] 
+[ORIGINAL] return this.validateNext(lineOfFile);
+[ORIGINAL] }
+[ORIGINAL] 
+[ORIGINAL] /**
+[SPLITED] * Verifica si la línea contiene múltiples declaraciones separadas por punto y
+[ORIGINAL] coma o solo por
+[ORIGINAL] * comas.
+[ORIGINAL] *
+[ORIGINAL] * @param lineOfFile La línea del archivo a validar.
+[SPLITED] * @return {@code true} si hay múltiples declaraciones separadas por comas o
+[ORIGINAL] punto y coma, {@code
+[ORIGINAL] *     false} en caso contrario.
+[ORIGINAL] */
+[ORIGINAL] public boolean hasMultipleDeclarations(String lineOfFile) {
+[ORIGINAL] return lineOfFile.matches(MULTIPLE_DECLARATIONS_REGEX);
+[ORIGINAL] }
+[ORIGINAL] }
+
+--- VERSIÓN NUEVA ---
+[ORIGINAL] package mantenimiento.codecounter.validators.format_validators;
+[ORIGINAL] 
+[SPLITED] import static
+[SPLITED] mantenimiento.codecounter.constants.ReasonInvalidFormat.INVALID_SINGLE_DECLARATI
+[ORIGINAL] ON_STATEMENT;
+[ORIGINAL] 
+[ORIGINAL] import mantenimiento.codecounter.exceptions.InvalidFormatException;
+[ORIGINAL] import mantenimiento.codecounter.templates.FormatValidator;
+[ORIGINAL] 
+[SPLITED] /** Clase que valida si existe una sola variable declarada por línea ejemplo:
+[ORIGINAL] int value = 10; */
+[ORIGINAL] public class SingleDeclarationValidator extends FormatValidator {
+[ORIGINAL] private static final String MULTIPLE_DECLARATIONS_REGEX =
+[ORIGINAL] "^\\s*\\w+[\\s.=*&%+\\-/^\\w]*[;,][\\s.=*&%+\\-/^\\w]*[;,].*$";
+[ORIGINAL] 
+[ORIGINAL] /**
+[SPLITED] * Realiza la validacion del formato verificando si existe una sola declaración
+[ORIGINAL] por línea
+[ORIGINAL] *
+[ORIGINAL] * @param lineOfFile linea de texto (sentencia de codigo) a validar
+[SPLITED] * @return {@code true} si la línea cuenta con una sola declaración, {@code
+[ORIGINAL] false} en caso
+[ORIGINAL] *     contrario
+[ORIGINAL] * @throws InvalidFormatException si existen más variables declaradas
+[ORIGINAL] */
+[ORIGINAL] @Override
+[ORIGINAL] public boolean isValid(String lineOfFile) throws InvalidFormatException {
+[ORIGINAL] if (hasMultipleDeclarations(lineOfFile)) {
+[SPLITED] throw new InvalidFormatException(INVALID_SINGLE_DECLARATION_STATEMENT,
+[ORIGINAL] lineOfFile);
+[ORIGINAL] }
+[ORIGINAL] 
+[ORIGINAL] return this.validateNext(lineOfFile);
+[ORIGINAL] }
+[ORIGINAL] 
+[ORIGINAL] /**
+[SPLITED] * Verifica si la línea contiene múltiples declaraciones separadas por punto y
+[ORIGINAL] coma o solo por
+[ORIGINAL] * comas.
+[ORIGINAL] *
+[ORIGINAL] * @param lineOfFile La línea del archivo a validar.
+[SPLITED] * @return {@code true} si hay múltiples declaraciones separadas por comas o
+[ORIGINAL] punto y coma, {@code
+[ORIGINAL] *     false} en caso contrario.
+[ORIGINAL] */
+[ORIGINAL] public boolean hasMultipleDeclarations(String lineOfFile) {
+[ORIGINAL] return lineOfFile.matches(MULTIPLE_DECLARATIONS_REGEX);
+[ORIGINAL] }
+[ORIGINAL] }
+

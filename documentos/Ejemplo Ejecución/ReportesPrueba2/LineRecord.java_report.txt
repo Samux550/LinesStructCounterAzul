@@ -1,0 +1,13 @@
+=== ARCHIVO LineRecord.java [Version: A] ===
+
+[DELETED] package mantenimiento.codecounter.models;
+[DELETED] 
+[DELETED] import mantenimiento.codecounter.models.comparators.Status;
+[DELETED] 
+[DELETED] /**
+[SPLITED] * Representación de un registro de la línea de código posterior a una
+[DELETED] comparación
+[DELETED] * @param status estado de la línea posterior a la evaluación
+[DELETED] * @param content contenido de la línea de código
+[DELETED] */
+[DELETED] public record LineRecord (Status status, String content) {}

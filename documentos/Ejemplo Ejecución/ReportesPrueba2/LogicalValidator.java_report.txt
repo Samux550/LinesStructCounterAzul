@@ -1,0 +1,34 @@
+=== COMPARACIÓN PARA LogicalValidator.java ===
+
+--- VERSIÓN ANTIGUA ---
+[ORIGINAL] package mantenimiento.codecounter.templates;
+[ORIGINAL] 
+[ORIGINAL] /*
+[ORIGINAL] * Interfaz que define el comportamiento de una fábrica de validadores lógicos
+[ORIGINAL] */
+[ORIGINAL] public interface LogicalValidator {
+[ORIGINAL] /**
+[ORIGINAL] * Valida si la línea de código corresponde a una declaración de tipo
+[ORIGINAL] *
+[ORIGINAL] * @param linesOfCode
+[ORIGINAL] * @return
+[ORIGINAL] */
+[ORIGINAL] public boolean validateType(String linesOfCode);
+[ORIGINAL] }
+
+--- VERSIÓN NUEVA ---
+[ORIGINAL] package mantenimiento.codecounter.templates;
+[ORIGINAL] 
+[ORIGINAL] /*
+[ORIGINAL] * Interfaz que define el comportamiento de una fábrica de validadores lógicos
+[ORIGINAL] */
+[ORIGINAL] public interface LogicalValidator {
+[ORIGINAL] /**
+[ORIGINAL] * Valida si la línea de código corresponde a una declaración de tipo
+[ORIGINAL] *
+[ORIGINAL] * @param linesOfCode
+[ORIGINAL] * @return
+[ORIGINAL] */
+[ORIGINAL] public boolean validateType(String linesOfCode);
+[ORIGINAL] }
+

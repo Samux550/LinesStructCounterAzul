@@ -1,0 +1,114 @@
+=== COMPARACIÓN PARA SingleAnnotationValidatorTest.java ===
+
+--- VERSIÓN ANTIGUA ---
+[ORIGINAL] package mantenimiento.codecounter.validators.format_validators;
+[ORIGINAL] 
+[ORIGINAL] import static org.junit.jupiter.api.Assertions.assertThrows;
+[ORIGINAL] import static org.junit.jupiter.api.Assertions.assertTrue;
+[ORIGINAL] 
+[ORIGINAL] import mantenimiento.codecounter.exceptions.InvalidFormatException;
+[ORIGINAL] import org.junit.jupiter.api.DisplayName;
+[ORIGINAL] import org.junit.jupiter.api.Test;
+[ORIGINAL] 
+[ORIGINAL] class SingleAnnotationValidatorTest {
+[SPLITED] private final SingleAnnotationValidator validator = new
+[ORIGINAL] SingleAnnotationValidator();
+[ORIGINAL] 
+[ORIGINAL] @Test
+[SPLITED] @DisplayName("Debe devolver true para una anotación válida en una sola línea:
+[ORIGINAL] @Override")
+[ORIGINAL] void testValidOverrideAnnotation() throws InvalidFormatException {
+[ORIGINAL] assertTrue(validator.isValid("@Override"));
+[ORIGINAL] }
+[ORIGINAL] 
+[ORIGINAL] @Test
+[ORIGINAL] @DisplayName(
+[SPLITED] "Debe devolver true para una anotación válida en una sola línea: @Rule(expected
+[ORIGINAL] ="
+[ORIGINAL] + " IllegalArgumentException.class)")
+[ORIGINAL] void testValidTestAnnotation() throws InvalidFormatException {
+[SPLITED] assertTrue(validator.isValid("@Rule(expected =
+[ORIGINAL] IllegalArgumentException.class)"));
+[ORIGINAL] }
+[ORIGINAL] 
+[ORIGINAL] @Test
+[SPLITED] @DisplayName("Debe lanzar excepción para múltiples anotaciones en la misma
+[ORIGINAL] línea")
+[ORIGINAL] void testMultipleAnnotationsThrowsException() {
+[ORIGINAL] String line = "@Override @Test @Something";
+[ORIGINAL] assertThrows(InvalidFormatException.class, () -> validator.isValid(line));
+[ORIGINAL] }
+[ORIGINAL] 
+[ORIGINAL] @Test
+[SPLITED] @DisplayName("Debe lanzar excepción para anotación seguida de código en la misma
+[ORIGINAL] línea")
+[ORIGINAL] void testAnnotationWithCodeThrowsException() {
+[ORIGINAL] String line = "@Override public void doSomething(){";
+[ORIGINAL] assertThrows(InvalidFormatException.class, () -> validator.isValid(line));
+[ORIGINAL] }
+[ORIGINAL] 
+[ORIGINAL] @Test
+[ORIGINAL] @DisplayName("Debe lanzar excepción si la anotación es mal formada")
+[ORIGINAL] void testMalformedAnnotationThrowsException() {
+[ORIGINAL] assertThrows(InvalidFormatException.class, () -> validator.isValid("@"));
+[SPLITED] assertThrows(InvalidFormatException.class, () ->
+[ORIGINAL] validator.isValid("@123Invalid"));
+[ORIGINAL] }
+[ORIGINAL] }
+
+--- VERSIÓN NUEVA ---
+[ORIGINAL] package mantenimiento.codecounter.validators.format_validators;
+[ORIGINAL] 
+[ORIGINAL] import static org.junit.jupiter.api.Assertions.assertThrows;
+[ORIGINAL] import static org.junit.jupiter.api.Assertions.assertTrue;
+[ORIGINAL] 
+[ORIGINAL] import mantenimiento.codecounter.exceptions.InvalidFormatException;
+[ORIGINAL] import org.junit.jupiter.api.DisplayName;
+[ORIGINAL] import org.junit.jupiter.api.Test;
+[ORIGINAL] 
+[ORIGINAL] class SingleAnnotationValidatorTest {
+[SPLITED] private final SingleAnnotationValidator validator = new
+[ORIGINAL] SingleAnnotationValidator();
+[ORIGINAL] 
+[ORIGINAL] @Test
+[SPLITED] @DisplayName("Debe devolver true para una anotación válida en una sola línea:
+[ORIGINAL] @Override")
+[ORIGINAL] void testValidOverrideAnnotation() throws InvalidFormatException {
+[ORIGINAL] assertTrue(validator.isValid("@Override"));
+[ORIGINAL] }
+[ORIGINAL] 
+[ORIGINAL] @Test
+[ORIGINAL] @DisplayName(
+[SPLITED] "Debe devolver true para una anotación válida en una sola línea: @Rule(expected
+[ORIGINAL] ="
+[ORIGINAL] + " IllegalArgumentException.class)")
+[ORIGINAL] void testValidTestAnnotation() throws InvalidFormatException {
+[SPLITED] assertTrue(validator.isValid("@Rule(expected =
+[ORIGINAL] IllegalArgumentException.class)"));
+[ORIGINAL] }
+[ORIGINAL] 
+[ORIGINAL] @Test
+[SPLITED] @DisplayName("Debe lanzar excepción para múltiples anotaciones en la misma
+[ORIGINAL] línea")
+[ORIGINAL] void testMultipleAnnotationsThrowsException() {
+[ORIGINAL] String line = "@Override @Test @Something";
+[ORIGINAL] assertThrows(InvalidFormatException.class, () -> validator.isValid(line));
+[ORIGINAL] }
+[ORIGINAL] 
+[ORIGINAL] @Test
+[SPLITED] @DisplayName("Debe lanzar excepción para anotación seguida de código en la misma
+[ORIGINAL] línea")
+[ORIGINAL] void testAnnotationWithCodeThrowsException() {
+[ORIGINAL] String line = "@Override public void doSomething(){";
+[ORIGINAL] assertThrows(InvalidFormatException.class, () -> validator.isValid(line));
+[ORIGINAL] }
+[ORIGINAL] 
+[ORIGINAL] @Test
+[ORIGINAL] @DisplayName("Debe lanzar excepción si la anotación es mal formada")
+[ORIGINAL] void testMalformedAnnotationThrowsException() {
+[ORIGINAL] assertThrows(InvalidFormatException.class, () -> validator.isValid("@"));
+[SPLITED] assertThrows(InvalidFormatException.class, () ->
+[ORIGINAL] validator.isValid("@123Invalid"));
+[ORIGINAL] }
+[ORIGINAL] }
+

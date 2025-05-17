@@ -1,0 +1,171 @@
+=== ARCHIVO JavaFileComparatorTest.java [Version: A] ===
+
+[DELETED] package mantenimiento.codecounter.models.comparators;
+[DELETED] 
+[DELETED] import mantenimiento.codecounter.models.reporters.ComparationReport;
+[DELETED] import mantenimiento.codecounter.models.LineRecord;
+[DELETED] import org.junit.jupiter.api.Test;
+[DELETED] 
+[DELETED] import java.util.Arrays;
+[DELETED] import java.util.List;
+[DELETED] 
+[DELETED] import static org.junit.jupiter.api.Assertions.*;
+[DELETED] 
+[DELETED] public class JavaFileComparatorTest {
+[DELETED] 
+[DELETED] @Test
+[DELETED] public void testCompareContent_identicalContent() {
+[DELETED] List<String> contentA = Arrays.asList(
+[DELETED] "public class Test {",
+[DELETED] "    int x = 5;",
+[DELETED] "}"
+[DELETED] );
+[DELETED] List<String> contentB = Arrays.asList(
+[DELETED] "public class Test {",
+[DELETED] "    int x = 5;",
+[DELETED] "}"
+[DELETED] );
+[DELETED] 
+[DELETED] JavaFileComparator comparator = new JavaFileComparator(contentA, contentB);
+[DELETED] comparator.compareContent();
+[DELETED] 
+[DELETED] ComparationReport report = comparator.getComparationReport();
+[DELETED] 
+[DELETED] for (LineRecord line : report.getSourceContentReport()) {
+[DELETED] assertEquals(Status.ORIGINAL, line.status());
+[DELETED] }
+[DELETED] 
+[DELETED] for (LineRecord line : report.getTargetContentReport()) {
+[DELETED] assertEquals(Status.ORIGINAL, line.status());
+[DELETED] }
+[DELETED] }
+[DELETED] @Test
+[DELETED] public void testCompareContent_differentSizes() {
+[DELETED] List<String> contentA = Arrays.asList(
+[DELETED] "public class Test {",
+[DELETED] "    int x = 5;",
+[DELETED] "}"
+[DELETED] );
+[DELETED] List<String> contentB = Arrays.asList(
+[DELETED] "public class Test {",
+[DELETED] "}"
+[DELETED] );
+[DELETED] 
+[DELETED] JavaFileComparator comparator = new JavaFileComparator(contentA, contentB);
+[DELETED] comparator.compareContent();
+[DELETED] 
+[DELETED] ComparationReport report = comparator.getComparationReport();
+[DELETED] assertFalse(report.getSourceContentReport().isEmpty());
+[DELETED] assertFalse(report.getTargetContentReport().isEmpty());
+[DELETED] }
+[DELETED] 
+[DELETED] 
+[DELETED] 
+[DELETED] 
+[DELETED] @Test
+[DELETED] public void testCompareContent_modifiedLine() {
+[DELETED] List<String> contentA = Arrays.asList(
+[DELETED] "public class Test {",
+[DELETED] "    int x = 4;",
+[DELETED] "}"
+[DELETED] );
+[DELETED] List<String> contentB = Arrays.asList(
+[DELETED] "public class Test {",
+[DELETED] "    int x = 5;",
+[DELETED] "}"
+[DELETED] );
+[DELETED] 
+[DELETED] JavaFileComparator comparator = new JavaFileComparator(contentA, contentB);
+[DELETED] comparator.compareContent();
+[DELETED] 
+[DELETED] ComparationReport report = comparator.getComparationReport();
+[SPLITED] assertTrue(report.getSourceContentReport().stream().anyMatch(r -> r.status() ==
+[DELETED] Status.ORIGINAL));
+[SPLITED] assertTrue(report.getTargetContentReport().stream().anyMatch(r -> r.status() ==
+[DELETED] Status.MODIFIED));
+[DELETED] }
+[DELETED] @Test
+[DELETED] public void testCompareContent_withEmptyLines() {
+[DELETED] List<String> contentA = Arrays.asList(
+[DELETED] "System.out.println(\"Hello\");",
+[DELETED] "",
+[DELETED] "System.out.println(\"World\");"
+[DELETED] );
+[DELETED] List<String> contentB = Arrays.asList(
+[DELETED] "System.out.println(\"Hello\");",
+[DELETED] "System.out.println(\"World\");"
+[DELETED] );
+[DELETED] 
+[DELETED] JavaFileComparator comparator = new JavaFileComparator(contentA, contentB);
+[DELETED] comparator.compareContent();
+[DELETED] 
+[DELETED] ComparationReport report = comparator.getComparationReport();
+[DELETED] assertEquals(3, report.getSourceContentReport().size());
+[DELETED] assertEquals(Status.DELETED, report.getSourceContentReport().get(1).status());
+[DELETED] }
+[DELETED] 
+[DELETED] @Test
+[DELETED] public void testCompareContent_newLine() {
+[DELETED] List<String> contentA = Arrays.asList(
+[DELETED] "public class Test {"
+[DELETED] );
+[DELETED] List<String> contentB = Arrays.asList(
+[DELETED] "public class Test {",
+[DELETED] "    int y = 10;"
+[DELETED] );
+[DELETED] 
+[DELETED] JavaFileComparator comparator = new JavaFileComparator(contentA, contentB);
+[DELETED] comparator.compareContent();
+[DELETED] 
+[DELETED] ComparationReport report = comparator.getComparationReport();
+[SPLITED] assertTrue(report.getTargetContentReport().stream().anyMatch(r -> r.status() ==
+[DELETED] Status.NEW));
+[DELETED] }
+[DELETED] 
+[DELETED] @Test
+[DELETED] public void testCompareContent_deletedLine() {
+[DELETED] List<String> contentA = Arrays.asList(
+[DELETED] "public class Test {",
+[DELETED] "    int z = 9;"
+[DELETED] );
+[DELETED] List<String> contentB = Arrays.asList(
+[DELETED] "public class Test {"
+[DELETED] );
+[DELETED] 
+[DELETED] JavaFileComparator comparator = new JavaFileComparator(contentA, contentB);
+[DELETED] comparator.compareContent();
+[DELETED] 
+[DELETED] ComparationReport report = comparator.getComparationReport();
+[SPLITED] assertTrue(report.getSourceContentReport().stream().anyMatch(r -> r.status() ==
+[DELETED] Status.DELETED));
+[DELETED] }
+[DELETED] 
+[DELETED] @Test
+[DELETED] public void testCompareContent_mixedChanges() {
+[DELETED] List<String> contentA = Arrays.asList(
+[DELETED] "public class Test {",
+[DELETED] "    int a = 1;",
+[DELETED] "    int b = 2;",
+[DELETED] "}"
+[DELETED] );
+[DELETED] List<String> contentB = Arrays.asList(
+[DELETED] "public class Test {",
+[DELETED] "    int a = 1;",
+[DELETED] "    int c = 3;",
+[DELETED] "    int b = 2;",
+[DELETED] "}"
+[DELETED] );
+[DELETED] 
+[DELETED] JavaFileComparator comparator = new JavaFileComparator(contentA, contentB);
+[DELETED] comparator.compareContent();
+[DELETED] 
+[DELETED] ComparationReport report = comparator.getComparationReport();
+[DELETED] 
+[SPLITED] assertTrue(report.getTargetContentReport().stream().anyMatch(r -> r.status() ==
+[DELETED] Status.NEW));
+[SPLITED] assertTrue(report.getSourceContentReport().stream().anyMatch(r -> r.status() ==
+[DELETED] Status.DELETED));
+[SPLITED] assertTrue(report.getTargetContentReport().stream().anyMatch(r -> r.status() ==
+[DELETED] Status.ORIGINAL));
+[DELETED] }
+[DELETED] }

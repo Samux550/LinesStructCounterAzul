@@ -1,0 +1,118 @@
+=== ARCHIVO ComparationReport.java [Version: B] ===
+
+[NEW] package mantenimiento.codecounter.models.reporters;
+[NEW] 
+[NEW] import java.util.ArrayList;
+[NEW] import java.util.List;
+[NEW] 
+[NEW] import mantenimiento.codecounter.models.LineRecord;
+[NEW] import mantenimiento.codecounter.models.comparators.Status;
+[NEW] 
+[NEW] /**
+[NEW] * Clase encargada de construir un reporte de comparación línea por línea
+[NEW] * entre dos archivos de código fuente.
+[NEW] */
+[NEW] public class ComparationReport {
+[NEW] 
+[NEW] private List<LineRecord> sourceContentReport;
+[NEW] 
+[NEW] private List<LineRecord> targetContentReport;
+[NEW] 
+[NEW] /**
+[NEW] * Constructor que inicializa ambos reportes como listas vacías.
+[NEW] */
+[NEW] public ComparationReport() {
+[NEW] this.sourceContentReport = new ArrayList<>();
+[NEW] this.targetContentReport = new ArrayList<>();
+[NEW] }
+[NEW] 
+[NEW] /**
+[SPLITED] * Realiza una instancia en el reporte de acruedo al estatus de la línea a
+[NEW] comparar
+[NEW] * @param status estado de la línea de código a comparar
+[NEW] * @param sourceLine linea de código a comparar
+[NEW] * @param targetLine línea de código para comparar
+[NEW] */
+[SPLITED] public void makeReportLine(Status status, String sourceLine, String targetLine)
+[NEW] {
+[NEW] switch (status) {
+[NEW] case ORIGINAL:
+[NEW] sourceContentReport.add(new LineRecord(Status.ORIGINAL, sourceLine));
+[NEW] targetContentReport.add(new LineRecord(Status.ORIGINAL, targetLine));
+[NEW] break;
+[NEW] case MODIFIED:
+[NEW] sourceContentReport.add(new LineRecord(Status.ORIGINAL, sourceLine));
+[NEW] targetContentReport.add(new LineRecord(Status.MODIFIED, targetLine));
+[NEW] break;
+[NEW] case NEW:
+[NEW] sourceContentReport.add(new LineRecord(Status.DELETED, sourceLine));
+[NEW] targetContentReport.add(new LineRecord(Status.NEW, targetLine));
+[NEW] break;
+[NEW] default:
+[NEW] break;
+[NEW] }
+[NEW] }
+[NEW] 
+[NEW] /**
+[NEW] * Agrega al reporte las líneas faltantes al final del contenido original,
+[NEW] * marcándolas como eliminadas.
+[NEW] *
+[NEW] * @param content    Lista de líneas del contenido original.
+[SPLITED] * @param difference Número de líneas de diferencia respecto al contenido
+[NEW] comparado.
+[NEW] */
+[NEW] public void updateReport(List<String> content, int difference) {
+[NEW] int indexToCheck = content.size() - difference;
+[NEW] if (indexToCheck < 0) {
+[NEW] indexToCheck = 0;
+[NEW] }
+[NEW] for (int i = indexToCheck; i < content.size(); i++) {
+[NEW] this.sourceContentReport.add(new LineRecord(Status.DELETED, content.get(i)));
+[NEW] }
+[NEW] }
+[NEW] 
+[NEW] /**
+[NEW] * Agrega al reporte las líneas faltantes al final del contenido nuevo,
+[NEW] * marcándolas como nuevas.
+[NEW] *
+[NEW] * @param content           Lista de líneas del contenido nuevo.
+[NEW] * @param contentToCompare  Lista de líneas del contenido original.
+[SPLITED] * @param difference        Número de líneas de diferencia respecto al contenido
+[NEW] original.
+[NEW] */
+[SPLITED] public void updateReport(List<String> content, List<String> contentToCompare,
+[NEW] int difference) {
+[NEW] int indexToCheck = contentToCompare.size() - difference;
+[NEW] if (indexToCheck < 0) {
+[NEW] indexToCheck = 0;
+[NEW] }
+[NEW] for (int i = indexToCheck; i < contentToCompare.size(); i++) {
+[SPLITED] this.targetContentReport.add(new LineRecord(Status.NEW,
+[NEW] contentToCompare.get(i)));
+[NEW] }
+[NEW] }
+[NEW] 
+[NEW] /**
+[NEW] *
+[NEW] * @return retorna el reporte del contenido a comparar
+[NEW] */
+[NEW] public List<LineRecord> getSourceContentReport() {
+[NEW] return sourceContentReport;
+[NEW] }
+[NEW] 
+[NEW] /**
+[NEW] *
+[NEW] * @return retorna el reporte del contenido para comparar
+[NEW] */
+[NEW] public List<LineRecord> getTargetContentReport() {
+[NEW] return targetContentReport;
+[NEW] }
+[NEW] 
+[NEW] /**
+[NEW] * Método reservado para generar el reporte de una clase individual.
+[NEW] * Actualmente no implementado.
+[NEW] */
+[NEW] public void makeReportSingleClass() {
+[NEW] // Método aún no implementado
+[NEW] }
+[NEW] }

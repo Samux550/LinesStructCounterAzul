@@ -1,0 +1,134 @@
+=== COMPARACIÓN PARA ImportValidator.java ===
+
+--- VERSIÓN ANTIGUA ---
+[ORIGINAL] package mantenimiento.codecounter.validators.format_validators;
+[ORIGINAL] 
+[SPLITED] import static
+[SPLITED] mantenimiento.codecounter.constants.ReasonInvalidFormat.INVALID_IMPORT_STATEMENT
+[ORIGINAL] ;
+[ORIGINAL] 
+[ORIGINAL] import mantenimiento.codecounter.exceptions.InvalidFormatException;
+[ORIGINAL] import mantenimiento.codecounter.templates.FormatValidator;
+[ORIGINAL] 
+[ORIGINAL] /**
+[SPLITED] * Clase que valida si la importacion de un paquete tiene un comodin y lanza una
+[ORIGINAL] excepcion en caso
+[ORIGINAL] * de haber
+[ORIGINAL] *
+[ORIGINAL] * <p>ej: import java.util*
+[ORIGINAL] */
+[ORIGINAL] public class ImportValidator extends FormatValidator {
+[ORIGINAL] 
+[ORIGINAL] /**
+[SPLITED] * Realiza la validacion del formato verificando si es un import y si utiliza un
+[ORIGINAL] comodin
+[ORIGINAL] *
+[ORIGINAL] * @param lineOfFile linea de texto (sentencia de codigo) a validar
+[ORIGINAL] * @return {@code true} si el import es sin comodin
+[ORIGINAL] * @throws InvalidFormatException si el import se realiza con comodin
+[ORIGINAL] */
+[ORIGINAL] @Override
+[ORIGINAL] public boolean isValid(String lineOfFile) throws InvalidFormatException {
+[ORIGINAL] if (isImportDeclaration(lineOfFile)) {
+[ORIGINAL] if (isImportWithWildcard(lineOfFile)) {
+[ORIGINAL] throw new InvalidFormatException(INVALID_IMPORT_STATEMENT, lineOfFile);
+[ORIGINAL] }
+[ORIGINAL] 
+[ORIGINAL] return true;
+[ORIGINAL] }
+[ORIGINAL] 
+[ORIGINAL] return this.validateNext(lineOfFile);
+[ORIGINAL] }
+[ORIGINAL] 
+[ORIGINAL] /**
+[ORIGINAL] * Valida si la sentencia corresponde a una declaracion de import
+[ORIGINAL] *
+[ORIGINAL] * @param lineOfCode sentencia a validar
+[SPLITED] * @return {@code true} si es una declaracion de import, {@code false} si no
+[ORIGINAL] corresponde
+[ORIGINAL] */
+[ORIGINAL] private boolean isImportDeclaration(String lineOfCode) {
+[ORIGINAL] String importDeclarationRegex = "^import\\s+.*;$";
+[ORIGINAL] return lineOfCode.matches(importDeclarationRegex);
+[ORIGINAL] }
+[ORIGINAL] 
+[ORIGINAL] /**
+[ORIGINAL] * Valida si la declaracion de import, incluso un import statico, tiene comodín
+[ORIGINAL] *
+[ORIGINAL] * @param lineOfCode sentencia a validar
+[SPLITED] * @return {@code true} si el import es con comodin, {@code false} si no
+[ORIGINAL] corresponde
+[ORIGINAL] */
+[ORIGINAL] private boolean isImportWithWildcard(String lineOfCode) {
+[SPLITED] String wildcardImportRegex =
+[ORIGINAL] "^import\\s+(static\\s+)?(?:\\w+\\.\\s*){1,10}\\*\\s*;";
+[ORIGINAL] return lineOfCode.matches(wildcardImportRegex);
+[ORIGINAL] }
+[ORIGINAL] }
+
+--- VERSIÓN NUEVA ---
+[ORIGINAL] package mantenimiento.codecounter.validators.format_validators;
+[ORIGINAL] 
+[SPLITED] import static
+[SPLITED] mantenimiento.codecounter.constants.ReasonInvalidFormat.INVALID_IMPORT_STATEMENT
+[ORIGINAL] ;
+[ORIGINAL] 
+[ORIGINAL] import mantenimiento.codecounter.exceptions.InvalidFormatException;
+[ORIGINAL] import mantenimiento.codecounter.templates.FormatValidator;
+[ORIGINAL] 
+[ORIGINAL] /**
+[SPLITED] * Clase que valida si la importacion de un paquete tiene un comodin y lanza una
+[ORIGINAL] excepcion en caso
+[ORIGINAL] * de haber
+[ORIGINAL] *
+[ORIGINAL] * <p>ej: import java.util*
+[ORIGINAL] */
+[ORIGINAL] public class ImportValidator extends FormatValidator {
+[ORIGINAL] 
+[ORIGINAL] /**
+[SPLITED] * Realiza la validacion del formato verificando si es un import y si utiliza un
+[ORIGINAL] comodin
+[ORIGINAL] *
+[ORIGINAL] * @param lineOfFile linea de texto (sentencia de codigo) a validar
+[ORIGINAL] * @return {@code true} si el import es sin comodin
+[ORIGINAL] * @throws InvalidFormatException si el import se realiza con comodin
+[ORIGINAL] */
+[ORIGINAL] @Override
+[ORIGINAL] public boolean isValid(String lineOfFile) throws InvalidFormatException {
+[ORIGINAL] if (isImportDeclaration(lineOfFile)) {
+[ORIGINAL] if (isImportWithWildcard(lineOfFile)) {
+[ORIGINAL] throw new InvalidFormatException(INVALID_IMPORT_STATEMENT, lineOfFile);
+[ORIGINAL] }
+[ORIGINAL] 
+[ORIGINAL] return true;
+[ORIGINAL] }
+[ORIGINAL] 
+[ORIGINAL] return this.validateNext(lineOfFile);
+[ORIGINAL] }
+[ORIGINAL] 
+[ORIGINAL] /**
+[ORIGINAL] * Valida si la sentencia corresponde a una declaracion de import
+[ORIGINAL] *
+[ORIGINAL] * @param lineOfCode sentencia a validar
+[SPLITED] * @return {@code true} si es una declaracion de import, {@code false} si no
+[ORIGINAL] corresponde
+[ORIGINAL] */
+[ORIGINAL] private boolean isImportDeclaration(String lineOfCode) {
+[ORIGINAL] String importDeclarationRegex = "^import\\s+.*;$";
+[ORIGINAL] return lineOfCode.matches(importDeclarationRegex);
+[ORIGINAL] }
+[ORIGINAL] 
+[ORIGINAL] /**
+[ORIGINAL] * Valida si la declaracion de import, incluso un import statico, tiene comodín
+[ORIGINAL] *
+[ORIGINAL] * @param lineOfCode sentencia a validar
+[SPLITED] * @return {@code true} si el import es con comodin, {@code false} si no
+[ORIGINAL] corresponde
+[ORIGINAL] */
+[ORIGINAL] private boolean isImportWithWildcard(String lineOfCode) {
+[SPLITED] String wildcardImportRegex =
+[ORIGINAL] "^import\\s+(static\\s+)?(?:\\w+\\.\\s*){1,10}\\*\\s*;";
+[ORIGINAL] return lineOfCode.matches(wildcardImportRegex);
+[ORIGINAL] }
+[ORIGINAL] }
+

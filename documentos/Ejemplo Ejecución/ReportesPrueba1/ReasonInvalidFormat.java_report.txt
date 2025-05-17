@@ -1,0 +1,60 @@
+=== COMPARACIÓN PARA ReasonInvalidFormat.java ===
+
+--- VERSIÓN ANTIGUA ---
+[ORIGINAL] package mantenimiento.codecounter.constants;
+[ORIGINAL] 
+[ORIGINAL] /** Clase que representa razones de formato inválido en el código fuente. */
+[ORIGINAL] public class ReasonInvalidFormat {
+[ORIGINAL] public static final ReasonInvalidFormat INVALID_STYLE_K_AND_R =
+[ORIGINAL] new ReasonInvalidFormat("Se debe seguir el estilo K&R para el uso de bloques.");
+[ORIGINAL] public static final ReasonInvalidFormat INVALID_IMPORT_STATEMENT =
+[ORIGINAL] new ReasonInvalidFormat(
+[ORIGINAL] "Las importaciones de paquete deben de ser explicitas y con comodin *.");
+[ORIGINAL] public static final ReasonInvalidFormat INVALID_ANOTATION_STATEMENT =
+[SPLITED] new ReasonInvalidFormat("Cada anotación debe estar en una sola línea y bien
+[ORIGINAL] formada.");
+[ORIGINAL] public static final ReasonInvalidFormat INVALID_SINGLE_DECLARATION_STATEMENT =
+[SPLITED] new ReasonInvalidFormat("No se permite realizar multiples declaraciones por
+[ORIGINAL] linea");
+[ORIGINAL] 
+[ORIGINAL] private String reason;
+[ORIGINAL] 
+[ORIGINAL] private ReasonInvalidFormat(String reason) {
+[ORIGINAL] this.reason = reason;
+[ORIGINAL] }
+[ORIGINAL] 
+[ORIGINAL] @Override
+[ORIGINAL] public String toString() {
+[ORIGINAL] return this.reason;
+[ORIGINAL] }
+[ORIGINAL] }
+
+--- VERSIÓN NUEVA ---
+[ORIGINAL] package mantenimiento.codecounter.constants;
+[ORIGINAL] 
+[ORIGINAL] /** Clase que representa razones de formato inválido en el código fuente. */
+[ORIGINAL] public class ReasonInvalidFormat {
+[ORIGINAL] public static final ReasonInvalidFormat INVALID_STYLE_K_AND_R =
+[ORIGINAL] new ReasonInvalidFormat("Se debe seguir el estilo K&R para el uso de bloques.");
+[ORIGINAL] public static final ReasonInvalidFormat INVALID_IMPORT_STATEMENT =
+[ORIGINAL] new ReasonInvalidFormat(
+[ORIGINAL] "Las importaciones de paquete deben de ser explicitas y con comodin *.");
+[ORIGINAL] public static final ReasonInvalidFormat INVALID_ANOTATION_STATEMENT =
+[SPLITED] new ReasonInvalidFormat("Cada anotación debe estar en una sola línea y bien
+[ORIGINAL] formada.");
+[ORIGINAL] public static final ReasonInvalidFormat INVALID_SINGLE_DECLARATION_STATEMENT =
+[SPLITED] new ReasonInvalidFormat("No se permite realizar multiples declaraciones por
+[ORIGINAL] linea");
+[ORIGINAL] 
+[ORIGINAL] private String reason;
+[ORIGINAL] 
+[ORIGINAL] private ReasonInvalidFormat(String reason) {
+[ORIGINAL] this.reason = reason;
+[ORIGINAL] }
+[ORIGINAL] 
+[ORIGINAL] @Override
+[ORIGINAL] public String toString() {
+[ORIGINAL] return this.reason;
+[ORIGINAL] }
+[ORIGINAL] }
+
