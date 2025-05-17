@@ -13,6 +13,8 @@ Puedes acceder a recursos adicionales en el siguiente enlace:
 
 [Bitácora de Ingeniería](https://alumnosuady-my.sharepoint.com/:w:/g/personal/a21216389_alumnos_uady_mx/ESlSYNSlpf9LgwYR-UJwihwBxbuQDi65lwtgJGDauD-dBQ?e=QetIgv)
 
+[Ejemplo de Ejecución](https://github.com/Samux550/LinesStructCounterAzul/tree/main/documentos/Ejemplo%20Ejecucio%CC%81n)
+
 ## 🚀 Instalación y Configuración
 
 ### 📂 Clonar el repositorio
