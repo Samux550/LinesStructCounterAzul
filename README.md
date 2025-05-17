@@ -9,7 +9,7 @@
 
 Puedes acceder a recursos adicionales en el siguiente enlace:
 
-[Carpeta de Documentación](https://alumnosuady-my.sharepoint.com/:f:/g/personal/a21216389_alumnos_uady_mx/EuYBGFHUCJNIl00mdtXZ0p4By9SHs6auiJKuQjcR_TLJzg?e=nmp7cg)
+[Carpeta de Documentación](https://alumnosuady-my.sharepoint.com/:f:/g/personal/a21216389_alumnos_uady_mx/EuYBGFHUCJNIl00mdtXZ0p4BRYFrnB2x-Rf70XW4bSCaYA?e=ETKgnr)
 
 [Bitácora de Ingeniería](https://alumnosuady-my.sharepoint.com/:w:/g/personal/a21216389_alumnos_uady_mx/ESlSYNSlpf9LgwYR-UJwihwBxbuQDi65lwtgJGDauD-dBQ?e=QetIgv)
 
